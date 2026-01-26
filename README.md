@@ -144,10 +144,76 @@ evalSchema := schema.EvaluationSchemaJSON
 summarySchema := schema.SummarySchemaJSON
 ```
 
+## Rubrics (v0.2.0)
+
+Define explicit scoring criteria for consistent evaluations:
+
+```go
+rubric := evaluation.NewRubric("quality", "Output quality").
+    AddRangeAnchor(8, 10, "Excellent", "Near perfect").
+    AddRangeAnchor(5, 7.9, "Good", "Acceptable").
+    AddRangeAnchor(0, 4.9, "Poor", "Needs work")
+
+// Use default PRD rubric
+rubricSet := evaluation.DefaultPRDRubricSet()
+```
+
+## Judge Metadata (v0.2.0)
+
+Track LLM judge configuration for reproducibility:
+
+```go
+judge := evaluation.NewJudgeMetadata("claude-3-opus").
+    WithProvider("anthropic").
+    WithPrompt("prd-eval-v1", "1.0").
+    WithTemperature(0.0).
+    WithTokenUsage(1500, 800)
+
+report.SetJudge(judge)
+```
+
+## Pairwise Comparison (v0.2.0)
+
+Compare two outputs instead of absolute scoring:
+
+```go
+comparison := evaluation.NewPairwiseComparison(input, outputA, outputB)
+comparison.SetWinner(evaluation.WinnerA, "A is more accurate", 0.9)
+
+// Aggregate multiple comparisons
+result := evaluation.ComputePairwiseResult(comparisons)
+// result.WinRateA, result.OverallWinner
+```
+
+## Multi-Judge Aggregation (v0.2.0)
+
+Combine evaluations from multiple judges:
+
+```go
+result := evaluation.AggregateEvaluations(evaluations, evaluation.AggregationMean)
+
+// Methods: AggregationMean, AggregationMedian, AggregationConservative, AggregationMajority
+// result.Agreement - inter-judge agreement (0-1)
+// result.Disagreements - categories with significant disagreement
+// result.ConsolidatedDecision - final aggregated decision
+```
+
+## OmniObserve Integration
+
+Export evaluations to Opik, Phoenix, or Langfuse:
+
+```go
+import "github.com/agentplexus/omniobserve/integrations/sevaluation"
+
+// Export to observability platform
+err := sevaluation.Export(ctx, provider, traceID, report)
+```
+
 ## Integration
 
 Designed to work with:
 
+- `github.com/agentplexus/omniobserve` - LLM observability (Opik, Phoenix, Langfuse)
 - `github.com/grokify/structured-requirements` - PRD evaluation templates
 - `github.com/agentplexus/multi-agent-spec` - Agent coordination
 - `github.com/grokify/structured-changelog` - Release validation
