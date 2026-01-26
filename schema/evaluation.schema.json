@@ -1,0 +1,269 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/agentplexus/structured-evaluation/schema/evaluation.schema.json",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "metadata": {
+      "properties": {
+        "document": {
+          "type": "string"
+        },
+        "document_id": {
+          "type": "string"
+        },
+        "document_title": {
+          "type": "string"
+        },
+        "document_version": {
+          "type": "string"
+        },
+        "generated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "generated_by": {
+          "type": "string"
+        },
+        "reviewer_id": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "review_type": {
+      "type": "string"
+    },
+    "categories": {
+      "items": {
+        "properties": {
+          "category": {
+            "type": "string"
+          },
+          "weight": {
+            "type": "number"
+          },
+          "score": {
+            "type": "number"
+          },
+          "max_score": {
+            "type": "number"
+          },
+          "status": {
+            "type": "string"
+          },
+          "justification": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "string"
+          },
+          "findings": {
+            "items": {
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "category": {
+                  "type": "string"
+                },
+                "severity": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "recommendation": {
+                  "type": "string"
+                },
+                "evidence": {
+                  "type": "string"
+                },
+                "owner": {
+                  "type": "string"
+                },
+                "effort": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "findings": {
+      "items": {
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "recommendation": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "effort": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "weighted_score": {
+      "type": "number"
+    },
+    "pass_criteria": {
+      "properties": {
+        "max_critical": {
+          "type": "integer"
+        },
+        "max_high": {
+          "type": "integer"
+        },
+        "max_medium": {
+          "type": "integer"
+        },
+        "min_score": {
+          "type": "number"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "decision": {
+      "properties": {
+        "status": {
+          "type": "string"
+        },
+        "passed": {
+          "type": "boolean"
+        },
+        "rationale": {
+          "type": "string"
+        },
+        "finding_counts": {
+          "properties": {
+            "critical": {
+              "type": "integer"
+            },
+            "high": {
+              "type": "integer"
+            },
+            "medium": {
+              "type": "integer"
+            },
+            "low": {
+              "type": "integer"
+            },
+            "info": {
+              "type": "integer"
+            },
+            "total": {
+              "type": "integer"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
+        },
+        "weighted_score": {
+          "type": "number"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "next_steps": {
+      "properties": {
+        "rerun_command": {
+          "type": "string"
+        },
+        "immediate": {
+          "items": {
+            "properties": {
+              "action": {
+                "type": "string"
+              },
+              "category": {
+                "type": "string"
+              },
+              "severity": {
+                "type": "string"
+              },
+              "owner": {
+                "type": "string"
+              },
+              "effort": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "recommended": {
+          "items": {
+            "properties": {
+              "action": {
+                "type": "string"
+              },
+              "category": {
+                "type": "string"
+              },
+              "severity": {
+                "type": "string"
+              },
+              "owner": {
+                "type": "string"
+              },
+              "effort": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "summary": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "type": "object",
+  "title": "Evaluation Report",
+  "description": "Schema for detailed LLM-as-Judge evaluation reports"
+}
