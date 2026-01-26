@@ -16,6 +16,15 @@ type EvaluationReport struct {
 	// ReviewType identifies the type of review (prd, arb, security, etc.).
 	ReviewType string `json:"review_type"`
 
+	// Judge contains metadata about the LLM judge (v0.2.0).
+	Judge *JudgeMetadata `json:"judge,omitempty"`
+
+	// RubricID references the rubric used for scoring (v0.2.0).
+	RubricID string `json:"rubric_id,omitempty"`
+
+	// Reference contains gold/expected data for comparison (v0.2.0).
+	Reference *ReferenceData `json:"reference,omitempty"`
+
 	// Categories contains scores for each evaluation dimension.
 	Categories []CategoryScore `json:"categories"`
 
@@ -206,4 +215,22 @@ func (r *EvaluationReport) Finalize(rerunCommand string) {
 	r.Evaluate()
 	r.GenerateNextSteps(rerunCommand)
 	r.GenerateSummary()
+}
+
+// SetJudge sets the judge metadata.
+func (r *EvaluationReport) SetJudge(judge *JudgeMetadata) {
+	r.Judge = judge
+	if judge != nil && judge.RubricID != "" {
+		r.RubricID = judge.RubricID
+	}
+}
+
+// SetReference sets the reference data for comparison.
+func (r *EvaluationReport) SetReference(ref *ReferenceData) {
+	r.Reference = ref
+}
+
+// SetRubric sets the rubric ID.
+func (r *EvaluationReport) SetRubric(rubricID string) {
+	r.RubricID = rubricID
 }
