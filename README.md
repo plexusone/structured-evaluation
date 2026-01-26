@@ -1,4 +1,10 @@
-# structured-evaluation
+# Structured Evaluation
+
+[![Build Status][build-status-svg]][build-status-url]
+[![Lint Status][lint-status-svg]][lint-status-url]
+[![Go Report Card][goreport-svg]][goreport-url]
+[![Docs][docs-godoc-svg]][docs-godoc-url]
+[![License][license-svg]][license-url]
 
 A reusable evaluation framework for LLM-as-Judge and multi-agent workflows.
 
@@ -149,3 +155,16 @@ Designed to work with:
 ## License
 
 MIT License - see [LICENSE](LICENSE) for details.
+
+ [build-status-svg]: https://github.com/agentplexus/structured-evaluation/actions/workflows/ci.yaml/badge.svg?branch=main
+ [build-status-url]: https://github.com/agentplexus/structured-evaluation/actions/workflows/ci.yaml
+ [lint-status-svg]: https://github.com/agentplexus/structured-evaluation/actions/workflows/lint.yaml/badge.svg?branch=main
+ [lint-status-url]: https://github.com/agentplexus/structured-evaluation/actions/workflows/lint.yaml
+ [goreport-svg]: https://goreportcard.com/badge/github.com/agentplexus/structured-evaluation
+ [goreport-url]: https://goreportcard.com/report/github.com/agentplexus/structured-evaluation
+ [docs-godoc-svg]: https://pkg.go.dev/badge/github.com/agentplexus/structured-evaluation
+ [docs-godoc-url]: https://pkg.go.dev/github.com/agentplexus/structured-evaluation
+ [license-svg]: https://img.shields.io/badge/license-MIT-blue.svg
+ [license-url]: https://github.com/agentplexus/structured-evaluation/blob/master/LICENSE
+ [used-by-svg]: https://sourcegraph.com/github.com/agentplexus/structured-evaluation/-/badge.svg
+ [used-by-url]: https://sourcegraph.com/github.com/agentplexus/structured-evaluation?badge
