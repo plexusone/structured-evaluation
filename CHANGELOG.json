@@ -6,6 +6,40 @@
   "commit_convention": "conventional",
   "releases": [
     {
+      "version": "v0.2.0",
+      "date": "2026-01-26",
+      "highlights": [
+        { "description": "Rubric definitions with score anchors for consistent LLM-as-Judge evaluations" },
+        { "description": "Judge metadata tracking (model, prompt, temperature, tokens)" },
+        { "description": "Pairwise comparison mode as alternative to absolute scoring" },
+        { "description": "Multi-judge aggregation with agreement metrics" }
+      ],
+      "added": [
+        { "description": "Rubric and ScoreAnchor types for defining explicit scoring criteria", "commit": "ba83b8d" },
+        { "description": "Range-based score anchors (e.g., 8-10 = Excellent)", "commit": "ba83b8d" },
+        { "description": "DefaultPRDRubricSet with problem_definition, solution_clarity, success_metrics", "commit": "ba83b8d" },
+        { "description": "JudgeMetadata type for tracking LLM model, provider, and prompt", "commit": "4874b1d" },
+        { "description": "TokenUsage tracking for evaluation cost monitoring", "commit": "4874b1d" },
+        { "description": "Observability trace/span links in JudgeMetadata", "commit": "4874b1d" },
+        { "description": "PairwiseComparison type for comparing two outputs", "commit": "4ec495d" },
+        { "description": "Position bias detection via swapped comparisons", "commit": "4ec495d" },
+        { "description": "ComputePairwiseResult for aggregating comparison results", "commit": "4ec495d" },
+        { "description": "ReferenceData and ReferenceDataset types for gold/expected data", "commit": "5c937e9" },
+        { "description": "Human annotation support with scores and labels", "commit": "5c937e9" },
+        { "description": "MultiJudgeResult for aggregating evaluations from multiple judges", "commit": "06060ac" },
+        { "description": "Aggregation methods: mean, median, weighted, majority, conservative", "commit": "06060ac" },
+        { "description": "Inter-judge agreement metrics and disagreement detection", "commit": "06060ac" },
+        { "description": "Finding consolidation with severity-based deduplication", "commit": "06060ac" },
+        { "description": "Judge, RubricID, and Reference fields in EvaluationReport", "commit": "3cb047c" }
+      ],
+      "changed": [
+        { "description": "Updated JSON Schema to include v0.2.0 types", "commit": "62ca52b" }
+      ],
+      "tests": [
+        { "description": "Unit tests for Rubric, PairwiseComparison, and MultiJudgeResult", "commit": "682e87b" }
+      ]
+    },
+    {
       "version": "v0.1.0",
       "date": "2026-01-26",
       "highlights": [
