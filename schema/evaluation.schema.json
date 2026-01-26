@@ -36,6 +36,148 @@
     "review_type": {
       "type": "string"
     },
+    "judge": {
+      "properties": {
+        "judge_id": {
+          "type": "string"
+        },
+        "model": {
+          "type": "string"
+        },
+        "model_provider": {
+          "type": "string"
+        },
+        "model_version": {
+          "type": "string"
+        },
+        "prompt_template": {
+          "type": "string"
+        },
+        "prompt_version": {
+          "type": "string"
+        },
+        "system_prompt": {
+          "type": "string"
+        },
+        "temperature": {
+          "type": "number"
+        },
+        "max_tokens": {
+          "type": "integer"
+        },
+        "rubric_id": {
+          "type": "string"
+        },
+        "rubric_version": {
+          "type": "string"
+        },
+        "evaluated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "latency": {
+          "type": "integer"
+        },
+        "tokens_used": {
+          "properties": {
+            "input_tokens": {
+              "type": "integer"
+            },
+            "output_tokens": {
+              "type": "integer"
+            },
+            "total_tokens": {
+              "type": "integer"
+            },
+            "cache_read_tokens": {
+              "type": "integer"
+            },
+            "cache_write_tokens": {
+              "type": "integer"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
+        },
+        "trace_id": {
+          "type": "string"
+        },
+        "span_id": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "rubric_id": {
+      "type": "string"
+    },
+    "reference": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "input": {
+          "type": "string"
+        },
+        "expected_output": {
+          "type": "string"
+        },
+        "expected_outputs": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "context": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "annotations": {
+          "items": {
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "score": {
+                "type": "number"
+              },
+              "label": {
+                "type": "string"
+              },
+              "explanation": {
+                "type": "string"
+              },
+              "annotator_id": {
+                "type": "string"
+              },
+              "annotator_type": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "source": {
+          "type": "string"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "metadata": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
     "categories": {
       "items": {
         "properties": {
