@@ -1,0 +1,43 @@
+{
+  "ir_version": "1.0",
+  "project": "structured-evaluation",
+  "repository": "https://github.com/agentplexus/structured-evaluation",
+  "versioning": "semver",
+  "commit_convention": "conventional",
+  "releases": [
+    {
+      "version": "v0.1.0",
+      "date": "2026-01-26",
+      "highlights": [
+        { "description": "Reusable evaluation framework for LLM-as-Judge and multi-agent workflows" },
+        { "description": "InfoSec severity levels (Critical, High, Medium, Low) with configurable pass criteria" },
+        { "description": "DAG-based report aggregation for multi-agent coordination" }
+      ],
+      "added": [
+        { "description": "`evaluation` package with EvaluationReport, CategoryScore, Finding, Severity types", "commit": "7a283de" },
+        { "description": "Category scoring with weighted scores (0-10) and pass/warn/fail status", "commit": "0981fed" },
+        { "description": "PassCriteria and Decision types with configurable approval thresholds", "commit": "f32acc9" },
+        { "description": "EvaluationReport with metadata, categories, findings, and next steps", "commit": "f11ae66" },
+        { "description": "`summary` package with SummaryReport, TeamSection, TaskResult for GO/NO-GO checks", "commit": "897e09b" },
+        { "description": "`combine` package with DAG-based topological sort using Kahn's algorithm", "commit": "5b384b7" },
+        { "description": "AggregateResults and AggregateWithDAG for multi-agent coordination", "commit": "5b384b7" },
+        { "description": "Box-format terminal renderer for summary reports", "commit": "1ea0b48" },
+        { "description": "Detailed terminal renderer for evaluation reports with severity grouping", "commit": "1ea0b48" },
+        { "description": "JSON Schema generation using invopop/jsonschema", "commit": "2f77e28" },
+        { "description": "Embedded schemas via `//go:embed` for runtime access", "commit": "2f77e28" },
+        { "description": "`sevaluation` CLI with render, check, validate, and schema commands", "commit": "bfdb7bf" }
+      ],
+      "tests": [
+        { "description": "Unit tests for evaluation criteria, DAG sorting, and summary reports", "commit": "95435a5" }
+      ],
+      "documentation": [
+        { "description": "Example evaluation and summary reports in examples/", "commit": "b014b5f" }
+      ],
+      "build": [
+        { "description": "GitHub Actions workflows for CI, linting, and CodeQL analysis", "commit": "7ea98ec" },
+        { "description": "Dependabot configuration for automated dependency updates", "commit": "7ea98ec" },
+        { "description": "golangci-lint configuration", "commit": "57e6570" }
+      ]
+    }
+  ]
+}
