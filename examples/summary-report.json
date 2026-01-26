@@ -1,0 +1,71 @@
+{
+  "project": "data-resiliency-service",
+  "version": "v2.1.0",
+  "target": "production",
+  "phase": "Release Readiness Review",
+  "teams": [
+    {
+      "id": "qa",
+      "name": "Quality Assurance",
+      "depends_on": [],
+      "tasks": [
+        {
+          "id": "unit-tests",
+          "name": "Unit Tests",
+          "status": "GO",
+          "detail": "Coverage: 92%"
+        },
+        {
+          "id": "integration-tests",
+          "name": "Integration Tests",
+          "status": "GO",
+          "detail": "48/48 passed"
+        },
+        {
+          "id": "e2e-tests",
+          "name": "E2E Tests",
+          "status": "WARN",
+          "detail": "2 flaky tests skipped"
+        }
+      ]
+    },
+    {
+      "id": "security",
+      "name": "Security",
+      "depends_on": ["qa"],
+      "tasks": [
+        {
+          "id": "dependency-scan",
+          "name": "Dependency Scan",
+          "status": "GO",
+          "detail": "No CVEs found"
+        },
+        {
+          "id": "sast-scan",
+          "name": "SAST Scan",
+          "status": "GO",
+          "detail": "Clean"
+        }
+      ]
+    },
+    {
+      "id": "release",
+      "name": "Release Management",
+      "depends_on": ["qa", "security"],
+      "tasks": [
+        {
+          "id": "changelog",
+          "name": "Changelog",
+          "status": "GO",
+          "detail": "Generated"
+        },
+        {
+          "id": "version-bump",
+          "name": "Version Bump",
+          "status": "GO",
+          "detail": "v2.1.0"
+        }
+      ]
+    }
+  ]
+}

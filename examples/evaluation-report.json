@@ -1,0 +1,129 @@
+{
+  "metadata": {
+    "document": "prd-data-resiliency-v2.md",
+    "document_id": "PRD-2024-042",
+    "document_title": "Data Resiliency and Lifecycle Management",
+    "document_version": "2.0",
+    "generated_at": "2024-01-15T10:30:00Z",
+    "generated_by": "prd-review-agent",
+    "reviewer_id": "claude-3-opus"
+  },
+  "review_type": "prd",
+  "categories": [
+    {
+      "category": "Problem Definition",
+      "score": 9.0,
+      "max_score": 10.0,
+      "weight": 1.5,
+      "status": "pass",
+      "justification": "Clear problem statement with measurable impact"
+    },
+    {
+      "category": "Success Metrics",
+      "score": 7.5,
+      "max_score": 10.0,
+      "weight": 1.0,
+      "status": "pass",
+      "justification": "KPIs defined but some lack baselines"
+    },
+    {
+      "category": "Technical Feasibility",
+      "score": 8.0,
+      "max_score": 10.0,
+      "weight": 1.2,
+      "status": "pass",
+      "justification": "Architecture is sound with clear implementation path"
+    },
+    {
+      "category": "Risk Assessment",
+      "score": 6.0,
+      "max_score": 10.0,
+      "weight": 1.0,
+      "status": "needs_improvement",
+      "justification": "Missing mitigation strategies for key risks"
+    },
+    {
+      "category": "Timeline & Resources",
+      "score": 7.0,
+      "max_score": 10.0,
+      "weight": 0.8,
+      "status": "pass",
+      "justification": "Reasonable timeline with identified dependencies"
+    }
+  ],
+  "findings": [
+    {
+      "id": "F001",
+      "category": "Risk Assessment",
+      "severity": "high",
+      "title": "Missing disaster recovery plan",
+      "description": "The PRD does not include a disaster recovery strategy for data loss scenarios",
+      "recommendation": "Add DR section with RPO/RTO targets and failover procedures",
+      "owner": "tech-lead",
+      "effort": "medium"
+    },
+    {
+      "id": "F002",
+      "category": "Success Metrics",
+      "severity": "medium",
+      "title": "KPI baselines not established",
+      "description": "Three success metrics lack current baseline measurements",
+      "recommendation": "Gather baseline data from production before implementation",
+      "owner": "product-manager",
+      "effort": "low"
+    },
+    {
+      "id": "F003",
+      "category": "Technical Feasibility",
+      "severity": "low",
+      "title": "Consider caching strategy",
+      "description": "High-frequency data access patterns may benefit from caching",
+      "recommendation": "Evaluate Redis or similar caching layer for hot data",
+      "owner": "architect",
+      "effort": "medium"
+    }
+  ],
+  "weighted_score": 7.6,
+  "pass_criteria": {
+    "max_critical": 0,
+    "max_high": 0,
+    "max_medium": -1,
+    "min_score": 7.0
+  },
+  "decision": {
+    "status": "fail",
+    "passed": false,
+    "rationale": "Blocked: 1 high severity findings (max 0)",
+    "finding_counts": {
+      "critical": 0,
+      "high": 1,
+      "medium": 1,
+      "low": 1,
+      "info": 0,
+      "total": 3
+    },
+    "weighted_score": 7.6
+  },
+  "next_steps": {
+    "rerun_command": "sevaluation check prd-data-resiliency-v2.md",
+    "immediate": [
+      {
+        "action": "Add DR section with RPO/RTO targets and failover procedures",
+        "category": "Risk Assessment",
+        "severity": "high",
+        "owner": "tech-lead",
+        "effort": "medium"
+      }
+    ],
+    "recommended": [
+      {
+        "action": "Gather baseline data from production before implementation",
+        "category": "Success Metrics",
+        "severity": "medium",
+        "owner": "product-manager",
+        "effort": "low"
+      }
+    ]
+  },
+  "summary": "Score: 7.6/10. 1 high, 1 medium, 1 low findings. Decision: fail."
+}
