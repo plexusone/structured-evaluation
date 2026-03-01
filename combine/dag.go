@@ -5,7 +5,7 @@ package combine
 import (
 	"sort"
 
-	"github.com/agentplexus/structured-evaluation/summary"
+	"github.com/plexusone/structured-evaluation/summary"
 )
 
 // SortByDAG sorts teams in topological order based on their dependencies.

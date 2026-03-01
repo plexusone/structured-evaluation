@@ -3,7 +3,7 @@ package combine
 import (
 	"testing"
 
-	"github.com/agentplexus/structured-evaluation/summary"
+	"github.com/plexusone/structured-evaluation/summary"
 )
 
 func TestSortByDAG(t *testing.T) {

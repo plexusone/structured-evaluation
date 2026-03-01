@@ -6,8 +6,8 @@ import (
 	"io"
 	"strings"
 
-	"github.com/agentplexus/structured-evaluation/combine"
-	"github.com/agentplexus/structured-evaluation/summary"
+	"github.com/plexusone/structured-evaluation/combine"
+	"github.com/plexusone/structured-evaluation/summary"
 )
 
 const boxWidth = 78

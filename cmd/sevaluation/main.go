@@ -8,11 +8,11 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/agentplexus/structured-evaluation/evaluation"
-	"github.com/agentplexus/structured-evaluation/render/box"
-	"github.com/agentplexus/structured-evaluation/render/detailed"
-	"github.com/agentplexus/structured-evaluation/schema"
-	"github.com/agentplexus/structured-evaluation/summary"
+	"github.com/plexusone/structured-evaluation/evaluation"
+	"github.com/plexusone/structured-evaluation/render/box"
+	"github.com/plexusone/structured-evaluation/render/detailed"
+	"github.com/plexusone/structured-evaluation/schema"
+	"github.com/plexusone/structured-evaluation/summary"
 )
 
 var version = "0.1.0"

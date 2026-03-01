@@ -7,8 +7,8 @@ import (
 
 	"github.com/invopop/jsonschema"
 
-	"github.com/agentplexus/structured-evaluation/evaluation"
-	"github.com/agentplexus/structured-evaluation/summary"
+	"github.com/plexusone/structured-evaluation/evaluation"
+	"github.com/plexusone/structured-evaluation/summary"
 )
 
 // GenerateEvaluationSchema generates JSON Schema for EvaluationReport.
@@ -20,7 +20,7 @@ func GenerateEvaluationSchema() ([]byte, error) {
 	}
 
 	schema := reflector.Reflect(&evaluation.EvaluationReport{})
-	schema.ID = "https://github.com/agentplexus/structured-evaluation/schema/evaluation.schema.json"
+	schema.ID = "https://github.com/plexusone/structured-evaluation/schema/evaluation.schema.json"
 	schema.Title = "Evaluation Report"
 	schema.Description = "Schema for detailed LLM-as-Judge evaluation reports"
 
@@ -36,7 +36,7 @@ func GenerateSummarySchema() ([]byte, error) {
 	}
 
 	schema := reflector.Reflect(&summary.SummaryReport{})
-	schema.ID = "https://github.com/agentplexus/structured-evaluation/schema/summary.schema.json"
+	schema.ID = "https://github.com/plexusone/structured-evaluation/schema/summary.schema.json"
 	schema.Title = "Summary Report"
 	schema.Description = "Schema for GO/NO-GO summary reports from deterministic checks"
 

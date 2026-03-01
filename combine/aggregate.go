@@ -3,7 +3,7 @@ package combine
 import (
 	"time"
 
-	"github.com/agentplexus/structured-evaluation/summary"
+	"github.com/plexusone/structured-evaluation/summary"
 )
 
 // AgentResult represents the output from a single agent execution.

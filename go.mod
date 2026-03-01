@@ -1,4 +1,4 @@
-module github.com/agentplexus/structured-evaluation
+module github.com/plexusone/structured-evaluation
 
 go 1.24
 

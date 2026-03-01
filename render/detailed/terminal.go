@@ -6,7 +6,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/agentplexus/structured-evaluation/evaluation"
+	"github.com/plexusone/structured-evaluation/evaluation"
 )
 
 const boxWidth = 78
