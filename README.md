@@ -19,7 +19,7 @@ A reusable evaluation framework for LLM-as-Judge and multi-agent workflows.
 ## Installation
 
 ```bash
-go get github.com/agentplexus/structured-evaluation
+go get github.com/plexusone/structured-evaluation
 ```
 
 ## Packages
@@ -40,7 +40,7 @@ go get github.com/agentplexus/structured-evaluation
 For subjective quality assessments with detailed findings:
 
 ```go
-import "github.com/agentplexus/structured-evaluation/evaluation"
+import "github.com/plexusone/structured-evaluation/evaluation"
 
 report := evaluation.NewEvaluationReport("prd", "document.md")
 report.AddCategory(evaluation.NewCategoryScore("problem_definition", 0.20, 8.5, "Clear problem statement"))
@@ -58,7 +58,7 @@ report.Finalize("sevaluation check document.md")
 For deterministic checks with pass/fail status:
 
 ```go
-import "github.com/agentplexus/structured-evaluation/summary"
+import "github.com/plexusone/structured-evaluation/summary"
 
 report := summary.NewSummaryReport("my-service", "v1.0.0", "Release Validation")
 report.AddTeam(summary.TeamSection{
@@ -99,7 +99,7 @@ criteria := evaluation.StrictPassCriteria()
 
 ```bash
 # Install
-go install github.com/agentplexus/structured-evaluation/cmd/sevaluation@latest
+go install github.com/plexusone/structured-evaluation/cmd/sevaluation@latest
 
 # Render reports
 sevaluation render report.json --format=detailed
@@ -121,7 +121,7 @@ sevaluation schema generate -o ./schema/
 For multi-agent workflows with dependencies:
 
 ```go
-import "github.com/agentplexus/structured-evaluation/combine"
+import "github.com/plexusone/structured-evaluation/combine"
 
 results := []combine.AgentResult{
     {TeamID: "qa", Tasks: qaTasks},
@@ -138,7 +138,7 @@ report := combine.AggregateResults(results, "my-project", "v1.0.0", "Release")
 Schemas are embedded for runtime validation:
 
 ```go
-import "github.com/agentplexus/structured-evaluation/schema"
+import "github.com/plexusone/structured-evaluation/schema"
 
 evalSchema := schema.EvaluationSchemaJSON
 summarySchema := schema.SummarySchemaJSON
@@ -203,7 +203,7 @@ result := evaluation.AggregateEvaluations(evaluations, evaluation.AggregationMea
 Export evaluations to Opik, Phoenix, or Langfuse:
 
 ```go
-import "github.com/agentplexus/omniobserve/integrations/sevaluation"
+import "github.com/plexusone/omniobserve/integrations/sevaluation"
 
 // Export to observability platform
 err := sevaluation.Export(ctx, provider, traceID, report)
@@ -213,24 +213,24 @@ err := sevaluation.Export(ctx, provider, traceID, report)
 
 Designed to work with:
 
-- `github.com/agentplexus/omniobserve` - LLM observability (Opik, Phoenix, Langfuse)
+- `github.com/plexusone/omniobserve` - LLM observability (Opik, Phoenix, Langfuse)
 - `github.com/grokify/structured-requirements` - PRD evaluation templates
-- `github.com/agentplexus/multi-agent-spec` - Agent coordination
+- `github.com/plexusone/multi-agent-spec` - Agent coordination
 - `github.com/grokify/structured-changelog` - Release validation
 
 ## License
 
 MIT License - see [LICENSE](LICENSE) for details.
 
- [build-status-svg]: https://github.com/agentplexus/structured-evaluation/actions/workflows/ci.yaml/badge.svg?branch=main
- [build-status-url]: https://github.com/agentplexus/structured-evaluation/actions/workflows/ci.yaml
- [lint-status-svg]: https://github.com/agentplexus/structured-evaluation/actions/workflows/lint.yaml/badge.svg?branch=main
- [lint-status-url]: https://github.com/agentplexus/structured-evaluation/actions/workflows/lint.yaml
- [goreport-svg]: https://goreportcard.com/badge/github.com/agentplexus/structured-evaluation
- [goreport-url]: https://goreportcard.com/report/github.com/agentplexus/structured-evaluation
- [docs-godoc-svg]: https://pkg.go.dev/badge/github.com/agentplexus/structured-evaluation
- [docs-godoc-url]: https://pkg.go.dev/github.com/agentplexus/structured-evaluation
+ [build-status-svg]: https://github.com/plexusone/structured-evaluation/actions/workflows/ci.yaml/badge.svg?branch=main
+ [build-status-url]: https://github.com/plexusone/structured-evaluation/actions/workflows/ci.yaml
+ [lint-status-svg]: https://github.com/plexusone/structured-evaluation/actions/workflows/lint.yaml/badge.svg?branch=main
+ [lint-status-url]: https://github.com/plexusone/structured-evaluation/actions/workflows/lint.yaml
+ [goreport-svg]: https://goreportcard.com/badge/github.com/plexusone/structured-evaluation
+ [goreport-url]: https://goreportcard.com/report/github.com/plexusone/structured-evaluation
+ [docs-godoc-svg]: https://pkg.go.dev/badge/github.com/plexusone/structured-evaluation
+ [docs-godoc-url]: https://pkg.go.dev/github.com/plexusone/structured-evaluation
  [license-svg]: https://img.shields.io/badge/license-MIT-blue.svg
- [license-url]: https://github.com/agentplexus/structured-evaluation/blob/master/LICENSE
- [used-by-svg]: https://sourcegraph.com/github.com/agentplexus/structured-evaluation/-/badge.svg
- [used-by-url]: https://sourcegraph.com/github.com/agentplexus/structured-evaluation?badge
+ [license-url]: https://github.com/plexusone/structured-evaluation/blob/master/LICENSE
+ [used-by-svg]: https://sourcegraph.com/github.com/plexusone/structured-evaluation/-/badge.svg
+ [used-by-url]: https://sourcegraph.com/github.com/plexusone/structured-evaluation?badge

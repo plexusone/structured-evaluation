@@ -119,7 +119,7 @@ type EvaluationReport struct {
 The `omniobserve` package now includes `integrations/sevaluation` for exporting evaluation reports to Opik, Phoenix, and Langfuse:
 
 ```go
-import "github.com/agentplexus/omniobserve/integrations/sevaluation"
+import "github.com/plexusone/omniobserve/integrations/sevaluation"
 
 // Export to observability platform
 err := sevaluation.Export(ctx, provider, traceID, report)
@@ -156,10 +156,10 @@ report.SetRubric("prd-evaluation-v1")
 ## Installation
 
 ```bash
-go get github.com/agentplexus/structured-evaluation@v0.2.0
+go get github.com/plexusone/structured-evaluation@v0.2.0
 ```
 
 ## Contributors
 
-- AgentPlexus Team
+- PlexusOne Team
 - Claude Opus 4.5 (Co-Author)

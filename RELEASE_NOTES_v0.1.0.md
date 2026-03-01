@@ -93,10 +93,10 @@ Based on LLM-as-Judge best practices, planned additions:
 ## Installation
 
 ```bash
-go get github.com/agentplexus/structured-evaluation@v0.1.0
+go get github.com/plexusone/structured-evaluation@v0.1.0
 ```
 
 ## Contributors
 
-- AgentPlexus Team
+- PlexusOne Team
 - Claude Opus 4.5 (Co-Author)
