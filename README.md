@@ -31,9 +31,9 @@ A reusable evaluation framework for LLM-as-Judge and multi-agent workflows.
 
 `structured-evaluation` provides standardized types for evaluation reports, enabling:
 
-- **LLM-as-Judge assessments** with weighted category scores and severity-based findings
-- **GO/NO-GO summary reports** for deterministic checks (CI, tests, validation)
-- **Multi-agent coordination** with DAG-based report aggregation
+- ⚖️ **LLM-as-Judge assessments** with weighted category scores and severity-based findings
+- ✅ **GO/NO-GO summary reports** for deterministic checks (CI, tests, validation)
+- 🔗 **Multi-agent coordination** with DAG-based report aggregation
 
 ## Installation
 
