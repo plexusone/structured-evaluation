@@ -40,29 +40,33 @@ func (r *TerminalRenderer) Render(report *evaluation.EvaluationReport) error {
 		b.WriteString(paddedLine(fmt.Sprintf("Title:    %s", truncate(report.Metadata.DocumentTitle, 60))))
 		b.WriteString("\n")
 	}
-	b.WriteString(paddedLine(fmt.Sprintf("Score:    %.1f / 10.0", report.WeightedScore)))
+
+	// Category score summary
+	catCounts := report.Decision.CategoryCounts
+	b.WriteString(paddedLine(fmt.Sprintf("Results:  %d pass, %d partial, %d fail",
+		catCounts.Pass, catCounts.Partial, catCounts.Fail)))
 	b.WriteString("\n")
 
 	// Decision with finding counts
-	counts := report.Decision.FindingCounts
+	findCounts := report.Decision.FindingCounts
 	decisionLine := fmt.Sprintf("Decision: %s", strings.ToUpper(string(report.Decision.Status)))
-	if counts.Total > 0 {
+	if findCounts.Total > 0 {
 		decisionLine += fmt.Sprintf(" (%d Critical, %d High, %d Medium)",
-			counts.Critical, counts.High, counts.Medium)
+			findCounts.Critical, findCounts.High, findCounts.Medium)
 	}
 	b.WriteString(paddedLine(decisionLine))
 	b.WriteString("\n")
 
-	// Category scores
+	// Category results
 	b.WriteString(separator())
 	b.WriteString("\n")
-	b.WriteString(paddedLine("SCORES BY CATEGORY"))
+	b.WriteString(paddedLine("RESULTS BY CATEGORY"))
 	b.WriteString("\n")
 	b.WriteString(separator())
 	b.WriteString("\n")
 
-	for _, cs := range report.Categories {
-		line := formatCategoryLine(cs)
+	for _, cr := range report.Categories {
+		line := formatCategoryLine(cr)
 		b.WriteString(paddedLine(line))
 		b.WriteString("\n")
 	}
@@ -72,7 +76,7 @@ func (r *TerminalRenderer) Render(report *evaluation.EvaluationReport) error {
 		b.WriteString(separator())
 		b.WriteString("\n")
 		b.WriteString(paddedLine(fmt.Sprintf("FINDINGS (%d Critical, %d High, %d Medium)",
-			counts.Critical, counts.High, counts.Medium)))
+			findCounts.Critical, findCounts.High, findCounts.Medium)))
 		b.WriteString("\n")
 		b.WriteString(separator())
 		b.WriteString("\n")
@@ -132,34 +136,38 @@ func (r *TerminalRenderer) Render(report *evaluation.EvaluationReport) error {
 	return err
 }
 
-func formatCategoryLine(cs evaluation.CategoryScore) string {
-	name := cs.Category
+func formatCategoryLine(cr evaluation.CategoryResult) string {
+	name := cr.Category
 	if len(name) > 24 {
 		name = name[:21] + "..."
 	}
 
-	icon := cs.Status.Icon()
-	statusText := string(cs.Status)
+	icon := cr.Score.Icon()
+	scoreText := strings.ToUpper(string(cr.Score))
 
-	justification := truncate(cs.Justification, 28)
+	reasoning := truncate(cr.Reasoning, 35)
 
-	return fmt.Sprintf("  %-24s %s %-4s %4.1f/%.0f  %s",
-		name, icon, statusText, cs.Score, cs.MaxScore, justification)
+	return fmt.Sprintf("  %-24s %s %-7s  %s",
+		name, icon, scoreText, reasoning)
 }
 
 func finalMessage(report *evaluation.EvaluationReport) string {
+	catCounts := report.Decision.CategoryCounts
 	switch report.Decision.Status {
 	case evaluation.DecisionPass:
-		return fmt.Sprintf("✅ %s PASSED (%.1f/10)", strings.ToUpper(report.ReviewType), report.WeightedScore)
+		return fmt.Sprintf("✅ %s PASSED (%d/%d categories)",
+			strings.ToUpper(report.ReviewType), catCounts.Pass, catCounts.Total)
 	case evaluation.DecisionConditional:
-		return fmt.Sprintf("⚠️ %s CONDITIONAL (%.1f/10)", strings.ToUpper(report.ReviewType), report.WeightedScore)
+		return fmt.Sprintf("⚠️ %s CONDITIONAL (%d pass, %d partial)",
+			strings.ToUpper(report.ReviewType), catCounts.Pass, catCounts.Partial)
 	case evaluation.DecisionFail:
 		return fmt.Sprintf("❌ %s BLOCKED - %d issues to resolve",
 			strings.ToUpper(report.ReviewType), report.Decision.FindingCounts.BlockingCount())
 	case evaluation.DecisionHumanReview:
-		return fmt.Sprintf("👤 %s NEEDS HUMAN REVIEW (%.1f/10)", strings.ToUpper(report.ReviewType), report.WeightedScore)
+		return fmt.Sprintf("👤 %s NEEDS HUMAN REVIEW", strings.ToUpper(report.ReviewType))
 	default:
-		return fmt.Sprintf("📋 %s: %.1f/10", strings.ToUpper(report.ReviewType), report.WeightedScore)
+		return fmt.Sprintf("📋 %s: %d/%d categories passed",
+			strings.ToUpper(report.ReviewType), catCounts.Pass, catCounts.Total)
 	}
 }
 
