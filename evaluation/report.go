@@ -13,35 +13,38 @@ type EvaluationReport struct {
 	// Metadata contains report identification and audit info.
 	Metadata ReportMetadata `json:"metadata"`
 
-	// ReviewType identifies the type of review (prd, arb, security, etc.).
-	ReviewType string `json:"review_type"`
+	// ReviewType identifies the type of review (prd, arb, security, article, etc.).
+	ReviewType string `json:"reviewType"`
 
-	// Judge contains metadata about the LLM judge (v0.2.0).
+	// Judge contains metadata about the LLM judge.
 	Judge *JudgeMetadata `json:"judge,omitempty"`
 
-	// RubricID references the rubric used for scoring (v0.2.0).
-	RubricID string `json:"rubric_id,omitempty"`
+	// RubricID references the rubric used for scoring.
+	RubricID string `json:"rubricId,omitempty"`
 
-	// Reference contains gold/expected data for comparison (v0.2.0).
+	// RubricVersion is the version of the rubric used.
+	RubricVersion string `json:"rubricVersion,omitempty"`
+
+	// Reference contains gold/expected data for comparison.
 	Reference *ReferenceData `json:"reference,omitempty"`
 
-	// Categories contains scores for each evaluation dimension.
-	Categories []CategoryScore `json:"categories"`
+	// Categories contains results for each evaluation dimension.
+	Categories []CategoryResult `json:"categories"`
 
 	// Findings are all issues discovered during evaluation.
 	Findings []Finding `json:"findings"`
 
-	// WeightedScore is the overall weighted score.
-	WeightedScore float64 `json:"weighted_score"`
-
 	// PassCriteria defines the requirements for approval.
-	PassCriteria PassCriteria `json:"pass_criteria"`
+	PassCriteria PassCriteria `json:"passCriteria"`
 
 	// Decision is the evaluation outcome.
 	Decision Decision `json:"decision"`
 
+	// OverallDecision is a simplified pass/conditional/fail status.
+	OverallDecision string `json:"overallDecision"`
+
 	// NextSteps provides actionable guidance.
-	NextSteps NextSteps `json:"next_steps"`
+	NextSteps NextSteps `json:"nextSteps"`
 
 	// Summary is the overall assessment.
 	Summary string `json:"summary"`
@@ -53,28 +56,28 @@ type ReportMetadata struct {
 	Document string `json:"document"`
 
 	// DocumentID is the document identifier (e.g., PRD ID).
-	DocumentID string `json:"document_id,omitempty"`
+	DocumentID string `json:"documentId,omitempty"`
 
 	// DocumentTitle is the document title.
-	DocumentTitle string `json:"document_title,omitempty"`
+	DocumentTitle string `json:"documentTitle,omitempty"`
 
 	// DocumentVersion is the document version.
-	DocumentVersion string `json:"document_version,omitempty"`
+	DocumentVersion string `json:"documentVersion,omitempty"`
 
 	// GeneratedAt is when the report was created.
-	GeneratedAt time.Time `json:"generated_at"`
+	GeneratedAt time.Time `json:"generatedAt"`
 
 	// GeneratedBy identifies what created this report.
-	GeneratedBy string `json:"generated_by,omitempty"`
+	GeneratedBy string `json:"generatedBy,omitempty"`
 
 	// ReviewerID identifies the reviewer (agent or human).
-	ReviewerID string `json:"reviewer_id,omitempty"`
+	ReviewerID string `json:"reviewerId,omitempty"`
 }
 
 // NextSteps provides actionable workflow guidance.
 type NextSteps struct {
 	// RerunCommand is the command to re-run evaluation.
-	RerunCommand string `json:"rerun_command"`
+	RerunCommand string `json:"rerunCommand,omitempty"`
 
 	// Immediate are blocking actions that must be completed.
 	Immediate []ActionItem `json:"immediate,omitempty"`
@@ -110,16 +113,17 @@ func NewEvaluationReport(reviewType, document string) *EvaluationReport {
 			GeneratedBy: "structured-evaluation",
 		},
 		ReviewType:   reviewType,
-		Categories:   []CategoryScore{},
+		Categories:   []CategoryResult{},
 		Findings:     []Finding{},
 		PassCriteria: DefaultPassCriteria(),
 	}
 }
 
-// AddCategory adds a category score.
-func (r *EvaluationReport) AddCategory(cs CategoryScore) {
-	cs.ComputeStatus()
-	r.Categories = append(r.Categories, cs)
+// AddCategoryResult adds a category result.
+func (r *EvaluationReport) AddCategoryResult(cr CategoryResult) {
+	r.Categories = append(r.Categories, cr)
+	// Also collect findings from the category
+	r.Findings = append(r.Findings, cr.Findings...)
 }
 
 // AddFinding adds a finding.
@@ -127,26 +131,10 @@ func (r *EvaluationReport) AddFinding(f Finding) {
 	r.Findings = append(r.Findings, f)
 }
 
-// ComputeWeightedScore calculates the overall weighted score.
-func (r *EvaluationReport) ComputeWeightedScore() float64 {
-	var totalWeight float64
-	var totalScore float64
-
-	for _, c := range r.Categories {
-		totalWeight += c.Weight
-		totalScore += c.ComputeWeightedScore()
-	}
-
-	if totalWeight > 0 {
-		r.WeightedScore = totalScore / totalWeight
-	}
-	return r.WeightedScore
-}
-
-// Evaluate computes the decision based on findings and score.
-func (r *EvaluationReport) Evaluate() Decision {
-	r.ComputeWeightedScore()
-	r.Decision = Evaluate(r.Findings, r.WeightedScore, r.PassCriteria)
+// Evaluate computes the decision based on findings and category results.
+func (r *EvaluationReport) Evaluate(rubric *RubricSet) Decision {
+	r.Decision = Evaluate(r.Categories, r.Findings, r.PassCriteria, rubric)
+	r.OverallDecision = string(r.Decision.Status)
 	return r.Decision
 }
 
@@ -178,30 +166,59 @@ func (r *EvaluationReport) GenerateNextSteps(rerunCommand string) {
 			})
 		}
 	}
+
+	// Add actions for failed/partial categories
+	for _, cat := range r.Categories {
+		if cat.Score == ScoreFail {
+			r.NextSteps.Immediate = append(r.NextSteps.Immediate, ActionItem{
+				Action:   "Address failing category: " + cat.Category,
+				Category: cat.Category,
+			})
+		} else if cat.Score == ScorePartial {
+			r.NextSteps.Recommended = append(r.NextSteps.Recommended, ActionItem{
+				Action:   "Improve partial category: " + cat.Category,
+				Category: cat.Category,
+			})
+		}
+	}
 }
 
 // GenerateSummary creates the summary text.
 func (r *EvaluationReport) GenerateSummary() string {
-	counts := r.Decision.FindingCounts
+	counts := r.Decision.CategoryCounts
+	findings := r.Decision.FindingCounts
 
-	summary := fmt.Sprintf("Score: %.1f/10. ", r.WeightedScore)
+	summary := fmt.Sprintf("Categories: %d pass, %d partial, %d fail. ",
+		counts.Pass, counts.Partial, counts.Fail)
 
-	if counts.Total == 0 {
+	if findings.Total == 0 {
 		summary += "No findings."
 	} else {
-		if counts.Critical > 0 {
-			summary += fmt.Sprintf("%d critical, ", counts.Critical)
+		findingParts := []string{}
+		if findings.Critical > 0 {
+			findingParts = append(findingParts, fmt.Sprintf("%d critical", findings.Critical))
 		}
-		if counts.High > 0 {
-			summary += fmt.Sprintf("%d high, ", counts.High)
+		if findings.High > 0 {
+			findingParts = append(findingParts, fmt.Sprintf("%d high", findings.High))
 		}
-		if counts.Medium > 0 {
-			summary += fmt.Sprintf("%d medium, ", counts.Medium)
+		if findings.Medium > 0 {
+			findingParts = append(findingParts, fmt.Sprintf("%d medium", findings.Medium))
 		}
-		if counts.Low > 0 {
-			summary += fmt.Sprintf("%d low", counts.Low)
+		if findings.Low > 0 {
+			findingParts = append(findingParts, fmt.Sprintf("%d low", findings.Low))
 		}
-		summary += " findings."
+		summary += fmt.Sprintf("%d findings", findings.Total)
+		if len(findingParts) > 0 {
+			summary += " ("
+			for i, part := range findingParts {
+				if i > 0 {
+					summary += ", "
+				}
+				summary += part
+			}
+			summary += ")"
+		}
+		summary += "."
 	}
 
 	summary += " Decision: " + string(r.Decision.Status) + "."
@@ -211,8 +228,8 @@ func (r *EvaluationReport) GenerateSummary() string {
 }
 
 // Finalize computes all derived fields.
-func (r *EvaluationReport) Finalize(rerunCommand string) {
-	r.Evaluate()
+func (r *EvaluationReport) Finalize(rubric *RubricSet, rerunCommand string) {
+	r.Evaluate(rubric)
 	r.GenerateNextSteps(rerunCommand)
 	r.GenerateSummary()
 }
@@ -223,6 +240,9 @@ func (r *EvaluationReport) SetJudge(judge *JudgeMetadata) {
 	if judge != nil && judge.RubricID != "" {
 		r.RubricID = judge.RubricID
 	}
+	if judge != nil && judge.RubricVersion != "" {
+		r.RubricVersion = judge.RubricVersion
+	}
 }
 
 // SetReference sets the reference data for comparison.
@@ -230,7 +250,23 @@ func (r *EvaluationReport) SetReference(ref *ReferenceData) {
 	r.Reference = ref
 }
 
-// SetRubric sets the rubric ID.
-func (r *EvaluationReport) SetRubric(rubricID string) {
+// SetRubric sets the rubric ID and version.
+func (r *EvaluationReport) SetRubric(rubricID, rubricVersion string) {
 	r.RubricID = rubricID
+	r.RubricVersion = rubricVersion
+}
+
+// SetPassCriteria sets the pass criteria.
+func (r *EvaluationReport) SetPassCriteria(criteria PassCriteria) {
+	r.PassCriteria = criteria
+}
+
+// GetCategoryResult returns a category result by ID, or nil if not found.
+func (r *EvaluationReport) GetCategoryResult(categoryID string) *CategoryResult {
+	for i := range r.Categories {
+		if r.Categories[i].Category == categoryID {
+			return &r.Categories[i]
+		}
+	}
+	return nil
 }

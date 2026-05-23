@@ -1,39 +1,42 @@
 package evaluation
 
 // PassCriteria defines the requirements for approval.
+// Aligned with LLM-as-Judge best practices.
 type PassCriteria struct {
-	// MaxCritical is the maximum allowed critical findings (default 0).
-	MaxCritical int `json:"max_critical"`
+	// MinCategoriesPassing specifies how many categories must pass.
+	// Values: "all", "all_required", or a number like "3".
+	MinCategoriesPassing string `json:"minCategoriesPassing"`
 
-	// MaxHigh is the maximum allowed high severity findings (default 0).
-	MaxHigh int `json:"max_high"`
-
-	// MaxMedium is the maximum allowed medium findings (-1 = unlimited).
-	MaxMedium int `json:"max_medium,omitempty"`
-
-	// MinScore is the minimum weighted score required.
-	MinScore float64 `json:"min_score"`
+	// MaxFindings limits findings by severity.
+	// Use -1 for unlimited.
+	MaxFindings *FindingLimits `json:"maxFindingsSeverity,omitempty"`
 }
 
 // DefaultPassCriteria returns standard pass criteria.
-// Zero Critical/High, minimum score 7.0.
+// All required categories must pass, 0 critical/high findings allowed.
 func DefaultPassCriteria() PassCriteria {
 	return PassCriteria{
-		MaxCritical: 0,
-		MaxHigh:     0,
-		MaxMedium:   -1, // Unlimited
-		MinScore:    7.0,
+		MinCategoriesPassing: "all_required",
+		MaxFindings: &FindingLimits{
+			Critical: 0,
+			High:     0,
+			Medium:   -1, // Unlimited
+			Low:      -1, // Unlimited
+		},
 	}
 }
 
 // StrictPassCriteria returns strict pass criteria.
-// Zero Critical/High, max 3 Medium, minimum score 8.0.
+// All categories must pass, max 3 medium findings.
 func StrictPassCriteria() PassCriteria {
 	return PassCriteria{
-		MaxCritical: 0,
-		MaxHigh:     0,
-		MaxMedium:   3,
-		MinScore:    8.0,
+		MinCategoriesPassing: "all",
+		MaxFindings: &FindingLimits{
+			Critical: 0,
+			High:     0,
+			Medium:   3,
+			Low:      -1,
+		},
 	}
 }
 
@@ -49,10 +52,10 @@ type Decision struct {
 	Rationale string `json:"rationale"`
 
 	// FindingCounts summarizes findings by severity.
-	FindingCounts FindingCounts `json:"finding_counts"`
+	FindingCounts FindingCounts `json:"findingCounts"`
 
-	// WeightedScore is the final weighted score.
-	WeightedScore float64 `json:"weighted_score"`
+	// CategoryCounts summarizes category results.
+	CategoryCounts CategoryResultCounts `json:"categoryCounts"`
 }
 
 // DecisionStatus represents the decision outcome.
@@ -60,48 +63,84 @@ type DecisionStatus string
 
 const (
 	DecisionPass        DecisionStatus = "pass"         // Meets all criteria
-	DecisionConditional DecisionStatus = "conditional"  // Meets score but has findings
-	DecisionFail        DecisionStatus = "fail"         // Has blocking findings
+	DecisionConditional DecisionStatus = "conditional"  // Partial scores or non-blocking findings
+	DecisionFail        DecisionStatus = "fail"         // Has blocking findings or required categories failed
 	DecisionHumanReview DecisionStatus = "human_review" // Requires human judgment
 )
 
-// Evaluate checks findings and score against criteria.
-func Evaluate(findings []Finding, weightedScore float64, criteria PassCriteria) Decision {
-	counts := CountFindings(findings)
+// Evaluate checks category results and findings against criteria.
+func Evaluate(results []CategoryResult, findings []Finding, criteria PassCriteria, rubric *RubricSet) Decision {
+	findingCounts := CountFindings(findings)
+	categoryCounts := CountResults(results)
 
 	decision := Decision{
-		FindingCounts: counts,
-		WeightedScore: weightedScore,
+		FindingCounts:  findingCounts,
+		CategoryCounts: categoryCounts,
 	}
 
 	// Check for blocking findings
-	criticalExceeded := counts.Critical > criteria.MaxCritical
-	highExceeded := counts.High > criteria.MaxHigh
-	mediumExceeded := criteria.MaxMedium >= 0 && counts.Medium > criteria.MaxMedium
-	scoreBelowMin := weightedScore < criteria.MinScore
-
-	if criticalExceeded || highExceeded {
-		decision.Status = DecisionFail
-		decision.Passed = false
-		decision.Rationale = formatFailRationale(counts, criteria)
-		return decision
+	if criteria.MaxFindings != nil {
+		if findingCounts.Critical > criteria.MaxFindings.Critical {
+			decision.Status = DecisionFail
+			decision.Passed = false
+			decision.Rationale = formatCriticalRationale(findingCounts.Critical, criteria.MaxFindings.Critical)
+			return decision
+		}
+		if findingCounts.High > criteria.MaxFindings.High {
+			decision.Status = DecisionFail
+			decision.Passed = false
+			decision.Rationale = formatHighRationale(findingCounts.High, criteria.MaxFindings.High)
+			return decision
+		}
 	}
 
-	if scoreBelowMin {
-		decision.Status = DecisionHumanReview
-		decision.Passed = false
-		decision.Rationale = formatScoreRationale(weightedScore, criteria.MinScore)
-		return decision
+	// Check category pass requirements
+	switch criteria.MinCategoriesPassing {
+	case "all":
+		if categoryCounts.Fail > 0 || categoryCounts.Partial > 0 {
+			decision.Status = DecisionFail
+			decision.Passed = false
+			decision.Rationale = "Not all categories passed: " + itoa(categoryCounts.Fail) + " failed, " + itoa(categoryCounts.Partial) + " partial"
+			return decision
+		}
+	case "all_required":
+		if rubric != nil && !AllRequiredPassing(results, rubric) {
+			decision.Status = DecisionFail
+			decision.Passed = false
+			decision.Rationale = "One or more required categories did not pass"
+			return decision
+		}
+	default:
+		// Numeric threshold
+		threshold := parseIntOrDefault(criteria.MinCategoriesPassing, 0)
+		if categoryCounts.Pass < threshold {
+			decision.Status = DecisionFail
+			decision.Passed = false
+			decision.Rationale = "Only " + itoa(categoryCounts.Pass) + " categories passed (minimum " + itoa(threshold) + " required)"
+			return decision
+		}
 	}
 
-	if mediumExceeded {
+	// Check medium finding limits
+	if criteria.MaxFindings != nil && criteria.MaxFindings.Medium >= 0 {
+		if findingCounts.Medium > criteria.MaxFindings.Medium {
+			decision.Status = DecisionConditional
+			decision.Passed = false
+			decision.Rationale = formatMediumRationale(findingCounts.Medium, criteria.MaxFindings.Medium)
+			return decision
+		}
+	}
+
+	// Has partial scores but passes
+	if categoryCounts.Partial > 0 {
 		decision.Status = DecisionConditional
-		decision.Passed = false
-		decision.Rationale = formatMediumRationale(counts.Medium, criteria.MaxMedium)
+		decision.Passed = true
+		decision.Rationale = "Passed with " + itoa(categoryCounts.Partial) + " partial score(s)"
 		return decision
 	}
 
-	if counts.Medium > 0 || counts.Low > 0 {
+	// Has non-blocking findings but passes
+	if findingCounts.Medium > 0 || findingCounts.Low > 0 {
 		decision.Status = DecisionConditional
 		decision.Passed = true
 		decision.Rationale = "Passed with non-blocking findings"
@@ -114,19 +153,31 @@ func Evaluate(findings []Finding, weightedScore float64, criteria PassCriteria) 
 	return decision
 }
 
-func formatFailRationale(counts FindingCounts, criteria PassCriteria) string {
-	if counts.Critical > criteria.MaxCritical {
-		return "Blocked: " + itoa(counts.Critical) + " critical findings (max " + itoa(criteria.MaxCritical) + ")"
-	}
-	return "Blocked: " + itoa(counts.High) + " high severity findings (max " + itoa(criteria.MaxHigh) + ")"
+func formatCriticalRationale(count, max int) string {
+	return "Blocked: " + itoa(count) + " critical findings (max " + itoa(max) + " allowed)"
 }
 
-func formatScoreRationale(score, min float64) string {
-	return "Score " + ftoa(score) + " below minimum " + ftoa(min)
+func formatHighRationale(count, max int) string {
+	return "Blocked: " + itoa(count) + " high severity findings (max " + itoa(max) + " allowed)"
 }
 
 func formatMediumRationale(count, max int) string {
 	return itoa(count) + " medium findings exceeds limit of " + itoa(max)
+}
+
+func parseIntOrDefault(s string, def int) int {
+	result := 0
+	for _, c := range s {
+		if c >= '0' && c <= '9' {
+			result = result*10 + int(c-'0')
+		} else {
+			return def
+		}
+	}
+	if s == "" {
+		return def
+	}
+	return result
 }
 
 func itoa(i int) string {
@@ -142,11 +193,4 @@ func itoa(i int) string {
 		i /= 10
 	}
 	return result
-}
-
-func ftoa(f float64) string {
-	// Simple float to string for scores
-	whole := int(f)
-	frac := int((f - float64(whole)) * 10)
-	return itoa(whole) + "." + itoa(frac)
 }

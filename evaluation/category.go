@@ -1,84 +1,150 @@
 package evaluation
 
-// ScoreStatus represents the pass/warn/fail status for a category score.
-type ScoreStatus string
+// ScoreValue represents a categorical score value.
+type ScoreValue string
 
 const (
-	ScoreStatusPass          ScoreStatus = "pass"              // Score >= 7.0
-	ScoreStatusWarn          ScoreStatus = "warn"              // Score >= 5.0 && < 7.0
-	ScoreStatusFail          ScoreStatus = "fail"              // Score < 5.0
-	CategoryPending          ScoreStatus = "pending"           // Not yet evaluated
-	CategoryNeedsImprovement ScoreStatus = "needs_improvement" // Requires attention
+	ScorePass    ScoreValue = "pass"
+	ScorePartial ScoreValue = "partial"
+	ScoreFail    ScoreValue = "fail"
 )
 
-// Icon returns the emoji icon for the score status.
-func (s ScoreStatus) Icon() string {
+// IsPassing returns true if this score is considered passing.
+func (s ScoreValue) IsPassing() bool {
+	return s == ScorePass
+}
+
+// IsPartial returns true if this score is partial.
+func (s ScoreValue) IsPartial() bool {
+	return s == ScorePartial
+}
+
+// IsFailing returns true if this score is failing.
+func (s ScoreValue) IsFailing() bool {
+	return s == ScoreFail
+}
+
+// Icon returns the emoji icon for the score.
+func (s ScoreValue) Icon() string {
 	switch s {
-	case ScoreStatusPass:
+	case ScorePass:
 		return "🟢"
-	case ScoreStatusWarn:
+	case ScorePartial:
 		return "🟡"
-	case ScoreStatusFail:
+	case ScoreFail:
 		return "🔴"
 	default:
 		return "⚪"
 	}
 }
 
-// CategoryScore represents a score for a single evaluation category.
-type CategoryScore struct {
-	// Category is the name/ID of the category.
+// CategoryResult is the evaluation result for a single category.
+type CategoryResult struct {
+	// Category is the category ID.
 	Category string `json:"category"`
 
-	// Weight is the category weight (0.0-1.0, should sum to 1.0).
-	Weight float64 `json:"weight"`
+	// Score is the assigned score (pass, partial, fail).
+	Score ScoreValue `json:"score"`
 
-	// Score is the category score (0.0-10.0).
-	Score float64 `json:"score"`
+	// Reasoning explains the score (chain-of-thought).
+	Reasoning string `json:"reasoning"`
 
-	// MaxScore is the maximum possible score (default 10.0).
-	MaxScore float64 `json:"max_score"`
+	// Evidence are specific quotes or observations.
+	Evidence []string `json:"evidence,omitempty"`
 
-	// Status is the derived status (pass/warn/fail).
-	Status ScoreStatus `json:"status"`
-
-	// Justification explains why this score was given.
-	Justification string `json:"justification"`
-
-	// Evidence provides specific supporting evidence.
-	Evidence string `json:"evidence,omitempty"`
-
-	// Findings are issues found in this category.
+	// Findings are issues discovered in this category.
 	Findings []Finding `json:"findings,omitempty"`
+
+	// ChecklistResults tracks checklist items (for checklist scales).
+	ChecklistResults *ChecklistResults `json:"checklistResults,omitempty"`
 }
 
-// ComputeStatus calculates the status from the score.
-func (c *CategoryScore) ComputeStatus() ScoreStatus {
-	switch {
-	case c.Score >= 7.0:
-		c.Status = ScoreStatusPass
-	case c.Score >= 5.0:
-		c.Status = ScoreStatusWarn
-	default:
-		c.Status = ScoreStatusFail
+// ChecklistResults tracks which items were found for checklist scales.
+type ChecklistResults struct {
+	// RequiredPresent are required items that were found.
+	RequiredPresent []string `json:"requiredPresent,omitempty"`
+
+	// RequiredMissing are required items that were not found.
+	RequiredMissing []string `json:"requiredMissing,omitempty"`
+
+	// OptionalPresent are optional items that were found.
+	OptionalPresent []string `json:"optionalPresent,omitempty"`
+
+	// OptionalMissing are optional items that were not found.
+	OptionalMissing []string `json:"optionalMissing,omitempty"`
+}
+
+// NewCategoryResult creates a category result with the given score.
+func NewCategoryResult(category string, score ScoreValue, reasoning string) *CategoryResult {
+	return &CategoryResult{
+		Category:  category,
+		Score:     score,
+		Reasoning: reasoning,
+		Evidence:  []string{},
+		Findings:  []Finding{},
 	}
-	return c.Status
 }
 
-// ComputeWeightedScore calculates the weighted contribution of this category.
-func (c *CategoryScore) ComputeWeightedScore() float64 {
-	return c.Score * c.Weight
+// AddEvidence adds evidence to the result.
+func (cr *CategoryResult) AddEvidence(evidence ...string) *CategoryResult {
+	cr.Evidence = append(cr.Evidence, evidence...)
+	return cr
 }
 
-// NewCategoryScore creates a category score with computed status.
-func NewCategoryScore(category string, weight, score float64, justification string) CategoryScore {
-	cs := CategoryScore{
-		Category:      category,
-		Weight:        weight,
-		Score:         score,
-		MaxScore:      10.0,
-		Justification: justification,
+// AddFinding adds a finding to the result.
+func (cr *CategoryResult) AddFinding(f Finding) *CategoryResult {
+	cr.Findings = append(cr.Findings, f)
+	return cr
+}
+
+// SetChecklistResults sets the checklist results.
+func (cr *CategoryResult) SetChecklistResults(results *ChecklistResults) *CategoryResult {
+	cr.ChecklistResults = results
+	return cr
+}
+
+// IsPassing returns true if this category passed.
+func (cr *CategoryResult) IsPassing() bool {
+	return cr.Score.IsPassing()
+}
+
+// CountCategoryResults counts results by score value.
+type CategoryResultCounts struct {
+	Pass    int `json:"pass"`
+	Partial int `json:"partial"`
+	Fail    int `json:"fail"`
+	Total   int `json:"total"`
+}
+
+// CountResults counts category results by score.
+func CountResults(results []CategoryResult) CategoryResultCounts {
+	counts := CategoryResultCounts{}
+	for _, r := range results {
+		counts.Total++
+		switch r.Score {
+		case ScorePass:
+			counts.Pass++
+		case ScorePartial:
+			counts.Partial++
+		case ScoreFail:
+			counts.Fail++
+		}
 	}
-	cs.ComputeStatus()
-	return cs
+	return counts
+}
+
+// AllPassing returns true if all results are passing.
+func (c CategoryResultCounts) AllPassing() bool {
+	return c.Fail == 0 && c.Partial == 0
+}
+
+// AllRequiredPassing checks if all required categories passed.
+func AllRequiredPassing(results []CategoryResult, rubric *RubricSet) bool {
+	for _, result := range results {
+		cat := rubric.GetCategory(result.Category)
+		if cat != nil && cat.Required && !result.IsPassing() {
+			return false
+		}
+	}
+	return true
 }
