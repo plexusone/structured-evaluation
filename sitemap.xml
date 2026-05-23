@@ -5,6 +5,14 @@
          <lastmod>2026-05-23</lastmod>
     </url>
     <url>
+         <loc>https://plexusone.github.io/structured-evaluation/cli/</loc>
+         <lastmod>2026-05-23</lastmod>
+    </url>
+    <url>
+         <loc>https://plexusone.github.io/structured-evaluation/cli/commands/</loc>
+         <lastmod>2026-05-23</lastmod>
+    </url>
+    <url>
          <loc>https://plexusone.github.io/structured-evaluation/concepts/findings/</loc>
          <lastmod>2026-05-23</lastmod>
     </url>
@@ -21,11 +29,51 @@
          <lastmod>2026-05-23</lastmod>
     </url>
     <url>
+         <loc>https://plexusone.github.io/structured-evaluation/features/dag-aggregation/</loc>
+         <lastmod>2026-05-23</lastmod>
+    </url>
+    <url>
+         <loc>https://plexusone.github.io/structured-evaluation/features/multi-judge/</loc>
+         <lastmod>2026-05-23</lastmod>
+    </url>
+    <url>
+         <loc>https://plexusone.github.io/structured-evaluation/features/pairwise/</loc>
+         <lastmod>2026-05-23</lastmod>
+    </url>
+    <url>
+         <loc>https://plexusone.github.io/structured-evaluation/features/rendering/</loc>
+         <lastmod>2026-05-23</lastmod>
+    </url>
+    <url>
+         <loc>https://plexusone.github.io/structured-evaluation/features/rubrics/</loc>
+         <lastmod>2026-05-23</lastmod>
+    </url>
+    <url>
          <loc>https://plexusone.github.io/structured-evaluation/getting-started/installation/</loc>
          <lastmod>2026-05-23</lastmod>
     </url>
     <url>
          <loc>https://plexusone.github.io/structured-evaluation/getting-started/quickstart/</loc>
+         <lastmod>2026-05-23</lastmod>
+    </url>
+    <url>
+         <loc>https://plexusone.github.io/structured-evaluation/releases/changelog/</loc>
+         <lastmod>2026-05-23</lastmod>
+    </url>
+    <url>
+         <loc>https://plexusone.github.io/structured-evaluation/releases/v0.1.0/</loc>
+         <lastmod>2026-05-23</lastmod>
+    </url>
+    <url>
+         <loc>https://plexusone.github.io/structured-evaluation/releases/v0.2.0/</loc>
+         <lastmod>2026-05-23</lastmod>
+    </url>
+    <url>
+         <loc>https://plexusone.github.io/structured-evaluation/releases/v0.3.0/</loc>
+         <lastmod>2026-05-23</lastmod>
+    </url>
+    <url>
+         <loc>https://plexusone.github.io/structured-evaluation/releases/v0.4.0/</loc>
          <lastmod>2026-05-23</lastmod>
     </url>
 </urlset>
