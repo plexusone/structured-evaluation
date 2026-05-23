@@ -45,11 +45,13 @@ go get github.com/plexusone/structured-evaluation
 
 | Package | Description |
 |---------|-------------|
-| `evaluation` | EvaluationReport, CategoryScore, Finding, Severity types |
+| `evaluation` | EvaluationReport, CategoryResult, Finding, Severity types |
 | `summary` | SummaryReport, TeamSection, TaskResult for GO/NO-GO checks |
 | `combine` | DAG-based report aggregation using Kahn's algorithm |
 | `render/box` | Box-format terminal renderer for summary reports |
 | `render/detailed` | Detailed terminal renderer for evaluation reports |
+| `render/terminal` | ANSI-colored terminal renderer with UTF8 icons |
+| `render/markdown` | Markdown report renderer |
 | `schema` | JSON Schema generation and embedding |
 
 ## Report Types
@@ -62,7 +64,11 @@ For subjective quality assessments with detailed findings:
 import "github.com/plexusone/structured-evaluation/evaluation"
 
 report := evaluation.NewEvaluationReport("prd", "document.md")
-report.AddCategory(evaluation.NewCategoryScore("problem_definition", 0.20, 8.5, "Clear problem statement"))
+report.AddCategory(evaluation.CategoryResult{
+    Category:  "problem_definition",
+    Score:     evaluation.ScorePass,
+    Reasoning: "Clear problem statement with measurable goals",
+})
 report.AddFinding(evaluation.Finding{
     Severity:       evaluation.SeverityMedium,
     Category:       "metrics",
@@ -104,14 +110,14 @@ Following InfoSec conventions:
 
 ## Pass Criteria
 
-Default criteria (zero blocking findings, minimum score):
+Default criteria (zero blocking findings, all categories passing):
 
 ```go
 criteria := evaluation.DefaultPassCriteria()
-// MaxCritical: 0, MaxHigh: 0, MaxMedium: -1 (unlimited), MinScore: 7.0
+// MaxCritical: 0, MaxHigh: 0, MaxMedium: -1 (unlimited), RequireAllPass: false
 
 criteria := evaluation.StrictPassCriteria()
-// MaxCritical: 0, MaxHigh: 0, MaxMedium: 3, MinScore: 8.0
+// MaxCritical: 0, MaxHigh: 0, MaxMedium: 3, RequireAllPass: true
 ```
 
 ## CLI Tool
@@ -122,6 +128,8 @@ go install github.com/plexusone/structured-evaluation/cmd/sevaluation@latest
 
 # Render reports
 sevaluation render report.json --format=detailed
+sevaluation render report.json --format=terminal   # ANSI colors + UTF8 icons
+sevaluation render report.json --format=markdown   # Markdown output
 sevaluation render report.json --format=box
 sevaluation render report.json --format=json
 
@@ -163,15 +171,15 @@ evalSchema := schema.EvaluationSchemaJSON
 summarySchema := schema.SummarySchemaJSON
 ```
 
-## Rubrics (v0.2.0)
+## Rubrics (v0.4.0)
 
-Define explicit scoring criteria for consistent evaluations:
+Define explicit criteria for consistent categorical evaluations:
 
 ```go
 rubric := evaluation.NewRubric("quality", "Output quality").
-    AddRangeAnchor(8, 10, "Excellent", "Near perfect").
-    AddRangeAnchor(5, 7.9, "Good", "Acceptable").
-    AddRangeAnchor(0, 4.9, "Poor", "Needs work")
+    WithPassCriteria("Meets all requirements, no significant issues").
+    WithPartialCriteria("Meets most requirements, minor issues").
+    WithFailCriteria("Missing key requirements or major issues")
 
 // Use default PRD rubric
 rubricSet := evaluation.DefaultPRDRubricSet()
@@ -204,14 +212,14 @@ result := evaluation.ComputePairwiseResult(comparisons)
 // result.WinRateA, result.OverallWinner
 ```
 
-## Multi-Judge Aggregation (v0.2.0)
+## Multi-Judge Aggregation (v0.4.0)
 
 Combine evaluations from multiple judges:
 
 ```go
-result := evaluation.AggregateEvaluations(evaluations, evaluation.AggregationMean)
+result := evaluation.AggregateEvaluations(evaluations, evaluation.AggregationMajority)
 
-// Methods: AggregationMean, AggregationMedian, AggregationConservative, AggregationMajority
+// Methods: AggregationMajority, AggregationConservative, AggregationOptimistic
 // result.Agreement - inter-judge agreement (0-1)
 // result.Disagreements - categories with significant disagreement
 // result.ConsolidatedDecision - final aggregated decision

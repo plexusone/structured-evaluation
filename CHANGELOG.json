@@ -7,6 +7,42 @@
   "commitConvention": "conventional",
   "releases": [
     {
+      "version": "v0.4.0",
+      "date": "2026-05-23",
+      "highlights": [
+        { "description": "Switch from numeric scores to categorical pass/partial/fail values" },
+        { "description": "New terminal and markdown renderers for evaluation reports" }
+      ],
+      "changed": [
+        { "description": "**Breaking**: `CategoryScore` renamed to `CategoryResult` with `Score` field (pass/partial/fail)", "commit": "2c84023" },
+        { "description": "**Breaking**: `ScoreStatus` renamed to `ScoreValue` with values pass/partial/fail", "commit": "2c84023" },
+        { "description": "**Breaking**: Removed `WeightedScore` from `EvaluationReport`", "commit": "2c84023" },
+        { "description": "**Breaking**: `CategoryResult.Score` is now categorical instead of numeric", "commit": "2c84023" },
+        { "description": "Added `CategoryCounts` to `Decision` (pass/partial/fail counts)", "commit": "2c84023" },
+        { "description": "Updated detailed renderer to display category counts instead of numeric scores", "commit": "4d0d9e6" }
+      ],
+      "added": [
+        { "description": "`render/terminal` package with ANSI-colored output and UTF8 icons", "commit": "cb692fe" },
+        { "description": "`render/markdown` package for Markdown report generation", "commit": "cb692fe" },
+        { "description": "CLI `terminal` and `markdown` render format options", "commit": "8ec8893" }
+      ],
+      "documentation": [
+        { "description": "Added UTF8 icons to README.md Overview section", "commit": "67068ee" }
+      ]
+    },
+    {
+      "version": "v0.3.1",
+      "date": "2026-05-19",
+      "build": [
+        { "description": "Updated CI workflows to use shared workflows", "commit": "9d9cd21" },
+        { "description": "Renamed workflow files to standard filenames", "commit": "ad685e0" }
+      ],
+      "dependencies": [
+        { "description": "Bump github.com/invopop/jsonschema from 0.13.0 to 0.14.0", "commit": "8b1c8d8" },
+        { "description": "Updated go.mod dependencies", "commit": "230616e" }
+      ]
+    },
+    {
       "version": "v0.3.0",
       "date": "2026-03-01",
       "highlights": [
