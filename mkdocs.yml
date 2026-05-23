@@ -1,0 +1,76 @@
+site_name: Structured Evaluation
+site_description: Reusable evaluation framework for LLM-as-Judge and multi-agent workflows
+site_url: https://plexusone.github.io/structured-evaluation
+repo_url: https://github.com/plexusone/structured-evaluation
+repo_name: plexusone/structured-evaluation
+
+theme:
+  name: material
+  custom_dir: docs/overrides
+  palette:
+    # Dark mode first (PlexusOne default)
+    - scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+    - scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+  features:
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.highlight
+    - content.code.copy
+
+extra_css:
+  - https://plexusone.dev/css/plexusone-mkdocs.css
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - admonition
+  - pymdownx.details
+  - tables
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - Getting Started:
+      - Installation: getting-started/installation.md
+      - Quick Start: getting-started/quickstart.md
+  - Concepts:
+      - Report Types: concepts/report-types.md
+      - Categorical Scoring: concepts/scoring.md
+      - Findings & Severity: concepts/findings.md
+      - Pass Criteria: concepts/pass-criteria.md
+  - Features:
+      - Rubrics: features/rubrics.md
+      - Pairwise Comparison: features/pairwise.md
+      - Multi-Judge Aggregation: features/multi-judge.md
+      - Report Rendering: features/rendering.md
+      - DAG Aggregation: features/dag-aggregation.md
+  - CLI:
+      - Overview: cli/index.md
+      - Commands: cli/commands.md
+  - API Reference: https://pkg.go.dev/github.com/plexusone/structured-evaluation
+  - Releases:
+      - Changelog: releases/changelog.md
+      - v0.4.0: releases/v0.4.0.md
+      - v0.3.0: releases/v0.3.0.md
+      - v0.2.0: releases/v0.2.0.md
+      - v0.1.0: releases/v0.1.0.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/plexusone/structured-evaluation
