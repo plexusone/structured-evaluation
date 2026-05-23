@@ -977,9 +977,18 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#module-path-change" class="md-nav__link">
+  <a href="#module-path-changed" class="md-nav__link">
     <span class="md-ellipsis">
-      Module Path Change
+      Module Path Changed
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#json-schema-urls-updated" class="md-nav__link">
+    <span class="md-ellipsis">
+      JSON Schema URLs Updated
     </span>
   </a>
   
@@ -991,11 +1000,35 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#migration" class="md-nav__link">
+  <a href="#upgrade-guide" class="md-nav__link">
     <span class="md-ellipsis">
-      Migration
+      Upgrade Guide
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#other-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Other Changes
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Other Changes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Documentation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1116,9 +1149,18 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#module-path-change" class="md-nav__link">
+  <a href="#module-path-changed" class="md-nav__link">
     <span class="md-ellipsis">
-      Module Path Change
+      Module Path Changed
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#json-schema-urls-updated" class="md-nav__link">
+    <span class="md-ellipsis">
+      JSON Schema URLs Updated
     </span>
   </a>
   
@@ -1130,11 +1172,35 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#migration" class="md-nav__link">
+  <a href="#upgrade-guide" class="md-nav__link">
     <span class="md-ellipsis">
-      Migration
+      Upgrade Guide
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#other-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Other Changes
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Other Changes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Documentation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1169,26 +1235,45 @@
 <h1 id="v030-release-notes">v0.3.0 Release Notes<a class="headerlink" href="#v030-release-notes" title="Permanent link">&para;</a></h1>
 <p><strong>Release Date:</strong> 2026-03-01</p>
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
-<p>v0.3.0 contains a breaking change for the module path due to organization rename.</p>
+<p>This release updates the module path following the GitHub organization rename from <code>agentplexus</code> to <code>plexusone</code>.</p>
 <h2 id="breaking-changes">Breaking Changes<a class="headerlink" href="#breaking-changes" title="Permanent link">&para;</a></h2>
-<h3 id="module-path-change">Module Path Change<a class="headerlink" href="#module-path-change" title="Permanent link">&para;</a></h3>
-<p>The module path has changed from <code>github.com/agentplexus/structured-evaluation</code> to <code>github.com/plexusone/structured-evaluation</code>.</p>
-<p><strong>Update your imports:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1">// Before</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">import</span><span class="w"> </span><span class="s">&quot;github.com/agentplexus/structured-evaluation/evaluation&quot;</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1">// After</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="kn">import</span><span class="w"> </span><span class="s">&quot;github.com/plexusone/structured-evaluation/evaluation&quot;</span>
+<h3 id="module-path-changed">Module Path Changed<a class="headerlink" href="#module-path-changed" title="Permanent link">&para;</a></h3>
+<p>The Go module path has changed from <code>github.com/agentplexus/structured-evaluation</code> to <code>github.com/plexusone/structured-evaluation</code>.</p>
+<p><strong>Before:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="s">&quot;github.com/agentplexus/structured-evaluation/evaluation&quot;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">import</span><span class="w"> </span><span class="s">&quot;github.com/agentplexus/structured-evaluation/summary&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kn">import</span><span class="w"> </span><span class="s">&quot;github.com/agentplexus/structured-evaluation/combine&quot;</span>
 </code></pre></div>
-<p><strong>Update go.mod:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>go<span class="w"> </span>get<span class="w"> </span>github.com/plexusone/structured-evaluation@v0.3.0
+<p><strong>After:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span><span class="w"> </span><span class="s">&quot;github.com/plexusone/structured-evaluation/evaluation&quot;</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">import</span><span class="w"> </span><span class="s">&quot;github.com/plexusone/structured-evaluation/summary&quot;</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="kn">import</span><span class="w"> </span><span class="s">&quot;github.com/plexusone/structured-evaluation/combine&quot;</span>
 </code></pre></div>
-<h2 id="migration">Migration<a class="headerlink" href="#migration" title="Permanent link">&para;</a></h2>
-<ol>
-<li>Update all imports from <code>agentplexus</code> to <code>plexusone</code></li>
-<li>Run <code>go mod tidy</code></li>
-<li>Verify builds succeed</li>
-</ol>
+<h3 id="json-schema-urls-updated">JSON Schema URLs Updated<a class="headerlink" href="#json-schema-urls-updated" title="Permanent link">&para;</a></h3>
+<p>The <code>$id</code> fields in JSON Schema files have been updated:</p>
+<ul>
+<li><code>evaluation.schema.json</code>: <code>https://github.com/plexusone/structured-evaluation/schema/evaluation.schema.json</code></li>
+<li><code>summary.schema.json</code>: <code>https://github.com/plexusone/structured-evaluation/schema/summary.schema.json</code></li>
+</ul>
+<h2 id="upgrade-guide">Upgrade Guide<a class="headerlink" href="#upgrade-guide" title="Permanent link">&para;</a></h2>
+<p>Update all import statements in your code:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Using sed (macOS)</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>find<span class="w"> </span>.<span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;*.go&quot;</span><span class="w"> </span>-exec<span class="w"> </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="s1">&#39;s|github.com/agentplexus/structured-evaluation|github.com/plexusone/structured-evaluation|g&#39;</span><span class="w"> </span><span class="o">{}</span><span class="w"> </span>+
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1"># Using sed (Linux)</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>find<span class="w"> </span>.<span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;*.go&quot;</span><span class="w"> </span>-exec<span class="w"> </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;s|github.com/agentplexus/structured-evaluation|github.com/plexusone/structured-evaluation|g&#39;</span><span class="w"> </span><span class="o">{}</span><span class="w"> </span>+
+</code></pre></div>
+<p>Then update your dependencies:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>go<span class="w"> </span>get<span class="w"> </span>github.com/plexusone/structured-evaluation@v0.3.0
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>go<span class="w"> </span>mod<span class="w"> </span>tidy
+</code></pre></div>
+<h2 id="other-changes">Other Changes<a class="headerlink" href="#other-changes" title="Permanent link">&para;</a></h2>
+<h3 id="documentation">Documentation<a class="headerlink" href="#documentation" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Updated README with new module path and badge URLs</li>
+<li>Updated all example imports in documentation</li>
+<li>Updated related package references (<code>omniobserve</code>, <code>multi-agent-spec</code>)</li>
+</ul>
 <h2 id="full-changelog">Full Changelog<a class="headerlink" href="#full-changelog" title="Permanent link">&para;</a></h2>
 <p>See the <a href="https://github.com/plexusone/structured-evaluation/blob/main/CHANGELOG.md">CHANGELOG</a> for complete details.</p>
 
