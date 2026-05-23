@@ -11,6 +11,8 @@ import (
 	"github.com/plexusone/structured-evaluation/evaluation"
 	"github.com/plexusone/structured-evaluation/render/box"
 	"github.com/plexusone/structured-evaluation/render/detailed"
+	"github.com/plexusone/structured-evaluation/render/markdown"
+	"github.com/plexusone/structured-evaluation/render/terminal"
 	"github.com/plexusone/structured-evaluation/schema"
 	"github.com/plexusone/structured-evaluation/summary"
 )
@@ -58,6 +60,8 @@ var renderCmd = &cobra.Command{
 Formats:
   box      - Summary box format (for summary reports)
   detailed - Detailed format with findings (for evaluation reports)
+  terminal - ANSI-colored terminal output with UTF8 icons (for evaluation reports)
+  markdown - Markdown report format (for evaluation reports)
   json     - Pretty-printed JSON`,
 	Args: cobra.ExactArgs(1),
 	RunE: runRender,
@@ -175,8 +179,14 @@ func renderEvaluation(data []byte, format string) error {
 	}
 
 	switch format {
-	case "detailed", "terminal":
+	case "detailed":
 		renderer := detailed.NewTerminal(os.Stdout)
+		return renderer.Render(&report)
+	case "terminal":
+		renderer := terminal.New(os.Stdout)
+		return renderer.Render(&report)
+	case "markdown", "md":
+		renderer := markdown.New(os.Stdout)
 		return renderer.Render(&report)
 	case "json":
 		output, err := json.MarshalIndent(&report, "", "  ")
@@ -186,7 +196,7 @@ func renderEvaluation(data []byte, format string) error {
 		fmt.Println(string(output))
 		return nil
 	default:
-		return fmt.Errorf("format %q not supported for evaluation reports (use detailed or json)", format)
+		return fmt.Errorf("format %q not supported for evaluation reports (use detailed, terminal, markdown, or json)", format)
 	}
 }
 
@@ -233,7 +243,8 @@ func runCheck(cmd *cobra.Command, args []string) error {
 		}
 
 		if report.Decision.Passed {
-			fmt.Printf("✅ PASSED: %s (%.1f/10)\n", report.ReviewType, report.WeightedScore)
+			counts := report.Decision.CategoryCounts
+			fmt.Printf("✅ PASSED: %s (%d/%d categories)\n", report.ReviewType, counts.Pass, counts.Total)
 			return nil
 		}
 		fmt.Printf("❌ FAILED: %s - %s\n", report.ReviewType, report.Decision.Rationale)
