@@ -26,6 +26,11 @@ const (
 
 	// ScaleTypeBinary is simple pass/fail.
 	ScaleTypeBinary ScaleType = "binary"
+
+	// ScaleTypeLikert uses a numeric scale (e.g., 1-5).
+	// Better for human comparison and inter-rater reliability studies.
+	// Scores are mapped to categorical (pass/partial/fail) for decisions.
+	ScaleTypeLikert ScaleType = "likert"
 )
 
 // RubricSet is a collection of rubrics for a complete evaluation.
@@ -116,8 +121,9 @@ type Category struct {
 
 // Scale defines the scoring mechanism for a category.
 type Scale struct {
-	// Type is "categorical", "checklist", or "binary".
+	// Type is "categorical", "checklist", "binary", or "likert".
 	// Categorical with 2-3 options is recommended for LLM-as-Judge.
+	// Likert is better for human comparison studies.
 	Type ScaleType `json:"type"`
 
 	// Options are the scoring options (for categorical scales).
@@ -131,6 +137,41 @@ type Scale struct {
 
 	// PassingThreshold defines pass criteria (for checklist scales).
 	PassingThreshold *ChecklistThreshold `json:"passingThreshold,omitempty"`
+
+	// LikertConfig defines the likert scale (for likert scales).
+	LikertConfig *LikertConfig `json:"likertConfig,omitempty"`
+}
+
+// LikertConfig defines a Likert scale configuration.
+type LikertConfig struct {
+	// Min is the minimum score value (usually 1 or 0).
+	Min int `json:"min"`
+
+	// Max is the maximum score value (usually 5).
+	Max int `json:"max"`
+
+	// Anchors describe what each score level means.
+	Anchors []LikertAnchor `json:"anchors,omitempty"`
+
+	// PassThreshold is the minimum score for "pass" (default: top 40%).
+	// For 1-5 scale, default is 4.
+	PassThreshold *int `json:"passThreshold,omitempty"`
+
+	// PartialThreshold is the minimum score for "partial" (default: middle).
+	// For 1-5 scale, default is 3.
+	PartialThreshold *int `json:"partialThreshold,omitempty"`
+}
+
+// LikertAnchor describes what a specific score level means.
+type LikertAnchor struct {
+	// Value is the numeric score.
+	Value int `json:"value"`
+
+	// Label is the short label (e.g., "Excellent", "Good").
+	Label string `json:"label"`
+
+	// Description explains what this score means.
+	Description string `json:"description,omitempty"`
 }
 
 // ScaleOption is a single option in a categorical scale.
@@ -247,6 +288,14 @@ func (rs *RubricSet) Validate() []string {
 		if len(cat.Scale.Options) == 0 && cat.Scale.Type == ScaleTypeCategorical {
 			issues = append(issues, "category "+cat.ID+": categorical scale requires options")
 		}
+		if cat.Scale.Type == ScaleTypeLikert && cat.Scale.LikertConfig == nil {
+			issues = append(issues, "category "+cat.ID+": likert scale requires LikertConfig")
+		}
+		if cat.Scale.LikertConfig != nil {
+			if cat.Scale.LikertConfig.Min >= cat.Scale.LikertConfig.Max {
+				issues = append(issues, "category "+cat.ID+": likert scale min must be less than max")
+			}
+		}
 	}
 
 	return issues
@@ -343,6 +392,65 @@ func (c *Category) WithChecklist(required, optional []string, threshold *Checkli
 	c.Scale.OptionalItems = optional
 	c.Scale.PassingThreshold = threshold
 	return c
+}
+
+// WithLikert sets up a Likert scale with custom configuration.
+func (c *Category) WithLikert(config *LikertConfig) *Category {
+	c.Scale.Type = ScaleTypeLikert
+	c.Scale.LikertConfig = config
+	return c
+}
+
+// WithLikert5 sets up a standard 1-5 Likert scale.
+// Default thresholds: 4-5 = pass, 3 = partial, 1-2 = fail.
+func (c *Category) WithLikert5(anchors []LikertAnchor) *Category {
+	passThreshold := 4
+	partialThreshold := 3
+	c.Scale.Type = ScaleTypeLikert
+	c.Scale.LikertConfig = &LikertConfig{
+		Min:              1,
+		Max:              5,
+		Anchors:          anchors,
+		PassThreshold:    &passThreshold,
+		PartialThreshold: &partialThreshold,
+	}
+	return c
+}
+
+// StandardLikert5Anchors returns standard 1-5 Likert anchors.
+func StandardLikert5Anchors() []LikertAnchor {
+	return []LikertAnchor{
+		{Value: 5, Label: "Excellent", Description: "Exceeds all expectations"},
+		{Value: 4, Label: "Good", Description: "Meets expectations with minor improvements possible"},
+		{Value: 3, Label: "Adequate", Description: "Meets minimum requirements"},
+		{Value: 2, Label: "Needs Improvement", Description: "Below expectations"},
+		{Value: 1, Label: "Poor", Description: "Does not meet requirements"},
+	}
+}
+
+// LikertToCategorical converts a Likert score to categorical (pass/partial/fail).
+func LikertToCategorical(score int, config *LikertConfig) ScoreValue {
+	if config == nil {
+		// Default 1-5 scale
+		config = &LikertConfig{Min: 1, Max: 5}
+	}
+
+	passThreshold := config.Max - 1 // Default: top 2 values = pass
+	if config.PassThreshold != nil {
+		passThreshold = *config.PassThreshold
+	}
+
+	partialThreshold := config.Min + (config.Max-config.Min)/2 // Default: middle
+	if config.PartialThreshold != nil {
+		partialThreshold = *config.PartialThreshold
+	}
+
+	if score >= passThreshold {
+		return ScorePass
+	} else if score >= partialThreshold {
+		return ScorePartial
+	}
+	return ScoreFail
 }
 
 // SetExamples sets few-shot examples for the category.
