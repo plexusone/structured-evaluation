@@ -5,6 +5,7 @@
 [![Go SAST][go-sast-svg]][go-sast-url]
 [![Go Report Card][goreport-svg]][goreport-url]
 [![Docs][docs-godoc-svg]][docs-godoc-url]
+[![Docs][docs-mkdoc-svg]][docs-mkdoc-url]
 [![Visualization][viz-svg]][viz-url]
 [![License][license-svg]][license-url]
 
@@ -18,12 +19,14 @@
  [goreport-url]: https://goreportcard.com/report/github.com/plexusone/structured-evaluation
  [docs-godoc-svg]: https://pkg.go.dev/badge/github.com/plexusone/structured-evaluation
  [docs-godoc-url]: https://pkg.go.dev/github.com/plexusone/structured-evaluation
- [viz-svg]: https://img.shields.io/badge/visualizaton-Go-blue.svg
+ [docs-mkdoc-svg]: https://img.shields.io/badge/Go-dev%20guide-blue.svg
+ [docs-mkdoc-url]: https://plexusone.dev/structured-evaluation
+ [viz-svg]: https://img.shields.io/badge/Go-visualizaton-blue.svg
  [viz-url]: https://mango-dune-07a8b7110.1.azurestaticapps.net/?repo=plexusone%2Fstructured-evaluation
  [loc-svg]: https://tokei.rs/b1/github/plexusone/structured-evaluation
  [repo-url]: https://github.com/plexusone/structured-evaluation
  [license-svg]: https://img.shields.io/badge/license-MIT-blue.svg
- [license-url]: https://github.com/plexusone/structured-evaluation/blob/master/LICENSE
+ [license-url]: https://github.com/plexusone/structured-evaluation/blob/main/LICENSE
 
 A reusable evaluation framework for LLM-as-Judge and multi-agent workflows.
 
