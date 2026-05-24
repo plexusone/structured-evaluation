@@ -31,7 +31,9 @@ A reusable evaluation framework for LLM-as-Judge and multi-agent workflows.
 
 `structured-evaluation` provides standardized types for evaluation reports, enabling:
 
-- ⚖️ **LLM-as-Judge assessments** with weighted category scores and severity-based findings
+- ⚖️ **LLM-as-Judge assessments** with categorical scoring and severity-based findings
+- 📊 **Dual-scale support** with Likert (1-5) scales for human comparison studies
+- 📈 **Inter-rater reliability** metrics for LLM calibration and quality assurance
 - ✅ **GO/NO-GO summary reports** for deterministic checks (CI, tests, validation)
 - 🔗 **Multi-agent coordination** with DAG-based report aggregation
 
@@ -223,6 +225,39 @@ result := evaluation.AggregateEvaluations(evaluations, evaluation.AggregationMaj
 // result.Agreement - inter-judge agreement (0-1)
 // result.Disagreements - categories with significant disagreement
 // result.ConsolidatedDecision - final aggregated decision
+```
+
+## Likert Scales (v0.5.0)
+
+Use 1-5 numeric scales for human comparison studies:
+
+```go
+// Create a Likert-scale category
+cat := evaluation.NewCategory("quality", "Content Quality", "Overall quality").
+    WithLikert5(evaluation.StandardLikert5Anchors())
+
+// Record a Likert score (automatically maps to categorical)
+result := evaluation.NewCategoryResultFromLikert("quality", 4, config, "Good quality")
+// result.Score = ScorePass, result.NumericScore = 4.0
+
+// Or record both categorical and numeric
+result := evaluation.NewCategoryResultWithNumeric("quality", evaluation.ScorePass, 4.5, "reasoning")
+```
+
+## Inter-Rater Reliability (v0.5.0)
+
+Compare LLM evaluations with human ground truth:
+
+```go
+// Compute IRR metrics
+metrics := evaluation.ComputeIRRFromResults(humanResults, llmResults)
+
+fmt.Printf("Exact Agreement: %.1f%%\n", metrics.ExactAgreement*100)
+fmt.Printf("Adjacent Agreement: %.1f%%\n", metrics.AdjacentAgreement*100)
+fmt.Printf("Pearson r: %.3f\n", metrics.PearsonCorrelation)
+
+// Categorical agreement with confusion matrix
+agreement := evaluation.ComputeCategoricalAgreement(humanResults, llmResults)
 ```
 
 ## OmniObserve Integration

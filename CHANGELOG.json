@@ -7,6 +7,37 @@
   "commitConvention": "conventional",
   "releases": [
     {
+      "version": "v0.5.0",
+      "date": "2026-05-23",
+      "highlights": [
+        { "description": "Likert scale (1-5) support for human comparison studies" },
+        { "description": "Inter-rater reliability (IRR) metrics for LLM calibration" }
+      ],
+      "added": [
+        { "description": "`ScaleTypeLikert` scale type with configurable anchors and thresholds" },
+        { "description": "`LikertConfig` with min/max values and pass/partial thresholds" },
+        { "description": "`LikertAnchor` for describing score levels (value, label, description)" },
+        { "description": "`StandardLikert5Anchors()` helper for standard 1-5 scale" },
+        { "description": "`WithLikert5()` and `WithLikert()` methods for creating Likert categories" },
+        { "description": "`LikertToCategorical()` for converting numeric scores to pass/partial/fail" },
+        { "description": "Optional `NumericScore` field on `CategoryResult` for dual-scale support" },
+        { "description": "`NewCategoryResultWithNumeric()` for creating results with both categorical and numeric scores" },
+        { "description": "`NewCategoryResultFromLikert()` for creating results from Likert scores" },
+        { "description": "`IRRMetrics` type with exact agreement, adjacent agreement, MAD, and Pearson correlation" },
+        { "description": "`ComputeIRR()` for computing IRR from rating pairs" },
+        { "description": "`ComputeIRRFromResults()` for comparing two sets of CategoryResults" },
+        { "description": "`CategoricalAgreement` type with confusion matrix for categorical comparisons" },
+        { "description": "`ComputeCategoricalAgreement()` for categorical IRR analysis" }
+      ],
+      "documentation": [
+        { "description": "Added Likert Scales documentation page" },
+        { "description": "Added Inter-Rater Reliability documentation page" }
+      ],
+      "tests": [
+        { "description": "Comprehensive tests for Likert scales and IRR metrics" }
+      ]
+    },
+    {
       "version": "v0.4.0",
       "date": "2026-05-23",
       "highlights": [
