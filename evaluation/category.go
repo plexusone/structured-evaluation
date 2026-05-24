@@ -44,7 +44,13 @@ type CategoryResult struct {
 	Category string `json:"category"`
 
 	// Score is the assigned score (pass, partial, fail).
+	// This is the authoritative score for decision-making.
 	Score ScoreValue `json:"score"`
+
+	// NumericScore is an optional numeric score (e.g., 1-5 Likert).
+	// Used for human comparison, inter-rater reliability, and calibration.
+	// The categorical Score takes precedence for pass/fail decisions.
+	NumericScore *float64 `json:"numericScore,omitempty"`
 
 	// Reasoning explains the score (chain-of-thought).
 	Reasoning string `json:"reasoning"`
@@ -83,6 +89,53 @@ func NewCategoryResult(category string, score ScoreValue, reasoning string) *Cat
 		Evidence:  []string{},
 		Findings:  []Finding{},
 	}
+}
+
+// NewCategoryResultWithNumeric creates a category result with both categorical and numeric scores.
+// The numeric score is used for human comparison; categorical score is authoritative for decisions.
+func NewCategoryResultWithNumeric(category string, score ScoreValue, numericScore float64, reasoning string) *CategoryResult {
+	return &CategoryResult{
+		Category:     category,
+		Score:        score,
+		NumericScore: &numericScore,
+		Reasoning:    reasoning,
+		Evidence:     []string{},
+		Findings:     []Finding{},
+	}
+}
+
+// NewCategoryResultFromLikert creates a category result from a Likert score.
+// The categorical score is derived from the numeric score using the config thresholds.
+func NewCategoryResultFromLikert(category string, likertScore int, config *LikertConfig, reasoning string) *CategoryResult {
+	categoricalScore := LikertToCategorical(likertScore, config)
+	numericScore := float64(likertScore)
+	return &CategoryResult{
+		Category:     category,
+		Score:        categoricalScore,
+		NumericScore: &numericScore,
+		Reasoning:    reasoning,
+		Evidence:     []string{},
+		Findings:     []Finding{},
+	}
+}
+
+// SetNumericScore sets the numeric score.
+func (cr *CategoryResult) SetNumericScore(score float64) *CategoryResult {
+	cr.NumericScore = &score
+	return cr
+}
+
+// HasNumericScore returns true if a numeric score is set.
+func (cr *CategoryResult) HasNumericScore() bool {
+	return cr.NumericScore != nil
+}
+
+// GetNumericScore returns the numeric score, or 0 if not set.
+func (cr *CategoryResult) GetNumericScore() float64 {
+	if cr.NumericScore == nil {
+		return 0
+	}
+	return *cr.NumericScore
 }
 
 // AddEvidence adds evidence to the result.
