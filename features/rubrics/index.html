@@ -634,9 +634,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#creating-rubrics" class="md-nav__link">
+  <a href="#creating-rubric-categories" class="md-nav__link">
     <span class="md-ellipsis">
-      Creating Rubrics
+      Creating Rubric Categories
     </span>
   </a>
   
@@ -1308,9 +1308,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#creating-rubrics" class="md-nav__link">
+  <a href="#creating-rubric-categories" class="md-nav__link">
     <span class="md-ellipsis">
-      Creating Rubrics
+      Creating Rubric Categories
     </span>
   </a>
   
@@ -1458,8 +1458,8 @@
 <h1 id="rubrics">Rubrics<a class="headerlink" href="#rubrics" title="Permanent link">&para;</a></h1>
 <p>Rubrics define explicit evaluation criteria for consistent assessments across evaluators (human or LLM).</p>
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
-<p>A rubric provides structured guidance for evaluating each category:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kd">type</span><span class="w"> </span><span class="nx">Rubric</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<p>A rubric category provides structured guidance for evaluating each category:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kd">type</span><span class="w"> </span><span class="nx">Category</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="nx">ID</span><span class="w">          </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;id&quot;`</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="nx">Name</span><span class="w">        </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;name&quot;`</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="nx">Description</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;description&quot;`</span>
@@ -1471,8 +1471,8 @@
 <a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="nx">Examples</span><span class="w">    </span><span class="p">[]</span><span class="nx">Example</span><span class="w"> </span><span class="s">`json:&quot;examples,omitempty&quot;`</span>
 <a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="p">}</span>
 </code></pre></div>
-<h2 id="creating-rubrics">Creating Rubrics<a class="headerlink" href="#creating-rubrics" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nx">rubric</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">evaluation</span><span class="p">.</span><span class="nx">NewRubric</span><span class="p">(</span><span class="s">&quot;problem_definition&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Problem Definition&quot;</span><span class="p">).</span>
+<h2 id="creating-rubric-categories">Creating Rubric Categories<a class="headerlink" href="#creating-rubric-categories" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nx">cat</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewCategory</span><span class="p">(</span><span class="s">&quot;problem_definition&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Problem Definition&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">).</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="nx">WithDescription</span><span class="p">(</span><span class="s">&quot;Evaluates clarity and completeness of the problem statement&quot;</span><span class="p">).</span>
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nx">WithPassCriteria</span><span class="p">(</span><span class="s">&quot;Problem is clearly stated with measurable business impact and affected users identified&quot;</span><span class="p">).</span>
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="nx">WithPartialCriteria</span><span class="p">(</span><span class="s">&quot;Problem is stated but lacks specificity or measurable impact&quot;</span><span class="p">).</span>
@@ -1480,37 +1480,37 @@
 </code></pre></div>
 <h2 id="adding-examples">Adding Examples<a class="headerlink" href="#adding-examples" title="Permanent link">&para;</a></h2>
 <p>Examples help evaluators understand the criteria:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nx">rubric</span><span class="p">.</span><span class="nx">AddExample</span><span class="p">(</span><span class="nx">evaluation</span><span class="p">.</span><span class="nx">Example</span><span class="p">{</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="nx">Score</span><span class="p">:</span><span class="w">   </span><span class="nx">evaluation</span><span class="p">.</span><span class="nx">ScorePass</span><span class="p">,</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nx">cat</span><span class="p">.</span><span class="nx">AddExample</span><span class="p">(</span><span class="nx">rubric</span><span class="p">.</span><span class="nx">Example</span><span class="p">{</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="nx">Score</span><span class="p">:</span><span class="w">   </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">ScorePass</span><span class="p">,</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nx">Text</span><span class="p">:</span><span class="w">    </span><span class="s">&quot;Users spend 3+ hours/week manually reconciling invoices, costing $50k/year in labor&quot;</span><span class="p">,</span>
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="nx">Reason</span><span class="p">:</span><span class="w">  </span><span class="s">&quot;Quantifies impact, identifies users, and is actionable&quot;</span><span class="p">,</span>
 <a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="p">})</span>
 <a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="nx">rubric</span><span class="p">.</span><span class="nx">AddExample</span><span class="p">(</span><span class="nx">evaluation</span><span class="p">.</span><span class="nx">Example</span><span class="p">{</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="nx">Score</span><span class="p">:</span><span class="w">   </span><span class="nx">evaluation</span><span class="p">.</span><span class="nx">ScoreFail</span><span class="p">,</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="nx">cat</span><span class="p">.</span><span class="nx">AddExample</span><span class="p">(</span><span class="nx">rubric</span><span class="p">.</span><span class="nx">Example</span><span class="p">{</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="nx">Score</span><span class="p">:</span><span class="w">   </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">ScoreFail</span><span class="p">,</span>
 <a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">    </span><span class="nx">Text</span><span class="p">:</span><span class="w">    </span><span class="s">&quot;We need to improve the system&quot;</span><span class="p">,</span>
 <a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">    </span><span class="nx">Reason</span><span class="p">:</span><span class="w">  </span><span class="s">&quot;Vague, no measurable impact, not actionable&quot;</span><span class="p">,</span>
 <a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="p">})</span>
 </code></pre></div>
 <h2 id="rubricset">RubricSet<a class="headerlink" href="#rubricset" title="Permanent link">&para;</a></h2>
-<p>Group rubrics for a specific review type:</p>
+<p>Group rubric categories for a specific review type:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kd">type</span><span class="w"> </span><span class="nx">RubricSet</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="nx">ID</span><span class="w">          </span><span class="kt">string</span><span class="w">   </span><span class="s">`json:&quot;id&quot;`</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="nx">Name</span><span class="w">        </span><span class="kt">string</span><span class="w">   </span><span class="s">`json:&quot;name&quot;`</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="nx">Description</span><span class="w"> </span><span class="kt">string</span><span class="w">   </span><span class="s">`json:&quot;description&quot;`</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="nx">Categories</span><span class="w">  </span><span class="p">[]</span><span class="nx">Rubric</span><span class="w"> </span><span class="s">`json:&quot;categories&quot;`</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="nx">ID</span><span class="w">          </span><span class="kt">string</span><span class="w">     </span><span class="s">`json:&quot;id&quot;`</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="nx">Name</span><span class="w">        </span><span class="kt">string</span><span class="w">     </span><span class="s">`json:&quot;name&quot;`</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="nx">Description</span><span class="w"> </span><span class="kt">string</span><span class="w">     </span><span class="s">`json:&quot;description&quot;`</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="nx">Categories</span><span class="w">  </span><span class="p">[]</span><span class="nx">Category</span><span class="w"> </span><span class="s">`json:&quot;categories&quot;`</span>
 <a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="p">}</span>
 </code></pre></div>
 <h3 id="creating-a-rubricset">Creating a RubricSet<a class="headerlink" href="#creating-a-rubricset" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nx">rubricSet</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">evaluation</span><span class="p">.</span><span class="nx">NewRubricSet</span><span class="p">(</span><span class="s">&quot;prd-review&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;PRD Review&quot;</span><span class="p">).</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nx">rubricSet</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewRubricSet</span><span class="p">(</span><span class="s">&quot;prd-review&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;PRD Review&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;1.0.0&quot;</span><span class="p">).</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="nx">WithDescription</span><span class="p">(</span><span class="s">&quot;Evaluates Product Requirements Documents&quot;</span><span class="p">).</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="nx">AddRubric</span><span class="p">(</span><span class="nx">problemDefinitionRubric</span><span class="p">).</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="nx">AddRubric</span><span class="p">(</span><span class="nx">userStoriesRubric</span><span class="p">).</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="nx">AddRubric</span><span class="p">(</span><span class="nx">successMetricsRubric</span><span class="p">).</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="nx">AddRubric</span><span class="p">(</span><span class="nx">acceptanceCriteriaRubric</span><span class="p">)</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="nx">AddCategory</span><span class="p">(</span><span class="nx">problemDefinitionCategory</span><span class="p">).</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="nx">AddCategory</span><span class="p">(</span><span class="nx">userStoriesCategory</span><span class="p">).</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="nx">AddCategory</span><span class="p">(</span><span class="nx">successMetricsCategory</span><span class="p">).</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="nx">AddCategory</span><span class="p">(</span><span class="nx">acceptanceCriteriaCategory</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="default-prd-rubricset">Default PRD RubricSet<a class="headerlink" href="#default-prd-rubricset" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nx">rubricSet</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">evaluation</span><span class="p">.</span><span class="nx">DefaultPRDRubricSet</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nx">rubricSet</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">DefaultPRDRubricSet</span><span class="p">()</span>
 </code></pre></div>
 <p>Includes rubrics for:</p>
 <ul>
@@ -1522,21 +1522,21 @@
 </ul>
 <h2 id="using-rubrics-with-reports">Using Rubrics with Reports<a class="headerlink" href="#using-rubrics-with-reports" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1">// Create report with rubric reference</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nx">report</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">evaluation</span><span class="p">.</span><span class="nx">NewEvaluationReport</span><span class="p">(</span><span class="s">&quot;prd-review&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;requirements.md&quot;</span><span class="p">)</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nx">report</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewRubric</span><span class="p">(</span><span class="s">&quot;prd-review&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;requirements.md&quot;</span><span class="p">)</span>
 <a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="nx">report</span><span class="p">.</span><span class="nx">RubricID</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;prd-review-v1&quot;</span>
 <a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
 <a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="c1">// Load rubric for evaluation guidance</span>
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="nx">rubricSet</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">evaluation</span><span class="p">.</span><span class="nx">DefaultPRDRubricSet</span><span class="p">()</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="nx">rubricSet</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">DefaultPRDRubricSet</span><span class="p">()</span>
 <a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>
 <a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="c1">// Evaluate each category using rubric criteria</span>
-<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">rubric</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">rubricSet</span><span class="p">.</span><span class="nx">Categories</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">    </span><span class="nx">result</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">evaluateCategory</span><span class="p">(</span><span class="nx">document</span><span class="p">,</span><span class="w"> </span><span class="nx">rubric</span><span class="p">)</span>
-<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">    </span><span class="nx">report</span><span class="p">.</span><span class="nx">AddCategory</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">cat</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">rubricSet</span><span class="p">.</span><span class="nx">Categories</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">    </span><span class="nx">result</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">evaluateCategory</span><span class="p">(</span><span class="nx">document</span><span class="p">,</span><span class="w"> </span><span class="nx">cat</span><span class="p">)</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">    </span><span class="nx">report</span><span class="p">.</span><span class="nx">AddCategoryResult</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span>
 <a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="p">}</span>
 </code></pre></div>
 <h2 id="rubric-guided-llm-evaluation">Rubric-Guided LLM Evaluation<a class="headerlink" href="#rubric-guided-llm-evaluation" title="Permanent link">&para;</a></h2>
 <p>When using LLM-as-Judge, include rubric criteria in the prompt:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kd">func</span><span class="w"> </span><span class="nx">buildPrompt</span><span class="p">(</span><span class="nx">document</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">rubric</span><span class="w"> </span><span class="nx">Rubric</span><span class="p">)</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kd">func</span><span class="w"> </span><span class="nx">buildPrompt</span><span class="p">(</span><span class="nx">document</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">cat</span><span class="w"> </span><span class="nx">Category</span><span class="p">)</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Sprintf</span><span class="p">(</span><span class="s">`Evaluate the following document for %s.</span>
 <a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
 <a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="s">Criteria:</span>
@@ -1548,10 +1548,10 @@
 <a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="s">%s</span>
 <a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>
 <a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="s">Respond with: score (pass/partial/fail) and reasoning.`</span><span class="p">,</span>
-<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="w">        </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">Name</span><span class="p">,</span>
-<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="w">        </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">Criteria</span><span class="p">.</span><span class="nx">Pass</span><span class="p">,</span>
-<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="w">        </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">Criteria</span><span class="p">.</span><span class="nx">Partial</span><span class="p">,</span>
-<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="w">        </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">Criteria</span><span class="p">.</span><span class="nx">Fail</span><span class="p">,</span>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="w">        </span><span class="nx">cat</span><span class="p">.</span><span class="nx">Name</span><span class="p">,</span>
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="w">        </span><span class="nx">cat</span><span class="p">.</span><span class="nx">Criteria</span><span class="p">.</span><span class="nx">Pass</span><span class="p">,</span>
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="w">        </span><span class="nx">cat</span><span class="p">.</span><span class="nx">Criteria</span><span class="p">.</span><span class="nx">Partial</span><span class="p">,</span>
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="w">        </span><span class="nx">cat</span><span class="p">.</span><span class="nx">Criteria</span><span class="p">.</span><span class="nx">Fail</span><span class="p">,</span>
 <a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a><span class="w">        </span><span class="nx">document</span><span class="p">,</span>
 <a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a><span class="w">    </span><span class="p">)</span>
 <a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a><span class="p">}</span>
@@ -1584,7 +1584,7 @@
 </ul>
 <h3 id="versioning">Versioning<a class="headerlink" href="#versioning" title="Permanent link">&para;</a></h3>
 <p>Track rubric versions for reproducibility:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nx">rubricSet</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">evaluation</span><span class="p">.</span><span class="nx">NewRubricSet</span><span class="p">(</span><span class="s">&quot;prd-review-v2&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;PRD Review v2&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nx">rubricSet</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewRubricSet</span><span class="p">(</span><span class="s">&quot;prd-review-v2&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;PRD Review v2&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2.0.0&quot;</span><span class="p">)</span>
 <a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nx">report</span><span class="p">.</span><span class="nx">RubricID</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;prd-review-v2&quot;</span>
 </code></pre></div>
 <h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>

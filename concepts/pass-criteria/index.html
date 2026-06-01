@@ -1452,7 +1452,7 @@
 <li>❌ Any partial or fail category → Fail</li>
 </ul>
 <h2 id="custom-criteria">Custom Criteria<a class="headerlink" href="#custom-criteria" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nx">criteria</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">evaluation</span><span class="p">.</span><span class="nx">PassCriteria</span><span class="p">{</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nx">criteria</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">PassCriteria</span><span class="p">{</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="nx">MaxCritical</span><span class="p">:</span><span class="w">    </span><span class="mi">0</span><span class="p">,</span>
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="nx">MaxHigh</span><span class="p">:</span><span class="w">        </span><span class="mi">1</span><span class="p">,</span><span class="w">  </span><span class="c1">// Allow 1 high finding</span>
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="nx">MaxMedium</span><span class="p">:</span><span class="w">      </span><span class="mi">5</span><span class="p">,</span><span class="w">  </span><span class="c1">// Allow up to 5 medium findings</span>
@@ -1460,7 +1460,7 @@
 <a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="p">}</span>
 <a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>
 <a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="nx">report</span><span class="p">.</span><span class="nx">SetPassCriteria</span><span class="p">(</span><span class="nx">criteria</span><span class="p">)</span>
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="nx">report</span><span class="p">.</span><span class="nx">Finalize</span><span class="p">(</span><span class="s">&quot;reviewer&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="nx">report</span><span class="p">.</span><span class="nx">Finalize</span><span class="p">(</span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;reviewer&quot;</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="decision-status">Decision Status<a class="headerlink" href="#decision-status" title="Permanent link">&para;</a></h2>
 <p>Based on criteria evaluation:</p>
@@ -1473,7 +1473,7 @@
 </code></pre></div>
 <h2 id="decision-logic">Decision Logic<a class="headerlink" href="#decision-logic" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1">// Pseudocode for decision computation</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="kd">func</span><span class="w"> </span><span class="nx">computeDecision</span><span class="p">(</span><span class="nx">report</span><span class="w"> </span><span class="o">*</span><span class="nx">EvaluationReport</span><span class="p">,</span><span class="w"> </span><span class="nx">criteria</span><span class="w"> </span><span class="nx">PassCriteria</span><span class="p">)</span><span class="w"> </span><span class="nx">Decision</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="kd">func</span><span class="w"> </span><span class="nx">computeDecision</span><span class="p">(</span><span class="nx">report</span><span class="w"> </span><span class="o">*</span><span class="nx">Rubric</span><span class="p">,</span><span class="w"> </span><span class="nx">criteria</span><span class="w"> </span><span class="nx">PassCriteria</span><span class="p">)</span><span class="w"> </span><span class="nx">Decision</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="nx">counts</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">report</span><span class="p">.</span><span class="nx">Decision</span><span class="p">.</span><span class="nx">FindingCounts</span>
 <a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="nx">catCounts</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">report</span><span class="p">.</span><span class="nx">Decision</span><span class="p">.</span><span class="nx">CategoryCounts</span>
 <a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>
@@ -1507,7 +1507,7 @@
 <h2 id="example-configurations">Example Configurations<a class="headerlink" href="#example-configurations" title="Permanent link">&para;</a></h2>
 <h3 id="security-review">Security Review<a class="headerlink" href="#security-review" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1">// Zero tolerance for security issues</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nx">criteria</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">evaluation</span><span class="p">.</span><span class="nx">PassCriteria</span><span class="p">{</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nx">criteria</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">PassCriteria</span><span class="p">{</span>
 <a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="nx">MaxCritical</span><span class="p">:</span><span class="w">    </span><span class="mi">0</span><span class="p">,</span>
 <a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">    </span><span class="nx">MaxHigh</span><span class="p">:</span><span class="w">        </span><span class="mi">0</span><span class="p">,</span>
 <a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">    </span><span class="nx">MaxMedium</span><span class="p">:</span><span class="w">      </span><span class="mi">0</span><span class="p">,</span><span class="w">  </span><span class="c1">// Even medium security findings block</span>
@@ -1516,7 +1516,7 @@
 </code></pre></div>
 <h3 id="documentation-review">Documentation Review<a class="headerlink" href="#documentation-review" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1">// More lenient for docs</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="nx">criteria</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">evaluation</span><span class="p">.</span><span class="nx">PassCriteria</span><span class="p">{</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="nx">criteria</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">PassCriteria</span><span class="p">{</span>
 <a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="nx">MaxCritical</span><span class="p">:</span><span class="w">    </span><span class="mi">0</span><span class="p">,</span>
 <a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span><span class="nx">MaxHigh</span><span class="p">:</span><span class="w">        </span><span class="mi">2</span><span class="p">,</span><span class="w">   </span><span class="c1">// Allow some high-priority gaps</span>
 <a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">    </span><span class="nx">MaxMedium</span><span class="p">:</span><span class="w">      </span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w">  </span><span class="c1">// Unlimited medium</span>
@@ -1525,7 +1525,7 @@
 </code></pre></div>
 <h3 id="release-gate">Release Gate<a class="headerlink" href="#release-gate" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1">// Strict for releases</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nx">criteria</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">evaluation</span><span class="p">.</span><span class="nx">PassCriteria</span><span class="p">{</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nx">criteria</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">PassCriteria</span><span class="p">{</span>
 <a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">    </span><span class="nx">MaxCritical</span><span class="p">:</span><span class="w">    </span><span class="mi">0</span><span class="p">,</span>
 <a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">    </span><span class="nx">MaxHigh</span><span class="p">:</span><span class="w">        </span><span class="mi">0</span><span class="p">,</span>
 <a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">    </span><span class="nx">MaxMedium</span><span class="p">:</span><span class="w">      </span><span class="mi">5</span><span class="p">,</span>

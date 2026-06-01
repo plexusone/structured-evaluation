@@ -481,13 +481,13 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#evaluationreport" class="md-nav__link">
+  <a href="#rubric" class="md-nav__link">
     <span class="md-ellipsis">
-      EvaluationReport
+      Rubric
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="EvaluationReport">
+    <nav class="md-nav" aria-label="Rubric">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -626,9 +626,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#use-evaluationreport-when" class="md-nav__link">
+  <a href="#use-rubric-when" class="md-nav__link">
     <span class="md-ellipsis">
-      Use EvaluationReport when:
+      Use Rubric when:
     </span>
   </a>
   
@@ -1347,13 +1347,13 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#evaluationreport" class="md-nav__link">
+  <a href="#rubric" class="md-nav__link">
     <span class="md-ellipsis">
-      EvaluationReport
+      Rubric
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="EvaluationReport">
+    <nav class="md-nav" aria-label="Rubric">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1492,9 +1492,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#use-evaluationreport-when" class="md-nav__link">
+  <a href="#use-rubric-when" class="md-nav__link">
     <span class="md-ellipsis">
-      Use EvaluationReport when:
+      Use Rubric when:
     </span>
   </a>
   
@@ -1553,10 +1553,10 @@
 
 <h1 id="report-types">Report Types<a class="headerlink" href="#report-types" title="Permanent link">&para;</a></h1>
 <p>Structured Evaluation provides three report types for different use cases.</p>
-<h2 id="evaluationreport">EvaluationReport<a class="headerlink" href="#evaluationreport" title="Permanent link">&para;</a></h2>
+<h2 id="rubric">Rubric<a class="headerlink" href="#rubric" title="Permanent link">&para;</a></h2>
 <p>For <strong>subjective quality assessments</strong> using LLM-as-Judge or human reviewers.</p>
 <h3 id="structure">Structure<a class="headerlink" href="#structure" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kd">type</span><span class="w"> </span><span class="nx">EvaluationReport</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kd">type</span><span class="w"> </span><span class="nx">Rubric</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="nx">ReviewType</span><span class="w">  </span><span class="kt">string</span><span class="w">           </span><span class="c1">// e.g., &quot;prd-review&quot;, &quot;code-quality&quot;</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="nx">Metadata</span><span class="w">    </span><span class="nx">ReportMetadata</span><span class="w">   </span><span class="c1">// Document info, timestamps</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="nx">Categories</span><span class="w">  </span><span class="p">[]</span><span class="nx">CategoryResult</span><span class="w"> </span><span class="c1">// Pass/partial/fail per category</span>
@@ -1576,17 +1576,17 @@
 <li>Security assessment reports</li>
 </ul>
 <h3 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nx">report</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">evaluation</span><span class="p">.</span><span class="nx">NewEvaluationReport</span><span class="p">(</span><span class="s">&quot;prd-review&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;requirements.md&quot;</span><span class="p">)</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nx">report</span><span class="p">.</span><span class="nx">AddCategory</span><span class="p">(</span><span class="nx">evaluation</span><span class="p">.</span><span class="nx">CategoryResult</span><span class="p">{</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nx">report</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewRubric</span><span class="p">(</span><span class="s">&quot;prd-review&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;requirements.md&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nx">report</span><span class="p">.</span><span class="nx">AddCategoryResult</span><span class="p">(</span><span class="nx">rubric</span><span class="p">.</span><span class="nx">CategoryResult</span><span class="p">{</span>
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nx">Category</span><span class="p">:</span><span class="w">  </span><span class="s">&quot;clarity&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="nx">Score</span><span class="p">:</span><span class="w">     </span><span class="nx">evaluation</span><span class="p">.</span><span class="nx">ScorePass</span><span class="p">,</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="nx">Score</span><span class="p">:</span><span class="w">     </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">ScorePass</span><span class="p">,</span>
 <a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="nx">Reasoning</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Requirements are clearly written&quot;</span><span class="p">,</span>
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="p">})</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="nx">report</span><span class="p">.</span><span class="nx">AddFinding</span><span class="p">(</span><span class="nx">evaluation</span><span class="p">.</span><span class="nx">Finding</span><span class="p">{</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="nx">Severity</span><span class="p">:</span><span class="w"> </span><span class="nx">evaluation</span><span class="p">.</span><span class="nx">SeverityMedium</span><span class="p">,</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="nx">report</span><span class="p">.</span><span class="nx">AddFinding</span><span class="p">(</span><span class="nx">rubric</span><span class="p">.</span><span class="nx">Finding</span><span class="p">{</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="nx">Severity</span><span class="p">:</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">SeverityMedium</span><span class="p">,</span>
 <a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="nx">Title</span><span class="p">:</span><span class="w">    </span><span class="s">&quot;Missing edge case&quot;</span><span class="p">,</span>
 <a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="p">})</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="nx">report</span><span class="p">.</span><span class="nx">Finalize</span><span class="p">(</span><span class="s">&quot;reviewer&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="nx">report</span><span class="p">.</span><span class="nx">Finalize</span><span class="p">(</span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;reviewer&quot;</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="summaryreport">SummaryReport<a class="headerlink" href="#summaryreport" title="Permanent link">&para;</a></h2>
 <p>For <strong>deterministic GO/NO-GO checks</strong> in CI/CD pipelines and release validation.</p>
@@ -1687,7 +1687,7 @@
 <thead>
 <tr>
 <th>Aspect</th>
-<th>EvaluationReport</th>
+<th>Rubric</th>
 <th>SummaryReport</th>
 <th>ClaimsReport</th>
 </tr>
@@ -1726,7 +1726,7 @@
 </tbody>
 </table>
 <h2 id="when-to-use-which">When to Use Which<a class="headerlink" href="#when-to-use-which" title="Permanent link">&para;</a></h2>
-<h3 id="use-evaluationreport-when">Use EvaluationReport when:<a class="headerlink" href="#use-evaluationreport-when" title="Permanent link">&para;</a></h3>
+<h3 id="use-rubric-when">Use Rubric when:<a class="headerlink" href="#use-rubric-when" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Assessment requires judgment</li>
 <li>Multiple criteria need scoring</li>
