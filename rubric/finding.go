@@ -1,4 +1,4 @@
-package evaluation
+package rubric
 
 // Finding represents an issue discovered during evaluation.
 type Finding struct {

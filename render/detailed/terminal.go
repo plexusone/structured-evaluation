@@ -6,7 +6,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/plexusone/structured-evaluation/evaluation"
+	"github.com/plexusone/structured-evaluation/rubric"
 )
 
 const boxWidth = 78
@@ -22,7 +22,7 @@ func NewTerminal(w io.Writer) *TerminalRenderer {
 }
 
 // Render outputs the evaluation report in detailed box format.
-func (r *TerminalRenderer) Render(report *evaluation.EvaluationReport) error {
+func (r *TerminalRenderer) Render(report *rubric.Rubric) error {
 	var b strings.Builder
 
 	// Header
@@ -82,7 +82,7 @@ func (r *TerminalRenderer) Render(report *evaluation.EvaluationReport) error {
 		b.WriteString("\n")
 
 		// Group by severity
-		for _, sev := range evaluation.AllSeverities() {
+		for _, sev := range rubric.AllSeverities() {
 			for _, f := range report.Findings {
 				if f.Severity == sev {
 					b.WriteString(paddedLine(fmt.Sprintf("%s %-8s [%s]",
@@ -136,7 +136,7 @@ func (r *TerminalRenderer) Render(report *evaluation.EvaluationReport) error {
 	return err
 }
 
-func formatCategoryLine(cr evaluation.CategoryResult) string {
+func formatCategoryLine(cr rubric.CategoryResult) string {
 	name := cr.Category
 	if len(name) > 24 {
 		name = name[:21] + "..."
@@ -151,19 +151,19 @@ func formatCategoryLine(cr evaluation.CategoryResult) string {
 		name, icon, scoreText, reasoning)
 }
 
-func finalMessage(report *evaluation.EvaluationReport) string {
+func finalMessage(report *rubric.Rubric) string {
 	catCounts := report.Decision.CategoryCounts
 	switch report.Decision.Status {
-	case evaluation.DecisionPass:
+	case rubric.DecisionPass:
 		return fmt.Sprintf("✅ %s PASSED (%d/%d categories)",
 			strings.ToUpper(report.ReviewType), catCounts.Pass, catCounts.Total)
-	case evaluation.DecisionConditional:
+	case rubric.DecisionConditional:
 		return fmt.Sprintf("⚠️ %s CONDITIONAL (%d pass, %d partial)",
 			strings.ToUpper(report.ReviewType), catCounts.Pass, catCounts.Partial)
-	case evaluation.DecisionFail:
+	case rubric.DecisionFail:
 		return fmt.Sprintf("❌ %s BLOCKED - %d issues to resolve",
 			strings.ToUpper(report.ReviewType), report.Decision.FindingCounts.BlockingCount())
-	case evaluation.DecisionHumanReview:
+	case rubric.DecisionHumanReview:
 		return fmt.Sprintf("👤 %s NEEDS HUMAN REVIEW", strings.ToUpper(report.ReviewType))
 	default:
 		return fmt.Sprintf("📋 %s: %d/%d categories passed",

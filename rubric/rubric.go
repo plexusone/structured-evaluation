@@ -1,4 +1,4 @@
-package evaluation
+package rubric
 
 import "encoding/json"
 

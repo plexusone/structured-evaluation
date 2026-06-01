@@ -5,24 +5,24 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/plexusone/structured-evaluation/evaluation"
+	"github.com/plexusone/structured-evaluation/rubric"
 )
 
 func TestRenderer_Render(t *testing.T) {
-	report := evaluation.NewEvaluationReport("article", "test-article.md")
+	report := rubric.NewRubric("article", "test-article.md")
 	report.Metadata.DocumentTitle = "Test Article"
 	report.RubricID = "vulnerability-article-v1"
 	report.RubricVersion = "1.0.0"
 
-	report.AddCategoryResult(evaluation.CategoryResult{
+	report.AddCategoryResult(rubric.CategoryResult{
 		Category:  "technical_accuracy",
-		Score:     evaluation.ScorePass,
+		Score:     rubric.ScorePass,
 		Reasoning: "All details correct",
 		Evidence:  []string{"CVE-2026-12345 matches NVD"},
 	})
-	report.AddCategoryResult(evaluation.CategoryResult{
+	report.AddCategoryResult(rubric.CategoryResult{
 		Category:  "completeness",
-		Score:     evaluation.ScorePartial,
+		Score:     rubric.ScorePartial,
 		Reasoning: "Missing optional sections",
 	})
 
@@ -61,15 +61,15 @@ func TestRenderer_Render(t *testing.T) {
 }
 
 func TestRenderer_RenderWithFindings(t *testing.T) {
-	report := evaluation.NewEvaluationReport("article", "test.md")
-	report.AddCategoryResult(evaluation.CategoryResult{
+	report := rubric.NewRubric("article", "test.md")
+	report.AddCategoryResult(rubric.CategoryResult{
 		Category: "accuracy",
-		Score:    evaluation.ScoreFail,
+		Score:    rubric.ScoreFail,
 	})
-	report.AddFinding(evaluation.Finding{
+	report.AddFinding(rubric.Finding{
 		ID:             "F1",
 		Category:       "accuracy",
-		Severity:       evaluation.SeverityHigh,
+		Severity:       rubric.SeverityHigh,
 		Title:          "CVE mismatch",
 		Description:    "CVE details don't match NVD",
 		Recommendation: "Verify against NVD",
@@ -100,22 +100,22 @@ func TestRenderer_RenderWithFindings(t *testing.T) {
 }
 
 func TestRenderer_RenderWithRubric(t *testing.T) {
-	rubric := evaluation.NewRubricSet("test-v1", "Test Rubric", "1.0.0")
-	cat := evaluation.NewCategory("accuracy", "Accuracy", "Test accuracy").
+	rubricSet := rubric.NewRubricSet("test-v1", "Test Rubric", "1.0.0")
+	cat := rubric.NewCategory("accuracy", "Accuracy", "Test accuracy").
 		SetRequired(true).
 		SetWeight(2.0)
-	rubric.AddCategory(*cat)
+	rubricSet.AddCategory(*cat)
 
-	report := evaluation.NewEvaluationReport("test", "doc.md")
-	report.AddCategoryResult(evaluation.CategoryResult{
+	report := rubric.NewRubric("test", "doc.md")
+	report.AddCategoryResult(rubric.CategoryResult{
 		Category: "accuracy",
-		Score:    evaluation.ScorePass,
+		Score:    rubric.ScorePass,
 	})
-	report.Finalize(rubric, "")
+	report.Finalize(rubricSet, "")
 
 	var buf bytes.Buffer
 	renderer := New(&buf)
-	err := renderer.RenderWithRubric(report, rubric)
+	err := renderer.RenderWithRubric(report, rubricSet)
 	if err != nil {
 		t.Fatalf("RenderWithRubric failed: %v", err)
 	}
@@ -132,10 +132,10 @@ func TestRenderer_RenderWithRubric(t *testing.T) {
 }
 
 func TestRenderer_NoFindings(t *testing.T) {
-	report := evaluation.NewEvaluationReport("test", "doc.md")
-	report.AddCategoryResult(evaluation.CategoryResult{
+	report := rubric.NewRubric("test", "doc.md")
+	report.AddCategoryResult(rubric.CategoryResult{
 		Category: "quality",
-		Score:    evaluation.ScorePass,
+		Score:    rubric.ScorePass,
 	})
 	report.Finalize(nil, "")
 

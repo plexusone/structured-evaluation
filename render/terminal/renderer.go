@@ -6,7 +6,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/plexusone/structured-evaluation/evaluation"
+	"github.com/plexusone/structured-evaluation/rubric"
 )
 
 // ANSI color codes
@@ -75,7 +75,7 @@ func (r *Renderer) color(c, text string) string {
 }
 
 // Render outputs the evaluation report with ANSI colors.
-func (r *Renderer) Render(report *evaluation.EvaluationReport) error {
+func (r *Renderer) Render(report *rubric.Rubric) error {
 	var b strings.Builder
 
 	// Header
@@ -151,7 +151,7 @@ func (r *Renderer) Render(report *evaluation.EvaluationReport) error {
 		b.WriteString("\n")
 
 		// Group by severity
-		for _, sev := range evaluation.AllSeverities() {
+		for _, sev := range rubric.AllSeverities() {
 			for _, f := range report.Findings {
 				if f.Severity == sev {
 					sevColor := r.severityColor(sev)
@@ -225,7 +225,7 @@ func (r *Renderer) c(color string) string {
 	return color
 }
 
-func (r *Renderer) formatCategoryLine(cr evaluation.CategoryResult) string {
+func (r *Renderer) formatCategoryLine(cr rubric.CategoryResult) string {
 	name := cr.Category
 	if len(name) > 24 {
 		name = name[:21] + "..."
@@ -242,19 +242,19 @@ func (r *Renderer) formatCategoryLine(cr evaluation.CategoryResult) string {
 		r.c(Gray), reasoning, r.c(Reset))
 }
 
-func (r *Renderer) finalMessage(report *evaluation.EvaluationReport) string {
+func (r *Renderer) finalMessage(report *rubric.Rubric) string {
 	catCounts := report.Decision.CategoryCounts
 	switch report.Decision.Status {
-	case evaluation.DecisionPass:
+	case rubric.DecisionPass:
 		return fmt.Sprintf("✅ %s PASSED (%d/%d categories)",
 			strings.ToUpper(report.ReviewType), catCounts.Pass, catCounts.Total)
-	case evaluation.DecisionConditional:
+	case rubric.DecisionConditional:
 		return fmt.Sprintf("⚠️ %s CONDITIONAL (%d pass, %d partial)",
 			strings.ToUpper(report.ReviewType), catCounts.Pass, catCounts.Partial)
-	case evaluation.DecisionFail:
+	case rubric.DecisionFail:
 		return fmt.Sprintf("❌ %s BLOCKED - %d issues to resolve",
 			strings.ToUpper(report.ReviewType), report.Decision.FindingCounts.BlockingCount())
-	case evaluation.DecisionHumanReview:
+	case rubric.DecisionHumanReview:
 		return fmt.Sprintf("👤 %s NEEDS HUMAN REVIEW", strings.ToUpper(report.ReviewType))
 	default:
 		return fmt.Sprintf("📋 %s: %d/%d categories passed",
@@ -262,43 +262,43 @@ func (r *Renderer) finalMessage(report *evaluation.EvaluationReport) string {
 	}
 }
 
-func (r *Renderer) decisionColor(status evaluation.DecisionStatus) string {
+func (r *Renderer) decisionColor(status rubric.DecisionStatus) string {
 	switch status {
-	case evaluation.DecisionPass:
+	case rubric.DecisionPass:
 		return Green
-	case evaluation.DecisionConditional:
+	case rubric.DecisionConditional:
 		return Yellow
-	case evaluation.DecisionFail:
+	case rubric.DecisionFail:
 		return Red
-	case evaluation.DecisionHumanReview:
+	case rubric.DecisionHumanReview:
 		return Magenta
 	default:
 		return White
 	}
 }
 
-func (r *Renderer) scoreColor(score evaluation.ScoreValue) string {
+func (r *Renderer) scoreColor(score rubric.ScoreValue) string {
 	switch score {
-	case evaluation.ScorePass:
+	case rubric.ScorePass:
 		return Green
-	case evaluation.ScorePartial:
+	case rubric.ScorePartial:
 		return Yellow
-	case evaluation.ScoreFail:
+	case rubric.ScoreFail:
 		return Red
 	default:
 		return White
 	}
 }
 
-func (r *Renderer) severityColor(sev evaluation.Severity) string {
+func (r *Renderer) severityColor(sev rubric.Severity) string {
 	switch sev {
-	case evaluation.SeverityCritical, evaluation.SeverityHigh:
+	case rubric.SeverityCritical, rubric.SeverityHigh:
 		return Red
-	case evaluation.SeverityMedium:
+	case rubric.SeverityMedium:
 		return Yellow
-	case evaluation.SeverityLow:
+	case rubric.SeverityLow:
 		return Green
-	case evaluation.SeverityInfo:
+	case rubric.SeverityInfo:
 		return Cyan
 	default:
 		return White

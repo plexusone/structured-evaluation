@@ -1,4 +1,4 @@
-package evaluation
+package rubric
 
 // ReferenceData contains ground truth or expected data for evaluation.
 // This enables reference-based evaluation where outputs are compared

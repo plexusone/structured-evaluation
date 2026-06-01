@@ -1,4 +1,4 @@
-package evaluation
+package rubric
 
 import (
 	"sort"
@@ -8,7 +8,7 @@ import (
 // This improves reliability by combining perspectives and detecting disagreement.
 type MultiJudgeResult struct {
 	// Evaluations are the individual judge evaluations.
-	Evaluations []*EvaluationReport `json:"evaluations"`
+	Evaluations []*Rubric `json:"evaluations"`
 
 	// Judges contains metadata for each judge.
 	Judges []*JudgeMetadata `json:"judges"`
@@ -71,7 +71,7 @@ type JudgeCategoricalScore struct {
 }
 
 // AggregateEvaluations combines multiple evaluation reports.
-func AggregateEvaluations(evaluations []*EvaluationReport, method AggregationMethod) *MultiJudgeResult {
+func AggregateEvaluations(evaluations []*Rubric, method AggregationMethod) *MultiJudgeResult {
 	if len(evaluations) == 0 {
 		return &MultiJudgeResult{}
 	}
@@ -108,7 +108,7 @@ func AggregateEvaluations(evaluations []*EvaluationReport, method AggregationMet
 }
 
 // aggregateCategoryResults combines category results from multiple judges.
-func aggregateCategoryResults(evaluations []*EvaluationReport, method AggregationMethod) []CategoryResult {
+func aggregateCategoryResults(evaluations []*Rubric, method AggregationMethod) []CategoryResult {
 	if len(evaluations) == 0 {
 		return nil
 	}
@@ -205,7 +205,7 @@ func aggregateScores(scores []ScoreValue, method AggregationMethod) ScoreValue {
 }
 
 // computeCategoricalAgreement calculates inter-judge agreement.
-func computeCategoricalAgreement(evaluations []*EvaluationReport) float64 {
+func computeCategoricalAgreement(evaluations []*Rubric) float64 {
 	if len(evaluations) <= 1 {
 		return 1.0
 	}
@@ -247,7 +247,7 @@ func computeCategoricalAgreement(evaluations []*EvaluationReport) float64 {
 }
 
 // findCategoricalDisagreements identifies categories with disagreement.
-func findCategoricalDisagreements(evaluations []*EvaluationReport) []JudgeDisagreement {
+func findCategoricalDisagreements(evaluations []*Rubric) []JudgeDisagreement {
 	if len(evaluations) <= 1 {
 		return nil
 	}
@@ -292,7 +292,7 @@ func findCategoricalDisagreements(evaluations []*EvaluationReport) []JudgeDisagr
 }
 
 // consolidateFindings merges findings from all evaluations.
-func consolidateFindings(evaluations []*EvaluationReport) []Finding {
+func consolidateFindings(evaluations []*Rubric) []Finding {
 	// Use map to deduplicate by title+category
 	seen := make(map[string]Finding)
 	for _, eval := range evaluations {
@@ -323,7 +323,7 @@ func consolidateFindings(evaluations []*EvaluationReport) []Finding {
 }
 
 // consolidateDecision determines the final decision.
-func consolidateDecision(evaluations []*EvaluationReport, method AggregationMethod) Decision {
+func consolidateDecision(evaluations []*Rubric, method AggregationMethod) Decision {
 	if len(evaluations) == 0 {
 		return Decision{Status: DecisionHumanReview}
 	}

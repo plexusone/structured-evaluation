@@ -1,4 +1,4 @@
-package evaluation
+package rubric
 
 import "testing"
 
@@ -41,7 +41,7 @@ func TestEvaluate_Pass(t *testing.T) {
 	findings := []Finding{}
 	criteria := DefaultPassCriteria()
 
-	decision := Evaluate(results, findings, criteria, rubric)
+	decision := EvaluateResults(results, findings, criteria, rubric)
 
 	if decision.Status != DecisionPass {
 		t.Errorf("Expected pass, got %s", decision.Status)
@@ -60,7 +60,7 @@ func TestEvaluate_FailOnCriticalFindings(t *testing.T) {
 	}
 	criteria := DefaultPassCriteria()
 
-	decision := Evaluate(results, findings, criteria, nil)
+	decision := EvaluateResults(results, findings, criteria, nil)
 
 	if decision.Status != DecisionFail {
 		t.Errorf("Expected fail, got %s", decision.Status)
@@ -79,7 +79,7 @@ func TestEvaluate_FailOnHighFindings(t *testing.T) {
 	}
 	criteria := DefaultPassCriteria()
 
-	decision := Evaluate(results, findings, criteria, nil)
+	decision := EvaluateResults(results, findings, criteria, nil)
 
 	if decision.Status != DecisionFail {
 		t.Errorf("Expected fail, got %s", decision.Status)
@@ -97,7 +97,7 @@ func TestEvaluate_FailOnRequiredCategoryFail(t *testing.T) {
 	findings := []Finding{}
 	criteria := DefaultPassCriteria()
 
-	decision := Evaluate(results, findings, criteria, rubric)
+	decision := EvaluateResults(results, findings, criteria, rubric)
 
 	if decision.Status != DecisionFail {
 		t.Errorf("Expected fail, got %s", decision.Status)
@@ -119,7 +119,7 @@ func TestEvaluate_ConditionalOnPartial(t *testing.T) {
 	}
 
 	// With "all_required", partial on required should fail
-	decision := Evaluate(results, findings, criteria, rubric)
+	decision := EvaluateResults(results, findings, criteria, rubric)
 	if decision.Status != DecisionFail {
 		t.Errorf("Expected fail for partial on required category, got %s", decision.Status)
 	}
@@ -134,7 +134,7 @@ func TestEvaluate_ConditionalOnMediumFindings(t *testing.T) {
 	}
 	criteria := DefaultPassCriteria()
 
-	decision := Evaluate(results, findings, criteria, nil)
+	decision := EvaluateResults(results, findings, criteria, nil)
 
 	if decision.Status != DecisionConditional {
 		t.Errorf("Expected conditional, got %s", decision.Status)
@@ -155,7 +155,7 @@ func TestEvaluate_AllCategoriesMustPass(t *testing.T) {
 		MaxFindings:          &FindingLimits{Critical: 0, High: 0, Medium: -1},
 	}
 
-	decision := Evaluate(results, findings, criteria, nil)
+	decision := EvaluateResults(results, findings, criteria, nil)
 
 	if decision.Status != DecisionFail {
 		t.Errorf("Expected fail when not all categories pass, got %s", decision.Status)
@@ -174,7 +174,7 @@ func TestEvaluate_NumericThreshold(t *testing.T) {
 		MaxFindings:          &FindingLimits{Critical: 0, High: 0, Medium: -1},
 	}
 
-	decision := Evaluate(results, findings, criteria, nil)
+	decision := EvaluateResults(results, findings, criteria, nil)
 
 	if decision.Status != DecisionPass {
 		t.Errorf("Expected pass with 2/3 categories passing, got %s", decision.Status)

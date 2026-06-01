@@ -10,30 +10,30 @@
         "document": {
           "type": "string"
         },
-        "document_id": {
+        "documentId": {
           "type": "string"
         },
-        "document_title": {
+        "documentTitle": {
           "type": "string"
         },
-        "document_version": {
+        "documentVersion": {
           "type": "string"
         },
-        "generated_at": {
+        "generatedAt": {
           "type": "string",
           "format": "date-time"
         },
-        "generated_by": {
+        "generatedBy": {
           "type": "string"
         },
-        "reviewer_id": {
+        "reviewerId": {
           "type": "string"
         }
       },
       "additionalProperties": false,
       "type": "object"
     },
-    "review_type": {
+    "reviewType": {
       "type": "string"
     },
     "judge": {
@@ -109,7 +109,10 @@
       "additionalProperties": false,
       "type": "object"
     },
-    "rubric_id": {
+    "rubricId": {
+      "type": "string"
+    },
+    "rubricVersion": {
       "type": "string"
     },
     "reference": {
@@ -184,23 +187,20 @@
           "category": {
             "type": "string"
           },
-          "weight": {
-            "type": "number"
-          },
           "score": {
-            "type": "number"
-          },
-          "max_score": {
-            "type": "number"
-          },
-          "status": {
             "type": "string"
           },
-          "justification": {
+          "numericScore": {
+            "type": "number"
+          },
+          "reasoning": {
             "type": "string"
           },
           "evidence": {
-            "type": "string"
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
           },
           "findings": {
             "items": {
@@ -237,6 +237,36 @@
               "type": "object"
             },
             "type": "array"
+          },
+          "checklistResults": {
+            "properties": {
+              "requiredPresent": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "requiredMissing": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "optionalPresent": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "optionalMissing": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
           }
         },
         "additionalProperties": false,
@@ -280,22 +310,28 @@
       },
       "type": "array"
     },
-    "weighted_score": {
-      "type": "number"
-    },
-    "pass_criteria": {
+    "passCriteria": {
       "properties": {
-        "max_critical": {
-          "type": "integer"
+        "minCategoriesPassing": {
+          "type": "string"
         },
-        "max_high": {
-          "type": "integer"
-        },
-        "max_medium": {
-          "type": "integer"
-        },
-        "min_score": {
-          "type": "number"
+        "maxFindingsSeverity": {
+          "properties": {
+            "critical": {
+              "type": "integer"
+            },
+            "high": {
+              "type": "integer"
+            },
+            "medium": {
+              "type": "integer"
+            },
+            "low": {
+              "type": "integer"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
         }
       },
       "additionalProperties": false,
@@ -312,7 +348,7 @@
         "rationale": {
           "type": "string"
         },
-        "finding_counts": {
+        "findingCounts": {
           "properties": {
             "critical": {
               "type": "integer"
@@ -336,16 +372,34 @@
           "additionalProperties": false,
           "type": "object"
         },
-        "weighted_score": {
-          "type": "number"
+        "categoryCounts": {
+          "properties": {
+            "pass": {
+              "type": "integer"
+            },
+            "partial": {
+              "type": "integer"
+            },
+            "fail": {
+              "type": "integer"
+            },
+            "total": {
+              "type": "integer"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
         }
       },
       "additionalProperties": false,
       "type": "object"
     },
-    "next_steps": {
+    "overallDecision": {
+      "type": "string"
+    },
+    "nextSteps": {
       "properties": {
-        "rerun_command": {
+        "rerunCommand": {
           "type": "string"
         },
         "immediate": {

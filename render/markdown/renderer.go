@@ -6,7 +6,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/plexusone/structured-evaluation/evaluation"
+	"github.com/plexusone/structured-evaluation/rubric"
 )
 
 // Renderer renders evaluation reports as Markdown.
@@ -20,7 +20,7 @@ func New(w io.Writer) *Renderer {
 }
 
 // Render outputs the evaluation report as Markdown.
-func (r *Renderer) Render(report *evaluation.EvaluationReport) error {
+func (r *Renderer) Render(report *rubric.Rubric) error {
 	var b strings.Builder
 
 	// Title
@@ -112,7 +112,7 @@ func (r *Renderer) Render(report *evaluation.EvaluationReport) error {
 		b.WriteString("### Findings\n\n")
 
 		// Group by severity
-		for _, sev := range evaluation.AllSeverities() {
+		for _, sev := range rubric.AllSeverities() {
 			findings := filterBySeverity(report.Findings, sev)
 			if len(findings) == 0 {
 				continue
@@ -151,7 +151,7 @@ func (r *Renderer) Render(report *evaluation.EvaluationReport) error {
 }
 
 // RenderWithRubric renders with additional rubric context (weights, required flags).
-func (r *Renderer) RenderWithRubric(report *evaluation.EvaluationReport, rubric *evaluation.RubricSet) error {
+func (r *Renderer) RenderWithRubric(report *rubric.Rubric, rubricSet *rubric.RubricSet) error {
 	var b strings.Builder
 
 	// Title
@@ -191,8 +191,8 @@ func (r *Renderer) RenderWithRubric(report *evaluation.EvaluationReport, rubric 
 		required := ""
 
 		// Look up rubric info
-		if rubric != nil {
-			if cat := rubric.GetCategory(cr.Category); cat != nil {
+		if rubricSet != nil {
+			if cat := rubricSet.GetCategory(cr.Category); cat != nil {
 				weight = fmt.Sprintf("%.1f", cat.Weight)
 				if cat.Required {
 					required = "✅"
@@ -239,7 +239,7 @@ func (r *Renderer) RenderWithRubric(report *evaluation.EvaluationReport, rubric 
 	if len(report.Findings) > 0 {
 		b.WriteString("### Findings\n\n")
 
-		for _, sev := range evaluation.AllSeverities() {
+		for _, sev := range rubric.AllSeverities() {
 			findings := filterBySeverity(report.Findings, sev)
 			if len(findings) == 0 {
 				continue
@@ -279,7 +279,7 @@ func (r *Renderer) RenderWithRubric(report *evaluation.EvaluationReport, rubric 
 
 // Helper functions
 
-func writeNextSteps(b *strings.Builder, report *evaluation.EvaluationReport) {
+func writeNextSteps(b *strings.Builder, report *rubric.Rubric) {
 	if len(report.NextSteps.Immediate) == 0 && len(report.NextSteps.Recommended) == 0 {
 		return
 	}
@@ -315,53 +315,53 @@ func writeNextSteps(b *strings.Builder, report *evaluation.EvaluationReport) {
 	}
 }
 
-func decisionIcon(status evaluation.DecisionStatus) string {
+func decisionIcon(status rubric.DecisionStatus) string {
 	switch status {
-	case evaluation.DecisionPass:
+	case rubric.DecisionPass:
 		return "✅"
-	case evaluation.DecisionConditional:
+	case rubric.DecisionConditional:
 		return "⚠️"
-	case evaluation.DecisionFail:
+	case rubric.DecisionFail:
 		return "❌"
-	case evaluation.DecisionHumanReview:
+	case rubric.DecisionHumanReview:
 		return "👤"
 	default:
 		return "📋"
 	}
 }
 
-func scoreIcon(score evaluation.ScoreValue) string {
+func scoreIcon(score rubric.ScoreValue) string {
 	switch score {
-	case evaluation.ScorePass:
+	case rubric.ScorePass:
 		return "🟢"
-	case evaluation.ScorePartial:
+	case rubric.ScorePartial:
 		return "🟡"
-	case evaluation.ScoreFail:
+	case rubric.ScoreFail:
 		return "🔴"
 	default:
 		return "⚪"
 	}
 }
 
-func severityIcon(sev evaluation.Severity) string {
+func severityIcon(sev rubric.Severity) string {
 	switch sev {
-	case evaluation.SeverityCritical:
+	case rubric.SeverityCritical:
 		return "🔴"
-	case evaluation.SeverityHigh:
+	case rubric.SeverityHigh:
 		return "🔴"
-	case evaluation.SeverityMedium:
+	case rubric.SeverityMedium:
 		return "🟡"
-	case evaluation.SeverityLow:
+	case rubric.SeverityLow:
 		return "🟢"
-	case evaluation.SeverityInfo:
+	case rubric.SeverityInfo:
 		return "ℹ️"
 	default:
 		return "⚪"
 	}
 }
 
-func filterBySeverity(findings []evaluation.Finding, sev evaluation.Severity) []evaluation.Finding {
-	var result []evaluation.Finding
+func filterBySeverity(findings []rubric.Finding, sev rubric.Severity) []rubric.Finding {
+	var result []rubric.Finding
 	for _, f := range findings {
 		if f.Severity == sev {
 			result = append(result, f)

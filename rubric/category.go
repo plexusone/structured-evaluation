@@ -1,4 +1,4 @@
-package evaluation
+package rubric
 
 // ScoreValue represents a categorical score value.
 type ScoreValue string

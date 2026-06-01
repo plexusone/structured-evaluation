@@ -1,7 +1,7 @@
-// Package evaluation provides types for detailed evaluation reports
-// with severity-based findings and recommendations. This is suited for
+// Package rubric provides types for rubric-based evaluation reports
+// with categorical scoring and severity-based findings. This is suited for
 // LLM-as-Judge style reviews like PRD and ARB evaluations.
-package evaluation
+package rubric
 
 // Severity represents the severity level of a finding.
 // Based on InfoSec severity classifications.

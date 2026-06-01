@@ -5,21 +5,21 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/plexusone/structured-evaluation/evaluation"
+	"github.com/plexusone/structured-evaluation/rubric"
 )
 
 func TestRenderer_Render(t *testing.T) {
-	report := evaluation.NewEvaluationReport("article", "test-article.md")
+	report := rubric.NewRubric("article", "test-article.md")
 	report.Metadata.DocumentTitle = "Test Article"
 
-	report.AddCategoryResult(evaluation.CategoryResult{
+	report.AddCategoryResult(rubric.CategoryResult{
 		Category:  "technical_accuracy",
-		Score:     evaluation.ScorePass,
+		Score:     rubric.ScorePass,
 		Reasoning: "All details correct",
 	})
-	report.AddCategoryResult(evaluation.CategoryResult{
+	report.AddCategoryResult(rubric.CategoryResult{
 		Category:  "completeness",
-		Score:     evaluation.ScorePartial,
+		Score:     rubric.ScorePartial,
 		Reasoning: "Missing optional sections",
 	})
 
@@ -56,10 +56,10 @@ func TestRenderer_Render(t *testing.T) {
 }
 
 func TestRenderer_NoColor(t *testing.T) {
-	report := evaluation.NewEvaluationReport("test", "doc.md")
-	report.AddCategoryResult(evaluation.CategoryResult{
+	report := rubric.NewRubric("test", "doc.md")
+	report.AddCategoryResult(rubric.CategoryResult{
 		Category: "quality",
-		Score:    evaluation.ScorePass,
+		Score:    rubric.ScorePass,
 	})
 	report.Finalize(nil, "")
 
@@ -84,10 +84,10 @@ func TestRenderer_NoColor(t *testing.T) {
 }
 
 func TestRenderer_SetColor(t *testing.T) {
-	report := evaluation.NewEvaluationReport("test", "doc.md")
-	report.AddCategoryResult(evaluation.CategoryResult{
+	report := rubric.NewRubric("test", "doc.md")
+	report.AddCategoryResult(rubric.CategoryResult{
 		Category: "quality",
-		Score:    evaluation.ScorePass,
+		Score:    rubric.ScorePass,
 	})
 	report.Finalize(nil, "")
 
@@ -114,15 +114,15 @@ func TestRenderer_SetColor(t *testing.T) {
 }
 
 func TestRenderer_WithFindings(t *testing.T) {
-	report := evaluation.NewEvaluationReport("article", "test.md")
-	report.AddCategoryResult(evaluation.CategoryResult{
+	report := rubric.NewRubric("article", "test.md")
+	report.AddCategoryResult(rubric.CategoryResult{
 		Category: "accuracy",
-		Score:    evaluation.ScoreFail,
+		Score:    rubric.ScoreFail,
 	})
-	report.AddFinding(evaluation.Finding{
+	report.AddFinding(rubric.Finding{
 		ID:             "F1",
 		Category:       "accuracy",
-		Severity:       evaluation.SeverityHigh,
+		Severity:       rubric.SeverityHigh,
 		Title:          "CVE mismatch",
 		Description:    "Details don't match",
 		Recommendation: "Verify against NVD",
@@ -152,18 +152,18 @@ func TestRenderer_WithFindings(t *testing.T) {
 
 func TestRenderer_DecisionColors(t *testing.T) {
 	tests := []struct {
-		status   evaluation.DecisionStatus
+		status   rubric.DecisionStatus
 		contains string
 	}{
-		{evaluation.DecisionPass, "PASS"},
-		{evaluation.DecisionConditional, "CONDITIONAL"},
-		{evaluation.DecisionFail, "BLOCKED"},
-		{evaluation.DecisionHumanReview, "HUMAN REVIEW"},
+		{rubric.DecisionPass, "PASS"},
+		{rubric.DecisionConditional, "CONDITIONAL"},
+		{rubric.DecisionFail, "BLOCKED"},
+		{rubric.DecisionHumanReview, "HUMAN REVIEW"},
 	}
 
 	for _, tt := range tests {
 		t.Run(string(tt.status), func(t *testing.T) {
-			report := evaluation.NewEvaluationReport("test", "doc.md")
+			report := rubric.NewRubric("test", "doc.md")
 			report.Decision.Status = tt.status
 			report.Decision.CategoryCounts.Total = 1
 

@@ -8,7 +8,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/plexusone/structured-evaluation/evaluation"
+	"github.com/plexusone/structured-evaluation/rubric"
 	"github.com/plexusone/structured-evaluation/render/box"
 	"github.com/plexusone/structured-evaluation/render/detailed"
 	"github.com/plexusone/structured-evaluation/render/markdown"
@@ -99,7 +99,7 @@ var schemaCmd = &cobra.Command{
 	Long: `Generate JSON Schema files for evaluation and summary reports.
 
 Outputs:
-  evaluation.schema.json - Schema for detailed LLM-as-Judge reports
+  rubric.schema.json - Schema for detailed LLM-as-Judge reports
   summary.schema.json    - Schema for GO/NO-GO summary reports`,
 	RunE: runSchemaGenerate,
 }
@@ -110,14 +110,14 @@ func runSchemaGenerate(cmd *cobra.Command, args []string) error {
 		outputDir = "."
 	}
 
-	// Generate evaluation schema
-	evalSchema, err := schema.GenerateEvaluationSchema()
+	// Generate rubric schema
+	evalSchema, err := schema.GenerateRubricSchema()
 	if err != nil {
-		return fmt.Errorf("generating evaluation schema: %w", err)
+		return fmt.Errorf("generating rubric schema: %w", err)
 	}
-	evalPath := outputDir + "/evaluation.schema.json"
+	evalPath := outputDir + "/rubric.schema.json"
 	if err := schema.WriteSchemaFile(evalPath, evalSchema); err != nil {
-		return fmt.Errorf("writing evaluation schema: %w", err)
+		return fmt.Errorf("writing rubric schema: %w", err)
 	}
 	fmt.Printf("Generated: %s\n", evalPath)
 
@@ -173,7 +173,7 @@ func runRender(cmd *cobra.Command, args []string) error {
 }
 
 func renderEvaluation(data []byte, format string) error {
-	var report evaluation.EvaluationReport
+	var report rubric.Rubric
 	if err := json.Unmarshal(data, &report); err != nil {
 		return fmt.Errorf("parsing evaluation report: %w", err)
 	}
@@ -237,7 +237,7 @@ func runCheck(cmd *cobra.Command, args []string) error {
 
 	// Check evaluation report
 	if _, hasCategories := raw["categories"]; hasCategories {
-		var report evaluation.EvaluationReport
+		var report rubric.Rubric
 		if err := json.Unmarshal(data, &report); err != nil {
 			return fmt.Errorf("parsing evaluation report: %w", err)
 		}
@@ -284,7 +284,7 @@ func runValidate(cmd *cobra.Command, args []string) error {
 
 	// Try parsing as evaluation
 	if _, hasCategories := raw["categories"]; hasCategories {
-		var report evaluation.EvaluationReport
+		var report rubric.Rubric
 		if err := json.Unmarshal(data, &report); err != nil {
 			return fmt.Errorf("invalid evaluation report: %w", err)
 		}

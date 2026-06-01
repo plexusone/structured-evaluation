@@ -1,4 +1,4 @@
-package evaluation
+package rubric
 
 // PassCriteria defines the requirements for approval.
 // Aligned with LLM-as-Judge best practices.
@@ -68,8 +68,8 @@ const (
 	DecisionHumanReview DecisionStatus = "human_review" // Requires human judgment
 )
 
-// Evaluate checks category results and findings against criteria.
-func Evaluate(results []CategoryResult, findings []Finding, criteria PassCriteria, rubric *RubricSet) Decision {
+// EvaluateResults checks category results and findings against criteria.
+func EvaluateResults(results []CategoryResult, findings []Finding, criteria PassCriteria, rubricSet *RubricSet) Decision {
 	findingCounts := CountFindings(findings)
 	categoryCounts := CountResults(results)
 
@@ -104,7 +104,7 @@ func Evaluate(results []CategoryResult, findings []Finding, criteria PassCriteri
 			return decision
 		}
 	case "all_required":
-		if rubric != nil && !AllRequiredPassing(results, rubric) {
+		if rubricSet != nil && !AllRequiredPassing(results, rubricSet) {
 			decision.Status = DecisionFail
 			decision.Passed = false
 			decision.Rationale = "One or more required categories did not pass"

@@ -1,21 +1,21 @@
-package evaluation
+package rubric
 
 import "testing"
 
 func TestAggregateEvaluations_Majority(t *testing.T) {
-	eval1 := NewEvaluationReport("test", "doc.md")
+	eval1 := NewRubric("test", "doc.md")
 	eval1.AddCategoryResult(CategoryResult{Category: "quality", Score: ScorePass})
 	eval1.Decision = Decision{Status: DecisionPass, Passed: true}
 
-	eval2 := NewEvaluationReport("test", "doc.md")
+	eval2 := NewRubric("test", "doc.md")
 	eval2.AddCategoryResult(CategoryResult{Category: "quality", Score: ScorePass})
 	eval2.Decision = Decision{Status: DecisionPass, Passed: true}
 
-	eval3 := NewEvaluationReport("test", "doc.md")
+	eval3 := NewRubric("test", "doc.md")
 	eval3.AddCategoryResult(CategoryResult{Category: "quality", Score: ScoreFail})
 	eval3.Decision = Decision{Status: DecisionFail}
 
-	result := AggregateEvaluations([]*EvaluationReport{eval1, eval2, eval3}, AggregationMajority)
+	result := AggregateEvaluations([]*Rubric{eval1, eval2, eval3}, AggregationMajority)
 
 	if result.AggregationMethod != AggregationMajority {
 		t.Errorf("Expected method 'majority', got %s", result.AggregationMethod)
@@ -36,15 +36,15 @@ func TestAggregateEvaluations_Majority(t *testing.T) {
 }
 
 func TestAggregateEvaluations_Conservative(t *testing.T) {
-	eval1 := NewEvaluationReport("test", "doc.md")
+	eval1 := NewRubric("test", "doc.md")
 	eval1.AddCategoryResult(CategoryResult{Category: "quality", Score: ScorePass})
 	eval1.Decision = Decision{Status: DecisionPass, Passed: true}
 
-	eval2 := NewEvaluationReport("test", "doc.md")
+	eval2 := NewRubric("test", "doc.md")
 	eval2.AddCategoryResult(CategoryResult{Category: "quality", Score: ScorePartial})
 	eval2.Decision = Decision{Status: DecisionConditional}
 
-	result := AggregateEvaluations([]*EvaluationReport{eval1, eval2}, AggregationConservative)
+	result := AggregateEvaluations([]*Rubric{eval1, eval2}, AggregationConservative)
 
 	// Conservative should take the worse score
 	if len(result.AggregatedCategories) != 1 {
@@ -61,13 +61,13 @@ func TestAggregateEvaluations_Conservative(t *testing.T) {
 }
 
 func TestAggregateEvaluations_ConservativeFail(t *testing.T) {
-	eval1 := NewEvaluationReport("test", "doc.md")
+	eval1 := NewRubric("test", "doc.md")
 	eval1.Decision = Decision{Status: DecisionPass, Passed: true}
 
-	eval2 := NewEvaluationReport("test", "doc.md")
+	eval2 := NewRubric("test", "doc.md")
 	eval2.Decision = Decision{Status: DecisionFail}
 
-	result := AggregateEvaluations([]*EvaluationReport{eval1, eval2}, AggregationConservative)
+	result := AggregateEvaluations([]*Rubric{eval1, eval2}, AggregationConservative)
 
 	// Conservative should fail if any judge fails
 	if result.ConsolidatedDecision.Status != DecisionFail {
@@ -76,15 +76,15 @@ func TestAggregateEvaluations_ConservativeFail(t *testing.T) {
 }
 
 func TestAggregateEvaluations_Unanimous(t *testing.T) {
-	eval1 := NewEvaluationReport("test", "doc.md")
+	eval1 := NewRubric("test", "doc.md")
 	eval1.AddCategoryResult(CategoryResult{Category: "quality", Score: ScorePass})
 	eval1.Decision = Decision{Status: DecisionPass, Passed: true}
 
-	eval2 := NewEvaluationReport("test", "doc.md")
+	eval2 := NewRubric("test", "doc.md")
 	eval2.AddCategoryResult(CategoryResult{Category: "quality", Score: ScorePass})
 	eval2.Decision = Decision{Status: DecisionPass, Passed: true}
 
-	result := AggregateEvaluations([]*EvaluationReport{eval1, eval2}, AggregationUnanimous)
+	result := AggregateEvaluations([]*Rubric{eval1, eval2}, AggregationUnanimous)
 
 	// Unanimous pass
 	if result.ConsolidatedDecision.Status != DecisionPass {
@@ -98,15 +98,15 @@ func TestAggregateEvaluations_Unanimous(t *testing.T) {
 }
 
 func TestAggregateEvaluations_UnanimousDisagreement(t *testing.T) {
-	eval1 := NewEvaluationReport("test", "doc.md")
+	eval1 := NewRubric("test", "doc.md")
 	eval1.AddCategoryResult(CategoryResult{Category: "quality", Score: ScorePass})
 	eval1.Decision = Decision{Status: DecisionPass, Passed: true}
 
-	eval2 := NewEvaluationReport("test", "doc.md")
+	eval2 := NewRubric("test", "doc.md")
 	eval2.AddCategoryResult(CategoryResult{Category: "quality", Score: ScoreFail})
 	eval2.Decision = Decision{Status: DecisionFail}
 
-	result := AggregateEvaluations([]*EvaluationReport{eval1, eval2}, AggregationUnanimous)
+	result := AggregateEvaluations([]*Rubric{eval1, eval2}, AggregationUnanimous)
 
 	// No unanimous agreement - should need human review
 	if result.ConsolidatedDecision.Status != DecisionHumanReview {
@@ -121,23 +121,23 @@ func TestAggregateEvaluations_UnanimousDisagreement(t *testing.T) {
 
 func TestAggregateEvaluations_Agreement(t *testing.T) {
 	// High agreement (same scores)
-	eval1 := NewEvaluationReport("test", "doc.md")
+	eval1 := NewRubric("test", "doc.md")
 	eval1.AddCategoryResult(CategoryResult{Category: "quality", Score: ScorePass})
 
-	eval2 := NewEvaluationReport("test", "doc.md")
+	eval2 := NewRubric("test", "doc.md")
 	eval2.AddCategoryResult(CategoryResult{Category: "quality", Score: ScorePass})
 
-	result := AggregateEvaluations([]*EvaluationReport{eval1, eval2}, AggregationMajority)
+	result := AggregateEvaluations([]*Rubric{eval1, eval2}, AggregationMajority)
 
 	if result.Agreement != 1.0 {
 		t.Errorf("Expected perfect agreement (1.0), got %f", result.Agreement)
 	}
 
 	// Lower agreement (different scores)
-	eval3 := NewEvaluationReport("test", "doc.md")
+	eval3 := NewRubric("test", "doc.md")
 	eval3.AddCategoryResult(CategoryResult{Category: "quality", Score: ScoreFail})
 
-	result2 := AggregateEvaluations([]*EvaluationReport{eval1, eval3}, AggregationMajority)
+	result2 := AggregateEvaluations([]*Rubric{eval1, eval3}, AggregationMajority)
 
 	if result2.Agreement >= 1.0 {
 		t.Errorf("Expected lower agreement, got %f", result2.Agreement)
@@ -145,13 +145,13 @@ func TestAggregateEvaluations_Agreement(t *testing.T) {
 }
 
 func TestAggregateEvaluations_Disagreements(t *testing.T) {
-	eval1 := NewEvaluationReport("test", "doc.md")
+	eval1 := NewRubric("test", "doc.md")
 	eval1.AddCategoryResult(CategoryResult{Category: "quality", Score: ScorePass})
 
-	eval2 := NewEvaluationReport("test", "doc.md")
+	eval2 := NewRubric("test", "doc.md")
 	eval2.AddCategoryResult(CategoryResult{Category: "quality", Score: ScoreFail})
 
-	result := AggregateEvaluations([]*EvaluationReport{eval1, eval2}, AggregationMajority)
+	result := AggregateEvaluations([]*Rubric{eval1, eval2}, AggregationMajority)
 
 	if len(result.Disagreements) != 1 {
 		t.Errorf("Expected 1 disagreement, got %d", len(result.Disagreements))
@@ -165,14 +165,14 @@ func TestAggregateEvaluations_Disagreements(t *testing.T) {
 }
 
 func TestAggregateEvaluations_ConsolidateFindings(t *testing.T) {
-	eval1 := NewEvaluationReport("test", "doc.md")
+	eval1 := NewRubric("test", "doc.md")
 	eval1.AddFinding(Finding{
 		Category: "security",
 		Title:    "SQL Injection",
 		Severity: SeverityHigh,
 	})
 
-	eval2 := NewEvaluationReport("test", "doc.md")
+	eval2 := NewRubric("test", "doc.md")
 	eval2.AddFinding(Finding{
 		Category: "security",
 		Title:    "SQL Injection",  // Same finding
@@ -184,7 +184,7 @@ func TestAggregateEvaluations_ConsolidateFindings(t *testing.T) {
 		Severity: SeverityMedium,
 	})
 
-	result := AggregateEvaluations([]*EvaluationReport{eval1, eval2}, AggregationMajority)
+	result := AggregateEvaluations([]*Rubric{eval1, eval2}, AggregationMajority)
 
 	// Should have 2 unique findings
 	if len(result.ConsolidatedFindings) != 2 {
@@ -200,7 +200,7 @@ func TestAggregateEvaluations_ConsolidateFindings(t *testing.T) {
 }
 
 func TestAggregateEvaluations_Empty(t *testing.T) {
-	result := AggregateEvaluations([]*EvaluationReport{}, AggregationMajority)
+	result := AggregateEvaluations([]*Rubric{}, AggregationMajority)
 
 	if len(result.AggregatedCategories) != 0 {
 		t.Errorf("Expected 0 categories for empty input, got %d", len(result.AggregatedCategories))

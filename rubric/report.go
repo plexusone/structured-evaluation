@@ -1,12 +1,12 @@
-package evaluation
+package rubric
 
 import (
 	"fmt"
 	"time"
 )
 
-// EvaluationReport is the detailed evaluation report for LLM-as-Judge reviews.
-type EvaluationReport struct {
+// Rubric is the detailed rubric-based evaluation report for LLM-as-Judge reviews.
+type Rubric struct {
 	// Schema is the JSON Schema URL.
 	Schema string `json:"$schema,omitempty"`
 
@@ -104,9 +104,9 @@ type ActionItem struct {
 	Effort string `json:"effort,omitempty"`
 }
 
-// NewEvaluationReport creates a new evaluation report.
-func NewEvaluationReport(reviewType, document string) *EvaluationReport {
-	return &EvaluationReport{
+// NewRubric creates a new rubric-based evaluation report.
+func NewRubric(reviewType, document string) *Rubric {
+	return &Rubric{
 		Metadata: ReportMetadata{
 			Document:    document,
 			GeneratedAt: time.Now().UTC(),
@@ -120,26 +120,26 @@ func NewEvaluationReport(reviewType, document string) *EvaluationReport {
 }
 
 // AddCategoryResult adds a category result.
-func (r *EvaluationReport) AddCategoryResult(cr CategoryResult) {
+func (r *Rubric) AddCategoryResult(cr CategoryResult) {
 	r.Categories = append(r.Categories, cr)
 	// Also collect findings from the category
 	r.Findings = append(r.Findings, cr.Findings...)
 }
 
 // AddFinding adds a finding.
-func (r *EvaluationReport) AddFinding(f Finding) {
+func (r *Rubric) AddFinding(f Finding) {
 	r.Findings = append(r.Findings, f)
 }
 
 // Evaluate computes the decision based on findings and category results.
-func (r *EvaluationReport) Evaluate(rubric *RubricSet) Decision {
-	r.Decision = Evaluate(r.Categories, r.Findings, r.PassCriteria, rubric)
+func (r *Rubric) Evaluate(rubricSet *RubricSet) Decision {
+	r.Decision = EvaluateResults(r.Categories, r.Findings, r.PassCriteria, rubricSet)
 	r.OverallDecision = string(r.Decision.Status)
 	return r.Decision
 }
 
 // GenerateNextSteps creates actionable next steps.
-func (r *EvaluationReport) GenerateNextSteps(rerunCommand string) {
+func (r *Rubric) GenerateNextSteps(rerunCommand string) {
 	r.NextSteps = NextSteps{
 		RerunCommand: rerunCommand,
 		Immediate:    []ActionItem{},
@@ -184,7 +184,7 @@ func (r *EvaluationReport) GenerateNextSteps(rerunCommand string) {
 }
 
 // GenerateSummary creates the summary text.
-func (r *EvaluationReport) GenerateSummary() string {
+func (r *Rubric) GenerateSummary() string {
 	counts := r.Decision.CategoryCounts
 	findings := r.Decision.FindingCounts
 
@@ -228,14 +228,14 @@ func (r *EvaluationReport) GenerateSummary() string {
 }
 
 // Finalize computes all derived fields.
-func (r *EvaluationReport) Finalize(rubric *RubricSet, rerunCommand string) {
-	r.Evaluate(rubric)
+func (r *Rubric) Finalize(rubricSet *RubricSet, rerunCommand string) {
+	r.Evaluate(rubricSet)
 	r.GenerateNextSteps(rerunCommand)
 	r.GenerateSummary()
 }
 
 // SetJudge sets the judge metadata.
-func (r *EvaluationReport) SetJudge(judge *JudgeMetadata) {
+func (r *Rubric) SetJudge(judge *JudgeMetadata) {
 	r.Judge = judge
 	if judge != nil && judge.RubricID != "" {
 		r.RubricID = judge.RubricID
@@ -246,23 +246,23 @@ func (r *EvaluationReport) SetJudge(judge *JudgeMetadata) {
 }
 
 // SetReference sets the reference data for comparison.
-func (r *EvaluationReport) SetReference(ref *ReferenceData) {
+func (r *Rubric) SetReference(ref *ReferenceData) {
 	r.Reference = ref
 }
 
-// SetRubric sets the rubric ID and version.
-func (r *EvaluationReport) SetRubric(rubricID, rubricVersion string) {
+// SetRubricInfo sets the rubric ID and version.
+func (r *Rubric) SetRubricInfo(rubricID, rubricVersion string) {
 	r.RubricID = rubricID
 	r.RubricVersion = rubricVersion
 }
 
 // SetPassCriteria sets the pass criteria.
-func (r *EvaluationReport) SetPassCriteria(criteria PassCriteria) {
+func (r *Rubric) SetPassCriteria(criteria PassCriteria) {
 	r.PassCriteria = criteria
 }
 
 // GetCategoryResult returns a category result by ID, or nil if not found.
-func (r *EvaluationReport) GetCategoryResult(categoryID string) *CategoryResult {
+func (r *Rubric) GetCategoryResult(categoryID string) *CategoryResult {
 	for i := range r.Categories {
 		if r.Categories[i].Category == categoryID {
 			return &r.Categories[i]

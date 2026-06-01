@@ -2,12 +2,17 @@ package schema
 
 import _ "embed"
 
-// EvaluationSchemaJSON is the embedded JSON Schema for EvaluationReport.
+// RubricSchemaJSON is the embedded JSON Schema for Rubric.
 //
-//go:embed evaluation.schema.json
-var EvaluationSchemaJSON []byte
+//go:embed rubric.schema.json
+var RubricSchemaJSON []byte
 
 // SummarySchemaJSON is the embedded JSON Schema for SummaryReport.
 //
 //go:embed summary.schema.json
 var SummarySchemaJSON []byte
+
+// ClaimsSchemaJSON is the embedded JSON Schema for ClaimsReport.
+//
+//go:embed claims.schema.json
+var ClaimsSchemaJSON []byte
