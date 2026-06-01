@@ -38,13 +38,13 @@ type CategoricalAgreement struct {
 ### From Rating Pairs
 
 ```go
-pairs := []evaluation.RatingPair{
+pairs := []rubric.RatingPair{
     {Rater1: 5, Rater2: 4, Category: "quality", ItemID: "doc1"},
     {Rater1: 3, Rater2: 3, Category: "quality", ItemID: "doc2"},
     {Rater1: 4, Rater2: 5, Category: "quality", ItemID: "doc3"},
 }
 
-metrics := evaluation.ComputeIRR(pairs)
+metrics := rubric.ComputeIRR(pairs)
 
 fmt.Printf("Exact Agreement: %.1f%%\n", metrics.ExactAgreement*100)
 fmt.Printf("Adjacent Agreement: %.1f%%\n", metrics.AdjacentAgreement*100)
@@ -58,18 +58,18 @@ Compare two sets of evaluation results directly:
 
 ```go
 // Human ratings
-humanResults := []evaluation.CategoryResult{
-    *evaluation.NewCategoryResultWithNumeric("quality", evaluation.ScorePass, 5.0, ""),
-    *evaluation.NewCategoryResultWithNumeric("clarity", evaluation.ScorePartial, 3.0, ""),
+humanResults := []rubric.CategoryResult{
+    *rubric.NewCategoryResultWithNumeric("quality", rubric.ScorePass, 5.0, ""),
+    *rubric.NewCategoryResultWithNumeric("clarity", rubric.ScorePartial, 3.0, ""),
 }
 
 // LLM ratings
-llmResults := []evaluation.CategoryResult{
-    *evaluation.NewCategoryResultWithNumeric("quality", evaluation.ScorePass, 4.0, ""),
-    *evaluation.NewCategoryResultWithNumeric("clarity", evaluation.ScorePartial, 3.0, ""),
+llmResults := []rubric.CategoryResult{
+    *rubric.NewCategoryResultWithNumeric("quality", rubric.ScorePass, 4.0, ""),
+    *rubric.NewCategoryResultWithNumeric("clarity", rubric.ScorePartial, 3.0, ""),
 }
 
-metrics := evaluation.ComputeIRRFromResults(humanResults, llmResults)
+metrics := rubric.ComputeIRRFromResults(humanResults, llmResults)
 ```
 
 ### Categorical Agreement
@@ -77,7 +77,7 @@ metrics := evaluation.ComputeIRRFromResults(humanResults, llmResults)
 For pass/partial/fail comparisons:
 
 ```go
-agreement := evaluation.ComputeCategoricalAgreement(humanResults, llmResults)
+agreement := rubric.ComputeCategoricalAgreement(humanResults, llmResults)
 
 fmt.Printf("Exact Agreement: %.1f%%\n", agreement.ExactAgreement*100)
 
@@ -138,8 +138,8 @@ humanResults := runHumanEvaluation(documents)
 llmResults := runLLMEvaluation(documents)
 
 // 3. Compute IRR
-metrics := evaluation.ComputeIRRFromResults(humanResults, llmResults)
-catAgreement := evaluation.ComputeCategoricalAgreement(humanResults, llmResults)
+metrics := rubric.ComputeIRRFromResults(humanResults, llmResults)
+catAgreement := rubric.ComputeCategoricalAgreement(humanResults, llmResults)
 
 // 4. Report
 fmt.Println("=== LLM Calibration Report ===")

@@ -10,44 +10,44 @@ package main
 import (
     "os"
 
-    "github.com/plexusone/structured-evaluation/evaluation"
+    "github.com/plexusone/structured-evaluation/rubric"
     "github.com/plexusone/structured-evaluation/render/terminal"
 )
 
 func main() {
     // Create a new evaluation report
-    report := evaluation.NewEvaluationReport("prd-review", "requirements.md")
+    report := rubric.NewRubric("prd-review", "requirements.md")
 
     // Add category results with categorical scores
-    report.AddCategory(evaluation.CategoryResult{
+    report.AddCategoryResult(rubric.CategoryResult{
         Category:  "problem_definition",
-        Score:     evaluation.ScorePass,
+        Score:     rubric.ScorePass,
         Reasoning: "Problem is clearly defined with measurable impact",
     })
 
-    report.AddCategory(evaluation.CategoryResult{
+    report.AddCategoryResult(rubric.CategoryResult{
         Category:  "user_stories",
-        Score:     evaluation.ScorePartial,
+        Score:     rubric.ScorePartial,
         Reasoning: "Stories present but some lack acceptance criteria",
     })
 
-    report.AddCategory(evaluation.CategoryResult{
+    report.AddCategoryResult(rubric.CategoryResult{
         Category:  "success_metrics",
-        Score:     evaluation.ScoreFail,
+        Score:     rubric.ScoreFail,
         Reasoning: "No quantitative success metrics defined",
     })
 
     // Add findings for issues discovered
-    report.AddFinding(evaluation.Finding{
-        Severity:       evaluation.SeverityHigh,
+    report.AddFinding(rubric.Finding{
+        Severity:       rubric.SeverityHigh,
         Category:       "success_metrics",
         Title:          "Missing success metrics",
         Description:    "The PRD does not define how success will be measured",
         Recommendation: "Add 2-3 quantitative KPIs with target values",
     })
 
-    report.AddFinding(evaluation.Finding{
-        Severity:       evaluation.SeverityMedium,
+    report.AddFinding(rubric.Finding{
+        Severity:       rubric.SeverityMedium,
         Category:       "user_stories",
         Title:          "Incomplete acceptance criteria",
         Description:    "3 of 8 user stories lack testable acceptance criteria",
@@ -55,11 +55,11 @@ func main() {
     })
 
     // Finalize computes the decision
-    report.Finalize("sevaluation check requirements.md")
+    report.Finalize(nil, "sevaluation check requirements.md")
 
     // Render to terminal with colors
     renderer := terminal.New(os.Stdout)
-    renderer.Render(&report)
+    renderer.Render(report)
 }
 ```
 
@@ -122,7 +122,7 @@ report.AddTeam(summary.TeamSection{
 import "github.com/plexusone/structured-evaluation/render/terminal"
 
 renderer := terminal.New(os.Stdout)
-renderer.Render(&report)
+renderer.Render(report)
 ```
 
 ### Markdown Output
@@ -131,7 +131,7 @@ renderer.Render(&report)
 import "github.com/plexusone/structured-evaluation/render/markdown"
 
 renderer := markdown.New(os.Stdout)
-renderer.Render(&report)
+renderer.Render(report)
 ```
 
 ### JSON Output

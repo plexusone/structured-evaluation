@@ -6,12 +6,12 @@ Combine evaluations from multiple judges (LLMs or humans) to improve reliability
 
 ```go
 type MultiJudgeResult struct {
-    Evaluations         []EvaluationReport `json:"evaluations"`
-    AggregationMethod   AggregationMethod  `json:"aggregation_method"`
-    Agreement           float64            `json:"agreement"` // 0-1
-    Disagreements       []Disagreement     `json:"disagreements,omitempty"`
-    ConsolidatedReport  EvaluationReport   `json:"consolidated_report"`
-    ConsolidatedDecision Decision          `json:"consolidated_decision"`
+    Evaluations         []Rubric          `json:"evaluations"`
+    AggregationMethod   AggregationMethod `json:"aggregation_method"`
+    Agreement           float64           `json:"agreement"` // 0-1
+    Disagreements       []Disagreement    `json:"disagreements,omitempty"`
+    ConsolidatedReport  Rubric            `json:"consolidated_report"`
+    ConsolidatedDecision Decision         `json:"consolidated_decision"`
 }
 ```
 
@@ -55,15 +55,15 @@ Takes the highest score:
 ## Aggregating Evaluations
 
 ```go
-evaluations := []evaluation.EvaluationReport{
+evaluations := []rubric.Rubric{
     judge1Report,
     judge2Report,
     judge3Report,
 }
 
-result := evaluation.AggregateEvaluations(
+result := rubric.AggregateEvaluations(
     evaluations,
-    evaluation.AggregationMajority,
+    rubric.AggregationMajority,
 )
 
 // Access results
@@ -141,19 +141,19 @@ judges := []JudgeConfig{
     {Model: "gemini-pro", Provider: "google"},
 }
 
-var evaluations []evaluation.EvaluationReport
+var evaluations []rubric.Rubric
 for _, judge := range judges {
-    report := runEvaluation(document, rubric, judge)
+    report := runEvaluation(document, rubricSet, judge)
     evaluations = append(evaluations, report)
 }
 
 // Aggregate with majority voting
-result := evaluation.AggregateEvaluations(evaluations, evaluation.AggregationMajority)
+result := rubric.AggregateEvaluations(evaluations, rubric.AggregationMajority)
 
 // Use consolidated report
 if result.Agreement < 0.6 {
     // Low agreement - flag for human review
-    result.ConsolidatedDecision.Status = evaluation.DecisionHumanReview
+    result.ConsolidatedDecision.Status = rubric.DecisionHumanReview
 }
 ```
 
@@ -188,11 +188,11 @@ if result.Agreement < 0.5 {
 
 ```go
 // Start with single judge
-report := runEvaluation(doc, rubric, primaryJudge)
+report := runEvaluation(doc, rubricSet, primaryJudge)
 
 // Only use multi-judge for borderline cases
-if report.Decision.Status == evaluation.DecisionConditional {
-    reports := runMultiJudge(doc, rubric, allJudges)
+if report.Decision.Status == rubric.DecisionConditional {
+    reports := runMultiJudge(doc, rubricSet, allJudges)
     result := AggregateEvaluations(reports, AggregationMajority)
 }
 ```

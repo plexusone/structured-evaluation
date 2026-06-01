@@ -31,8 +31,8 @@ type Finding struct {
 
 ```go
 // Critical finding - blocks approval
-report.AddFinding(evaluation.Finding{
-    Severity:       evaluation.SeverityCritical,
+report.AddFinding(rubric.Finding{
+    Severity:       rubric.SeverityCritical,
     Category:       "security",
     Title:          "SQL injection vulnerability",
     Description:    "User input is concatenated directly into SQL query",
@@ -42,8 +42,8 @@ report.AddFinding(evaluation.Finding{
 })
 
 // Medium finding - tracked but doesn't block
-report.AddFinding(evaluation.Finding{
-    Severity:       evaluation.SeverityMedium,
+report.AddFinding(rubric.Finding{
+    Severity:       rubric.SeverityMedium,
     Category:       "documentation",
     Title:          "Missing API documentation",
     Description:    "Public endpoints lack OpenAPI annotations",
@@ -51,8 +51,8 @@ report.AddFinding(evaluation.Finding{
 })
 
 // Info finding - observation
-report.AddFinding(evaluation.Finding{
-    Severity:    evaluation.SeverityInfo,
+report.AddFinding(rubric.Finding{
+    Severity:    rubric.SeverityInfo,
     Category:    "style",
     Title:       "Consider using table-driven tests",
     Description: "Test file has repetitive test cases",
@@ -95,7 +95,7 @@ fmt.Printf("Findings: %d critical, %d high, %d medium, %d low\n",
 ## Severity Methods
 
 ```go
-severity := evaluation.SeverityHigh
+severity := rubric.SeverityHigh
 
 severity.Icon()        // "🔴"
 severity.IsBlocking()  // true

@@ -4,10 +4,10 @@ Rubrics define explicit evaluation criteria for consistent assessments across ev
 
 ## Overview
 
-A rubric provides structured guidance for evaluating each category:
+A rubric category provides structured guidance for evaluating each category:
 
 ```go
-type Rubric struct {
+type Category struct {
     ID          string `json:"id"`
     Name        string `json:"name"`
     Description string `json:"description"`
@@ -20,10 +20,10 @@ type Rubric struct {
 }
 ```
 
-## Creating Rubrics
+## Creating Rubric Categories
 
 ```go
-rubric := evaluation.NewRubric("problem_definition", "Problem Definition").
+cat := rubric.NewCategory("problem_definition", "Problem Definition", "").
     WithDescription("Evaluates clarity and completeness of the problem statement").
     WithPassCriteria("Problem is clearly stated with measurable business impact and affected users identified").
     WithPartialCriteria("Problem is stated but lacks specificity or measurable impact").
@@ -35,14 +35,14 @@ rubric := evaluation.NewRubric("problem_definition", "Problem Definition").
 Examples help evaluators understand the criteria:
 
 ```go
-rubric.AddExample(evaluation.Example{
-    Score:   evaluation.ScorePass,
+cat.AddExample(rubric.Example{
+    Score:   rubric.ScorePass,
     Text:    "Users spend 3+ hours/week manually reconciling invoices, costing $50k/year in labor",
     Reason:  "Quantifies impact, identifies users, and is actionable",
 })
 
-rubric.AddExample(evaluation.Example{
-    Score:   evaluation.ScoreFail,
+cat.AddExample(rubric.Example{
+    Score:   rubric.ScoreFail,
     Text:    "We need to improve the system",
     Reason:  "Vague, no measurable impact, not actionable",
 })
@@ -50,32 +50,32 @@ rubric.AddExample(evaluation.Example{
 
 ## RubricSet
 
-Group rubrics for a specific review type:
+Group rubric categories for a specific review type:
 
 ```go
 type RubricSet struct {
-    ID          string   `json:"id"`
-    Name        string   `json:"name"`
-    Description string   `json:"description"`
-    Categories  []Rubric `json:"categories"`
+    ID          string     `json:"id"`
+    Name        string     `json:"name"`
+    Description string     `json:"description"`
+    Categories  []Category `json:"categories"`
 }
 ```
 
 ### Creating a RubricSet
 
 ```go
-rubricSet := evaluation.NewRubricSet("prd-review", "PRD Review").
+rubricSet := rubric.NewRubricSet("prd-review", "PRD Review", "1.0.0").
     WithDescription("Evaluates Product Requirements Documents").
-    AddRubric(problemDefinitionRubric).
-    AddRubric(userStoriesRubric).
-    AddRubric(successMetricsRubric).
-    AddRubric(acceptanceCriteriaRubric)
+    AddCategory(problemDefinitionCategory).
+    AddCategory(userStoriesCategory).
+    AddCategory(successMetricsCategory).
+    AddCategory(acceptanceCriteriaCategory)
 ```
 
 ## Default PRD RubricSet
 
 ```go
-rubricSet := evaluation.DefaultPRDRubricSet()
+rubricSet := rubric.DefaultPRDRubricSet()
 ```
 
 Includes rubrics for:
@@ -90,16 +90,16 @@ Includes rubrics for:
 
 ```go
 // Create report with rubric reference
-report := evaluation.NewEvaluationReport("prd-review", "requirements.md")
+report := rubric.NewRubric("prd-review", "requirements.md")
 report.RubricID = "prd-review-v1"
 
 // Load rubric for evaluation guidance
-rubricSet := evaluation.DefaultPRDRubricSet()
+rubricSet := rubric.DefaultPRDRubricSet()
 
 // Evaluate each category using rubric criteria
-for _, rubric := range rubricSet.Categories {
-    result := evaluateCategory(document, rubric)
-    report.AddCategory(result)
+for _, cat := range rubricSet.Categories {
+    result := evaluateCategory(document, cat)
+    report.AddCategoryResult(result)
 }
 ```
 
@@ -108,7 +108,7 @@ for _, rubric := range rubricSet.Categories {
 When using LLM-as-Judge, include rubric criteria in the prompt:
 
 ```go
-func buildPrompt(document string, rubric Rubric) string {
+func buildPrompt(document string, cat Category) string {
     return fmt.Sprintf(`Evaluate the following document for %s.
 
 Criteria:
@@ -120,10 +120,10 @@ Document:
 %s
 
 Respond with: score (pass/partial/fail) and reasoning.`,
-        rubric.Name,
-        rubric.Criteria.Pass,
-        rubric.Criteria.Partial,
-        rubric.Criteria.Fail,
+        cat.Name,
+        cat.Criteria.Pass,
+        cat.Criteria.Partial,
+        cat.Criteria.Fail,
         document,
     )
 }
@@ -163,7 +163,7 @@ WithPassCriteria("User stories are good")
 Track rubric versions for reproducibility:
 
 ```go
-rubricSet := evaluation.NewRubricSet("prd-review-v2", "PRD Review v2")
+rubricSet := rubric.NewRubricSet("prd-review-v2", "PRD Review v2", "2.0.0")
 report.RubricID = "prd-review-v2"
 ```
 

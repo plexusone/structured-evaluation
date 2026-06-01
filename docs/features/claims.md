@@ -293,5 +293,5 @@ func main() {
 
 ## Next Steps
 
-- [Report Types](../concepts/report-types.md) - Compare EvaluationReport, SummaryReport, ClaimsReport
+- [Report Types](../concepts/report-types.md) - Compare Rubric, SummaryReport, ClaimsReport
 - [v0.6.0 Release Notes](../releases/v0.6.0.md) - Full changelog

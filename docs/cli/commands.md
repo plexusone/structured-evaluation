@@ -16,9 +16,9 @@ sevaluation render <file> [--format=<format>]
 
 | Format | Description | Report Type |
 |--------|-------------|-------------|
-| `terminal` | ANSI colors + UTF8 icons | Evaluation |
-| `markdown` | Markdown output | Evaluation |
-| `detailed` | Verbose terminal output | Evaluation |
+| `terminal` | ANSI colors + UTF8 icons | Rubric |
+| `markdown` | Markdown output | Rubric |
+| `detailed` | Verbose terminal output | Rubric |
 | `box` | Box-drawing format | Summary |
 | `json` | Pretty-printed JSON | Both |
 
@@ -43,7 +43,7 @@ sevaluation render summary.json --format=box
 
 ### Auto-Detection
 
-The command auto-detects report type (evaluation vs summary) and uses the appropriate renderer.
+The command auto-detects report type (rubric vs summary) and uses the appropriate renderer.
 
 ---
 
@@ -110,7 +110,7 @@ sevaluation validate <file>
 ### Examples
 
 ```bash
-# Validate evaluation report
+# Validate rubric report
 sevaluation validate eval.json
 
 # Validate summary report
@@ -120,7 +120,7 @@ sevaluation validate summary.json
 ### Output
 
 ```
-✅ Valid evaluation report
+✅ Valid rubric report
 ```
 
 or
@@ -149,14 +149,15 @@ sevaluation schema generate -o ./schema/
 ```
 
 Generates:
-- `evaluation.schema.json`
+
+- `rubric.schema.json`
 - `summary.schema.json`
 
 ### show
 
 ```bash
-# Show evaluation schema
-sevaluation schema show evaluation
+# Show rubric schema
+sevaluation schema show rubric
 
 # Show summary schema
 sevaluation schema show summary
@@ -177,7 +178,7 @@ sevaluation version
 ### Output
 
 ```
-sevaluation v0.4.0
+sevaluation v0.6.0
 ```
 
 ---

@@ -15,15 +15,15 @@ Structured-evaluation supports Likert scales (1-5 numeric ratings) alongside cat
 ## Creating Likert Categories
 
 ```go
-import "github.com/plexusone/structured-evaluation/evaluation"
+import "github.com/plexusone/structured-evaluation/rubric"
 
 // Using standard 1-5 anchors
-cat := evaluation.NewCategory("quality", "Content Quality", "Overall quality assessment").
-    WithLikert5(evaluation.StandardLikert5Anchors())
+cat := rubric.NewCategory("quality", "Content Quality", "Overall quality assessment").
+    WithLikert5(rubric.StandardLikert5Anchors())
 
 // Custom anchors
-cat := evaluation.NewCategory("clarity", "Clarity", "How clear is the writing").
-    WithLikert5([]evaluation.LikertAnchor{
+cat := rubric.NewCategory("clarity", "Clarity", "How clear is the writing").
+    WithLikert5([]rubric.LikertAnchor{
         {Value: 5, Label: "Crystal Clear", Description: "No ambiguity, easy to understand"},
         {Value: 4, Label: "Clear", Description: "Minor clarifications needed"},
         {Value: 3, Label: "Adequate", Description: "Understandable with effort"},
@@ -59,7 +59,7 @@ Thresholds are configurable:
 ```go
 passThreshold := 4
 partialThreshold := 3
-config := &evaluation.LikertConfig{
+config := &rubric.LikertConfig{
     Min:              1,
     Max:              5,
     PassThreshold:    &passThreshold,
@@ -74,7 +74,7 @@ cat.WithLikert(config)
 
 ```go
 // Categorical score is derived automatically
-result := evaluation.NewCategoryResultFromLikert(
+result := rubric.NewCategoryResultFromLikert(
     "quality",   // category ID
     4,           // Likert score
     config,      // LikertConfig
@@ -88,9 +88,9 @@ result := evaluation.NewCategoryResultFromLikert(
 
 ```go
 // Record both categorical and numeric
-result := evaluation.NewCategoryResultWithNumeric(
+result := rubric.NewCategoryResultWithNumeric(
     "quality",
-    evaluation.ScorePass,
+    rubric.ScorePass,
     4.5,  // numeric for human comparison
     "Reasoning here",
 )
@@ -99,7 +99,7 @@ result := evaluation.NewCategoryResultWithNumeric(
 ### Adding Numeric to Existing
 
 ```go
-result := evaluation.NewCategoryResult("quality", evaluation.ScorePass, "Good").
+result := rubric.NewCategoryResult("quality", rubric.ScorePass, "Good").
     SetNumericScore(4.5)
 ```
 
@@ -117,7 +117,7 @@ if result.HasNumericScore() {
 Rubric validation checks Likert configurations:
 
 ```go
-rs := evaluation.NewRubricSet("test", "Test", "1.0")
+rs := rubric.NewRubricSet("test", "Test", "1.0")
 rs.AddCategory(*cat)
 
 issues := rs.Validate()

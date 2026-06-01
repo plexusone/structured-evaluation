@@ -19,7 +19,7 @@ ANSI-colored output with UTF8 icons:
 import "github.com/plexusone/structured-evaluation/render/terminal"
 
 renderer := terminal.New(os.Stdout)
-err := renderer.Render(&report)
+err := renderer.Render(report)
 ```
 
 ### Output Example
@@ -60,7 +60,7 @@ Generates Markdown suitable for documentation or GitHub:
 import "github.com/plexusone/structured-evaluation/render/markdown"
 
 renderer := markdown.New(os.Stdout)
-err := renderer.Render(&report)
+err := renderer.Render(report)
 ```
 
 ### Output Example
@@ -108,7 +108,7 @@ Verbose terminal output with full finding details:
 import "github.com/plexusone/structured-evaluation/render/detailed"
 
 renderer := detailed.NewTerminal(os.Stdout)
-err := renderer.Render(&report)
+err := renderer.Render(report)
 ```
 
 ## Box Renderer
@@ -184,7 +184,7 @@ if err != nil {
 defer file.Close()
 
 renderer := markdown.New(file)
-return renderer.Render(&report)
+return renderer.Render(report)
 ```
 
 ## Custom Renderers
@@ -193,7 +193,7 @@ Implement the Renderer interface:
 
 ```go
 type Renderer interface {
-    Render(report *evaluation.EvaluationReport) error
+    Render(report *rubric.Rubric) error
 }
 
 // Example: HTML renderer
@@ -201,7 +201,7 @@ type HTMLRenderer struct {
     w io.Writer
 }
 
-func (r *HTMLRenderer) Render(report *evaluation.EvaluationReport) error {
+func (r *HTMLRenderer) Render(report *rubric.Rubric) error {
     // Generate HTML output
     tmpl := template.Must(template.ParseFiles("report.html"))
     return tmpl.Execute(r.w, report)

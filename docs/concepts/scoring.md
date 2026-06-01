@@ -44,21 +44,21 @@ type CategoryResult struct {
 ### Example
 
 ```go
-report.AddCategory(evaluation.CategoryResult{
+report.AddCategoryResult(rubric.CategoryResult{
     Category:  "problem_definition",
-    Score:     evaluation.ScorePass,
+    Score:     rubric.ScorePass,
     Reasoning: "Problem is clearly stated with measurable business impact",
 })
 
-report.AddCategory(evaluation.CategoryResult{
+report.AddCategoryResult(rubric.CategoryResult{
     Category:  "user_stories",
-    Score:     evaluation.ScorePartial,
+    Score:     rubric.ScorePartial,
     Reasoning: "Stories present but 2 of 5 lack acceptance criteria",
 })
 
-report.AddCategory(evaluation.CategoryResult{
+report.AddCategoryResult(rubric.CategoryResult{
     Category:  "success_metrics",
-    Score:     evaluation.ScoreFail,
+    Score:     rubric.ScoreFail,
     Reasoning: "No quantitative success metrics defined",
 })
 ```
@@ -87,7 +87,7 @@ fmt.Printf("Results: %d pass, %d partial, %d fail (of %d)\n",
 ## Score Methods
 
 ```go
-score := evaluation.ScorePass
+score := rubric.ScorePass
 
 score.IsPassing()  // true
 score.IsPartial()  // false

@@ -27,7 +27,7 @@ const (
 ## Creating a Comparison
 
 ```go
-comparison := evaluation.NewPairwiseComparison(
+comparison := rubric.NewPairwiseComparison(
     "Summarize this article about climate change",
     "Output A: Climate change is causing global temperatures...",
     "Output B: The article discusses how climate change...",
@@ -35,7 +35,7 @@ comparison := evaluation.NewPairwiseComparison(
 
 // Set the winner after evaluation
 comparison.SetWinner(
-    evaluation.WinnerA,
+    rubric.WinnerA,
     "Output A provides more specific details and better structure",
     0.85, // Confidence 0-1
 )
@@ -47,13 +47,13 @@ LLMs can exhibit position bias (preferring the first or second option). Detect t
 
 ```go
 // Original comparison
-comp1 := evaluation.NewPairwiseComparison(input, outputA, outputB)
-comp1.SetWinner(evaluation.WinnerA, "...", 0.9)
+comp1 := rubric.NewPairwiseComparison(input, outputA, outputB)
+comp1.SetWinner(rubric.WinnerA, "...", 0.9)
 
 // Swapped comparison
-comp2 := evaluation.NewPairwiseComparison(input, outputB, outputA)
+comp2 := rubric.NewPairwiseComparison(input, outputB, outputA)
 comp2.SwapPosition = true
-comp2.SetWinner(evaluation.WinnerB, "...", 0.85) // Should also prefer original A
+comp2.SetWinner(rubric.WinnerB, "...", 0.85) // Should also prefer original A
 
 // Check for consistency
 if comp1.Winner == "a" && comp2.Winner == "b" {
@@ -68,11 +68,11 @@ if comp1.Winner == "a" && comp2.Winner == "b" {
 Compute overall results from multiple comparisons:
 
 ```go
-comparisons := []evaluation.PairwiseComparison{
+comparisons := []rubric.PairwiseComparison{
     comp1, comp2, comp3, // Multiple comparisons
 }
 
-result := evaluation.ComputePairwiseResult(comparisons)
+result := rubric.ComputePairwiseResult(comparisons)
 
 fmt.Printf("Win rate A: %.1f%%\n", result.WinRateA*100)
 fmt.Printf("Win rate B: %.1f%%\n", result.WinRateB*100)
@@ -104,7 +104,7 @@ Compare outputs from different models:
 
 ```go
 // Compare GPT-4 vs Claude responses
-comp := evaluation.NewPairwiseComparison(
+comp := rubric.NewPairwiseComparison(
     "Explain quantum computing",
     gpt4Response,
     claudeResponse,
@@ -117,7 +117,7 @@ Compare different prompt strategies:
 
 ```go
 // Compare concise vs detailed prompts
-comp := evaluation.NewPairwiseComparison(
+comp := rubric.NewPairwiseComparison(
     userQuery,
     responseFromConcisePrompt,
     responseFromDetailedPrompt,
@@ -130,9 +130,9 @@ Collect human preferences for RLHF:
 
 ```go
 // Store human preference
-comp := evaluation.NewPairwiseComparison(instruction, outputA, outputB)
-comp.SetWinner(evaluation.WinnerB, "Preferred by human annotator", 1.0)
-comp.Judge = &evaluation.JudgeMetadata{
+comp := rubric.NewPairwiseComparison(instruction, outputA, outputB)
+comp.SetWinner(rubric.WinnerB, "Preferred by human annotator", 1.0)
+comp.Judge = &rubric.JudgeMetadata{
     Model:    "human",
     Provider: "internal-annotation",
 }

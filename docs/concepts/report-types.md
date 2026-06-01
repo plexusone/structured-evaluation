@@ -2,14 +2,14 @@
 
 Structured Evaluation provides three report types for different use cases.
 
-## EvaluationReport
+## Rubric
 
 For **subjective quality assessments** using LLM-as-Judge or human reviewers.
 
 ### Structure
 
 ```go
-type EvaluationReport struct {
+type Rubric struct {
     ReviewType  string           // e.g., "prd-review", "code-quality"
     Metadata    ReportMetadata   // Document info, timestamps
     Categories  []CategoryResult // Pass/partial/fail per category
@@ -32,17 +32,17 @@ type EvaluationReport struct {
 ### Example
 
 ```go
-report := evaluation.NewEvaluationReport("prd-review", "requirements.md")
-report.AddCategory(evaluation.CategoryResult{
+report := rubric.NewRubric("prd-review", "requirements.md")
+report.AddCategoryResult(rubric.CategoryResult{
     Category:  "clarity",
-    Score:     evaluation.ScorePass,
+    Score:     rubric.ScorePass,
     Reasoning: "Requirements are clearly written",
 })
-report.AddFinding(evaluation.Finding{
-    Severity: evaluation.SeverityMedium,
+report.AddFinding(rubric.Finding{
+    Severity: rubric.SeverityMedium,
     Title:    "Missing edge case",
 })
-report.Finalize("reviewer")
+report.Finalize(nil, "reviewer")
 ```
 
 ## SummaryReport
@@ -157,8 +157,8 @@ report.Finalize()
 
 ## Comparison
 
-| Aspect | EvaluationReport | SummaryReport | ClaimsReport |
-|--------|------------------|---------------|--------------|
+| Aspect | Rubric | SummaryReport | ClaimsReport |
+|--------|--------|---------------|--------------|
 | **Purpose** | Subjective assessment | Deterministic checks | Source validation |
 | **Scoring** | Categorical (pass/partial/fail) | Binary (go/warn/nogo) | Verdict (verified/unverified) |
 | **Structure** | Categories + Findings | Teams + Tasks | Claims + Validation |
@@ -167,7 +167,7 @@ report.Finalize()
 
 ## When to Use Which
 
-### Use EvaluationReport when:
+### Use Rubric when:
 
 - Assessment requires judgment
 - Multiple criteria need scoring

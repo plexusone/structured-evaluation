@@ -95,7 +95,7 @@ func main() {
 
 | Type | Purpose | Use Case |
 |------|---------|----------|
-| **EvaluationReport** | LLM-as-Judge assessments | PRD reviews, code quality, content evaluation |
+| **Rubric** | LLM-as-Judge assessments | PRD reviews, code quality, content evaluation |
 | **SummaryReport** | GO/NO-GO deterministic checks | CI pipelines, release validation, test results |
 | **ClaimsReport** | Factual claim validation | Security advisories, blog posts, documentation |
 

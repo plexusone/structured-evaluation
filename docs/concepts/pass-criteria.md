@@ -56,7 +56,7 @@ With strict criteria:
 ## Custom Criteria
 
 ```go
-criteria := evaluation.PassCriteria{
+criteria := rubric.PassCriteria{
     MaxCritical:    0,
     MaxHigh:        1,  // Allow 1 high finding
     MaxMedium:      5,  // Allow up to 5 medium findings
@@ -64,7 +64,7 @@ criteria := evaluation.PassCriteria{
 }
 
 report.SetPassCriteria(criteria)
-report.Finalize("reviewer")
+report.Finalize(nil, "reviewer")
 ```
 
 ## Decision Status
@@ -84,7 +84,7 @@ const (
 
 ```go
 // Pseudocode for decision computation
-func computeDecision(report *EvaluationReport, criteria PassCriteria) Decision {
+func computeDecision(report *Rubric, criteria PassCriteria) Decision {
     counts := report.Decision.FindingCounts
     catCounts := report.Decision.CategoryCounts
 
@@ -122,7 +122,7 @@ func computeDecision(report *EvaluationReport, criteria PassCriteria) Decision {
 
 ```go
 // Zero tolerance for security issues
-criteria := evaluation.PassCriteria{
+criteria := rubric.PassCriteria{
     MaxCritical:    0,
     MaxHigh:        0,
     MaxMedium:      0,  // Even medium security findings block
@@ -134,7 +134,7 @@ criteria := evaluation.PassCriteria{
 
 ```go
 // More lenient for docs
-criteria := evaluation.PassCriteria{
+criteria := rubric.PassCriteria{
     MaxCritical:    0,
     MaxHigh:        2,   // Allow some high-priority gaps
     MaxMedium:      -1,  // Unlimited medium
@@ -146,7 +146,7 @@ criteria := evaluation.PassCriteria{
 
 ```go
 // Strict for releases
-criteria := evaluation.PassCriteria{
+criteria := rubric.PassCriteria{
     MaxCritical:    0,
     MaxHigh:        0,
     MaxMedium:      5,
