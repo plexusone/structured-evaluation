@@ -565,6 +565,48 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#claimsreport" class="md-nav__link">
+    <span class="md-ellipsis">
+      ClaimsReport
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ClaimsReport">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#structure_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Structure
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-cases_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Use Cases
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#comparison" class="md-nav__link">
     <span class="md-ellipsis">
       Comparison
@@ -596,6 +638,15 @@
   <a href="#use-summaryreport-when" class="md-nav__link">
     <span class="md-ellipsis">
       Use SummaryReport when:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-claimsreport-when" class="md-nav__link">
+    <span class="md-ellipsis">
+      Use ClaimsReport when:
     </span>
   </a>
   
@@ -758,6 +809,29 @@
   
   <span class="md-ellipsis">
     Rubrics
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/claims/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Claims Validation
     
   </span>
   
@@ -1108,6 +1182,29 @@
   
   
     <li class="md-nav__item">
+      <a href="../../releases/v0.6.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    v0.6.0
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../releases/v0.5.0/" class="md-nav__link">
         
   
@@ -1334,6 +1431,48 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#claimsreport" class="md-nav__link">
+    <span class="md-ellipsis">
+      ClaimsReport
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ClaimsReport">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#structure_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Structure
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-cases_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Use Cases
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#comparison" class="md-nav__link">
     <span class="md-ellipsis">
       Comparison
@@ -1365,6 +1504,15 @@
   <a href="#use-summaryreport-when" class="md-nav__link">
     <span class="md-ellipsis">
       Use SummaryReport when:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-claimsreport-when" class="md-nav__link">
+    <span class="md-ellipsis">
+      Use ClaimsReport when:
     </span>
   </a>
   
@@ -1404,7 +1552,7 @@
 
 
 <h1 id="report-types">Report Types<a class="headerlink" href="#report-types" title="Permanent link">&para;</a></h1>
-<p>Structured Evaluation provides two report types for different use cases.</p>
+<p>Structured Evaluation provides three report types for different use cases.</p>
 <h2 id="evaluationreport">EvaluationReport<a class="headerlink" href="#evaluationreport" title="Permanent link">&para;</a></h2>
 <p>For <strong>subjective quality assessments</strong> using LLM-as-Judge or human reviewers.</p>
 <h3 id="structure">Structure<a class="headerlink" href="#structure" title="Permanent link">&para;</a></h3>
@@ -1483,6 +1631,57 @@
 <a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">    </span><span class="p">},</span>
 <a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="p">})</span>
 </code></pre></div>
+<h2 id="claimsreport">ClaimsReport<a class="headerlink" href="#claimsreport" title="Permanent link">&para;</a></h2>
+<p>For <strong>factual claim validation</strong> with source tracking and verification.</p>
+<h3 id="structure_2">Structure<a class="headerlink" href="#structure_2" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kd">type</span><span class="w"> </span><span class="nx">ClaimsReport</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="nx">Metadata</span><span class="w">   </span><span class="nx">ClaimsMetadata</span><span class="w">  </span><span class="c1">// Document info, timestamps</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="nx">Claims</span><span class="w">     </span><span class="p">[]</span><span class="nx">Claim</span><span class="w">         </span><span class="c1">// Extracted claims with validation</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="nx">Summary</span><span class="w">    </span><span class="nx">ClaimsSummary</span><span class="w">   </span><span class="c1">// Counts by verdict, category</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="nx">Criteria</span><span class="w">   </span><span class="nx">ClaimsCriteria</span><span class="w">  </span><span class="c1">// Pass requirements</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="nx">Decision</span><span class="w">   </span><span class="nx">ClaimsDecision</span><span class="w">  </span><span class="c1">// Overall pass/fail decision</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="p">}</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="kd">type</span><span class="w"> </span><span class="nx">Claim</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">    </span><span class="nx">ID</span><span class="w">          </span><span class="kt">string</span><span class="w">       </span><span class="c1">// Unique identifier</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">    </span><span class="nx">Text</span><span class="w">        </span><span class="kt">string</span><span class="w">       </span><span class="c1">// Claim text</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">    </span><span class="nx">Location</span><span class="w">    </span><span class="nx">Location</span><span class="w">     </span><span class="c1">// Where in document</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">    </span><span class="nx">Category</span><span class="w">    </span><span class="nx">ClaimCategory</span><span class="w"> </span><span class="c1">// metadata, technical-finding, etc.</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">    </span><span class="nx">Validation</span><span class="w">  </span><span class="o">*</span><span class="nx">Validation</span><span class="w">  </span><span class="c1">// How validated</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">    </span><span class="nx">Verdict</span><span class="w">     </span><span class="nx">Verdict</span><span class="w">      </span><span class="c1">// verified, unverified, needs-review, rejected</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">    </span><span class="nx">Rationale</span><span class="w">   </span><span class="kt">string</span><span class="w">       </span><span class="c1">// Explanation</span>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="p">}</span>
+</code></pre></div>
+<h3 id="use-cases_2">Use Cases<a class="headerlink" href="#use-cases_2" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Security advisory validation</li>
+<li>Blog post fact-checking</li>
+<li>Technical documentation review</li>
+<li>Research paper claims</li>
+<li>Compliance verification</li>
+</ul>
+<h3 id="example_2">Example<a class="headerlink" href="#example_2" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nx">report</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">claims</span><span class="p">.</span><span class="nx">NewClaimsReport</span><span class="p">(</span><span class="s">&quot;security-advisory.md&quot;</span><span class="p">)</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="c1">// External source validation</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="nx">claim</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">claims</span><span class="p">.</span><span class="nx">NewClaim</span><span class="p">(</span><span class="s">&quot;cvss&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;CVSS 8.8&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">claims</span><span class="p">.</span><span class="nx">ClaimRiskAssessment</span><span class="p">,</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="nx">claims</span><span class="p">.</span><span class="nx">Location</span><span class="p">{</span><span class="nx">Section</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;severity&quot;</span><span class="p">})</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="nx">claim</span><span class="p">.</span><span class="nx">SetValidation</span><span class="p">(</span><span class="nx">claims</span><span class="p">.</span><span class="nx">NewExternalValidation</span><span class="p">(</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">    </span><span class="s">&quot;https://nvd.nist.gov/vuln/detail/CVE-2026-25253&quot;</span><span class="p">,</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">    </span><span class="nx">claims</span><span class="p">.</span><span class="nx">ExternalNVD</span><span class="p">,</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="p">))</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="nx">report</span><span class="p">.</span><span class="nx">AddClaim</span><span class="p">(</span><span class="o">*</span><span class="nx">claim</span><span class="p">)</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="c1">// Internal validation via code</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="nx">exploit</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">claims</span><span class="p">.</span><span class="nx">NewClaim</span><span class="p">(</span><span class="s">&quot;exploit&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;RCE confirmed&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">claims</span><span class="p">.</span><span class="nx">ClaimTechnicalFinding</span><span class="p">,</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="w">    </span><span class="nx">claims</span><span class="p">.</span><span class="nx">Location</span><span class="p">{</span><span class="nx">Section</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;impact&quot;</span><span class="p">})</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="nx">exploit</span><span class="p">.</span><span class="nx">SetValidation</span><span class="p">(</span><span class="nx">claims</span><span class="p">.</span><span class="nx">NewInternalValidation</span><span class="p">(</span>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="w">    </span><span class="nx">claims</span><span class="p">.</span><span class="nx">MethodCodeExecution</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;poc.py&quot;</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="p">))</span>
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="nx">report</span><span class="p">.</span><span class="nx">AddClaim</span><span class="p">(</span><span class="o">*</span><span class="nx">exploit</span><span class="p">)</span>
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a>
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="nx">report</span><span class="p">.</span><span class="nx">Finalize</span><span class="p">()</span>
+</code></pre></div>
 <h2 id="comparison">Comparison<a class="headerlink" href="#comparison" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -1490,6 +1689,7 @@
 <th>Aspect</th>
 <th>EvaluationReport</th>
 <th>SummaryReport</th>
+<th>ClaimsReport</th>
 </tr>
 </thead>
 <tbody>
@@ -1497,26 +1697,31 @@
 <td><strong>Purpose</strong></td>
 <td>Subjective assessment</td>
 <td>Deterministic checks</td>
+<td>Source validation</td>
 </tr>
 <tr>
 <td><strong>Scoring</strong></td>
 <td>Categorical (pass/partial/fail)</td>
 <td>Binary (go/warn/nogo)</td>
+<td>Verdict (verified/unverified)</td>
 </tr>
 <tr>
 <td><strong>Structure</strong></td>
 <td>Categories + Findings</td>
 <td>Teams + Tasks</td>
+<td>Claims + Validation</td>
 </tr>
 <tr>
 <td><strong>Source</strong></td>
 <td>LLM or human reviewer</td>
 <td>Automated systems</td>
+<td>External URLs or internal evidence</td>
 </tr>
 <tr>
-<td><strong>Findings</strong></td>
-<td>Detailed with severity</td>
-<td>Simple status + detail</td>
+<td><strong>Output</strong></td>
+<td>Quality assessment</td>
+<td>GO/NO-GO decision</td>
+<td>Publication readiness</td>
 </tr>
 </tbody>
 </table>
@@ -1535,10 +1740,18 @@
 <li>Aggregating across teams/domains</li>
 <li>CI/CD pipeline integration</li>
 </ul>
+<h3 id="use-claimsreport-when">Use ClaimsReport when:<a class="headerlink" href="#use-claimsreport-when" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Document contains factual claims</li>
+<li>Claims need source references (URLs)</li>
+<li>Internal evidence validates claims (code, testing)</li>
+<li>Publishing requires fact-checking</li>
+</ul>
 <h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../scoring/">Categorical Scoring</a> - Understand pass/partial/fail</li>
 <li><a href="../findings/">Findings &amp; Severity</a> - Issue tracking</li>
+<li><a href="../../features/claims/">Claims Validation</a> - Source verification</li>
 <li><a href="../../features/dag-aggregation/">DAG Aggregation</a> - Multi-agent coordination</li>
 </ul>
 
