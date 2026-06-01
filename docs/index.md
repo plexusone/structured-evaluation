@@ -17,13 +17,13 @@ Structured Evaluation provides standardized Go types for evaluation reports, ena
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    SummaryReport (GO/NO-GO)                 │
-│  ┌──────────────────────┐  ┌──────────────────────┐        │
-│  │  Embedded Reports    │  │   Team Sections      │        │
-│  │  (Full-Fidelity)     │  │   (Task Results)     │        │
-│  └──────────────────────┘  └──────────────────────┘        │
-└─────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────────────────────────────┐
+│                    SummaryReport (GO/NO-GO)               │
+│  ┌──────────────────────┐  ┌──────────────────────┐       │
+│  │  Embedded Reports    │  │   Team Sections      │       │
+│  │  (Full-Fidelity)     │  │   (Task Results)     │       │
+│  └──────────────────────┘  └──────────────────────┘       │
+└───────────────────────────────────────────────────────────┘
                               ▲
               ┌───────────────┴───────────────┐
               │                               │
@@ -36,7 +36,7 @@ Structured Evaluation provides standardized Go types for evaluation reports, ena
 │  │ Findings            │  │   │  │ Sources             │  │
 │  │ (severity-based)    │  │   │  │ (external/internal) │  │
 │  └─────────────────────┘  │   │  └─────────────────────┘  │
-│  LLM-as-Judge scoring     │   │  Fact verification       │
+│  LLM-as-Judge scoring     │   │  Fact verification        │
 └───────────────────────────┘   └───────────────────────────┘
 ```
 

@@ -44,13 +44,13 @@ A reusable evaluation framework for LLM-as-Judge and multi-agent workflows.
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    SummaryReport (GO/NO-GO)                 │
-│  ┌──────────────────────┐  ┌──────────────────────┐        │
-│  │  Embedded Reports    │  │   Team Sections      │        │
-│  │  (Full-Fidelity)     │  │   (Task Results)     │        │
-│  └──────────────────────┘  └──────────────────────┘        │
-└─────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────────────────────────────┐
+│                    SummaryReport (GO/NO-GO)               │
+│  ┌──────────────────────┐  ┌──────────────────────┐       │
+│  │  Embedded Reports    │  │   Team Sections      │       │
+│  │  (Full-Fidelity)     │  │   (Task Results)     │       │
+│  └──────────────────────┘  └──────────────────────┘       │
+└───────────────────────────────────────────────────────────┘
                               ▲
               ┌───────────────┴───────────────┐
               │                               │
@@ -63,7 +63,7 @@ A reusable evaluation framework for LLM-as-Judge and multi-agent workflows.
 │  │ Findings            │  │   │  │ Sources             │  │
 │  │ (severity-based)    │  │   │  │ (external/internal) │  │
 │  └─────────────────────┘  │   │  └─────────────────────┘  │
-│  LLM-as-Judge scoring     │   │  Fact verification       │
+│  LLM-as-Judge scoring     │   │  Fact verification        │
 └───────────────────────────┘   └───────────────────────────┘
 ```
 
