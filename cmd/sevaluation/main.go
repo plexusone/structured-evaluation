@@ -8,11 +8,11 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/plexusone/structured-evaluation/rubric"
 	"github.com/plexusone/structured-evaluation/render/box"
 	"github.com/plexusone/structured-evaluation/render/detailed"
 	"github.com/plexusone/structured-evaluation/render/markdown"
 	"github.com/plexusone/structured-evaluation/render/terminal"
+	"github.com/plexusone/structured-evaluation/rubric"
 	"github.com/plexusone/structured-evaluation/schema"
 	"github.com/plexusone/structured-evaluation/summary"
 )
