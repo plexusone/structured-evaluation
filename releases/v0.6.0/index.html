@@ -1130,6 +1130,30 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Migration Guide">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#breaking-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Breaking Changes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#additive-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Additive Changes
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1434,6 +1458,30 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Migration Guide">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#breaking-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Breaking Changes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#additive-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Additive Changes
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1478,6 +1526,7 @@
 <h2 id="highlights">Highlights<a class="headerlink" href="#highlights" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>Claims Package</strong>: Extract and validate factual claims with source tracking</li>
+<li><strong>Package Rename</strong>: evaluation package renamed to rubric for clearer terminology</li>
 <li><strong>Embedded Reports</strong>: Archive full-fidelity reports within SummaryReport</li>
 <li><strong>JSON Schema</strong>: Automated schema generation for ClaimsReport</li>
 </ul>
@@ -1578,13 +1627,13 @@
 <p>Archive full reports within SummaryReport:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nx">summary</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">summary</span><span class="p">.</span><span class="nx">NewSummaryReport</span><span class="p">(</span><span class="s">&quot;project&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;v1.0.0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;RELEASE&quot;</span><span class="p">)</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c1">// Embed evaluation and claims reports</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="nx">summary</span><span class="p">.</span><span class="nx">EmbedEvaluationReport</span><span class="p">(</span><span class="s">&quot;prd-review&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">evalReport</span><span class="p">)</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c1">// Embed rubric and claims reports</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="nx">summary</span><span class="p">.</span><span class="nx">EmbedRubricReport</span><span class="p">(</span><span class="s">&quot;prd-review&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">rubricReport</span><span class="p">)</span>
 <a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="nx">summary</span><span class="p">.</span><span class="nx">EmbedClaimsReport</span><span class="p">(</span><span class="s">&quot;source-validation&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">claimsReport</span><span class="p">)</span>
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
 <a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="c1">// Later, retrieve embedded reports</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="kd">var</span><span class="w"> </span><span class="nx">retrievedEval</span><span class="w"> </span><span class="nx">evaluation</span><span class="p">.</span><span class="nx">EvaluationReport</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="nx">summary</span><span class="p">.</span><span class="nx">GetEmbeddedEvaluation</span><span class="p">(</span><span class="s">&quot;prd-review&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">retrievedEval</span><span class="p">)</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="kd">var</span><span class="w"> </span><span class="nx">retrievedRubric</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">Rubric</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="nx">summary</span><span class="p">.</span><span class="nx">GetEmbeddedRubricReport</span><span class="p">(</span><span class="s">&quot;prd-review&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">retrievedRubric</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="json-schema-generation">JSON Schema Generation<a class="headerlink" href="#json-schema-generation" title="Permanent link">&para;</a></h3>
 <p>Generate schemas for all report types:</p>
@@ -1629,12 +1678,25 @@
 <a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="p">}</span>
 </code></pre></div>
 <h2 id="migration-guide">Migration Guide<a class="headerlink" href="#migration-guide" title="Permanent link">&para;</a></h2>
-<p>v0.6.0 is fully backward compatible with v0.5.0. No migration required.</p>
+<h3 id="breaking-changes">Breaking Changes<a class="headerlink" href="#breaking-changes" title="Permanent link">&para;</a></h3>
+<p>The <code>evaluation</code> package has been renamed to <code>rubric</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1">// Before (v0.5.0)</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="kn">import</span><span class="w"> </span><span class="s">&quot;github.com/plexusone/structured-evaluation/evaluation&quot;</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="nx">report</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">evaluation</span><span class="p">.</span><span class="nx">NewEvaluationReport</span><span class="p">(</span><span class="s">&quot;type&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;doc.md&quot;</span><span class="p">)</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="c1">// After (v0.6.0)</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="kn">import</span><span class="w"> </span><span class="s">&quot;github.com/plexusone/structured-evaluation/rubric&quot;</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="nx">report</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewRubric</span><span class="p">(</span><span class="s">&quot;type&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;doc.md&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>Type and function renames:
+- <code>EvaluationReport</code> → <code>Rubric</code>
+- <code>NewEvaluationReport</code> → <code>NewRubric</code>
+- <code>evaluation.schema.json</code> → <code>rubric.schema.json</code></p>
+<h3 id="additive-changes">Additive Changes<a class="headerlink" href="#additive-changes" title="Permanent link">&para;</a></h3>
 <p>New features are additive:</p>
 <ul>
 <li><code>claims</code> package is entirely new</li>
 <li><code>EmbeddedReports</code> field is optional on <code>SummaryReport</code></li>
-<li>Existing code continues to work unchanged</li>
 </ul>
 <h2 id="documentation">Documentation<a class="headerlink" href="#documentation" title="Permanent link">&para;</a></h2>
 <ul>
