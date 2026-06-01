@@ -1,0 +1,343 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/plexusone/structured-evaluation/schema/claims.schema.json",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "metadata": {
+      "properties": {
+        "document": {
+          "type": "string"
+        },
+        "documentId": {
+          "type": "string"
+        },
+        "documentTitle": {
+          "type": "string"
+        },
+        "documentVersion": {
+          "type": "string"
+        },
+        "generatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "generatedBy": {
+          "type": "string"
+        },
+        "validatedBy": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "claims": {
+      "items": {
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "location": {
+            "properties": {
+              "section": {
+                "type": "string"
+              },
+              "line": {
+                "type": "integer"
+              },
+              "startOffset": {
+                "type": "integer"
+              },
+              "endOffset": {
+                "type": "integer"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "category": {
+            "type": "string"
+          },
+          "validation": {
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "external": {
+                "properties": {
+                  "url": {
+                    "type": "string"
+                  },
+                  "sourceType": {
+                    "type": "string"
+                  },
+                  "reliability": {
+                    "type": "string"
+                  },
+                  "accessedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "archived": {
+                    "type": "boolean"
+                  },
+                  "archiveUrl": {
+                    "type": "string"
+                  },
+                  "quotedText": {
+                    "type": "string"
+                  },
+                  "verifiedMatch": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false,
+                "type": "object"
+              },
+              "internal": {
+                "properties": {
+                  "method": {
+                    "type": "string"
+                  },
+                  "evidencePath": {
+                    "type": "string"
+                  },
+                  "evidenceHash": {
+                    "type": "string"
+                  },
+                  "reproducible": {
+                    "type": "boolean"
+                  },
+                  "reproductionSteps": {
+                    "type": "string"
+                  },
+                  "validatedBy": {
+                    "type": "string"
+                  },
+                  "validatedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "environment": {
+                    "properties": {
+                      "product": {
+                        "type": "string"
+                      },
+                      "version": {
+                        "type": "string"
+                      },
+                      "configuration": {
+                        "type": "string"
+                      },
+                      "platform": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "type": "object"
+                  },
+                  "output": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "type": "object"
+              },
+              "derived": {
+                "properties": {
+                  "sourceClaimIds": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  },
+                  "derivationMethod": {
+                    "type": "string"
+                  },
+                  "formula": {
+                    "type": "string"
+                  },
+                  "reasoning": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "type": "object"
+              },
+              "subjective": {
+                "properties": {
+                  "acknowledged": {
+                    "type": "boolean"
+                  },
+                  "methodology": {
+                    "type": "string"
+                  },
+                  "recommendation": {
+                    "type": "string"
+                  },
+                  "rationale": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "type": "object"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "verdict": {
+            "type": "string"
+          },
+          "rationale": {
+            "type": "string"
+          },
+          "relatedClaimIds": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "summary": {
+      "properties": {
+        "counts": {
+          "properties": {
+            "total": {
+              "type": "integer"
+            },
+            "verified": {
+              "type": "integer"
+            },
+            "unverified": {
+              "type": "integer"
+            },
+            "needsReview": {
+              "type": "integer"
+            },
+            "rejected": {
+              "type": "integer"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
+        },
+        "byCategory": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "type": "object"
+        },
+        "bySourceType": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "type": "object"
+        },
+        "byReliability": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "type": "object"
+        },
+        "unverifiedClaims": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "needsReviewClaims": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "rejectedClaims": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "criteria": {
+      "properties": {
+        "requireAllVerified": {
+          "type": "boolean"
+        },
+        "allowSubjectiveWithDisclaimer": {
+          "type": "boolean"
+        },
+        "allowNeedsReview": {
+          "type": "boolean"
+        },
+        "minReliabilityTier": {
+          "type": "string"
+        },
+        "requireReproducible": {
+          "type": "boolean"
+        },
+        "requiredCategories": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "decision": {
+      "properties": {
+        "status": {
+          "type": "string"
+        },
+        "passed": {
+          "type": "boolean"
+        },
+        "rationale": {
+          "type": "string"
+        },
+        "counts": {
+          "properties": {
+            "total": {
+              "type": "integer"
+            },
+            "verified": {
+              "type": "integer"
+            },
+            "unverified": {
+              "type": "integer"
+            },
+            "needsReview": {
+              "type": "integer"
+            },
+            "rejected": {
+              "type": "integer"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "type": "object",
+  "title": "Claims Report",
+  "description": "Schema for claim extraction and source validation reports"
+}
