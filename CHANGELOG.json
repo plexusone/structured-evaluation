@@ -7,6 +7,54 @@
   "commitConvention": "conventional",
   "releases": [
     {
+      "version": "v0.6.0",
+      "date": "2026-06-01",
+      "highlights": [
+        { "description": "**Breaking**: `evaluation` package renamed to `rubric` for clearer terminology" },
+        { "description": "New `claims` package for factual claim extraction and source validation" },
+        { "description": "Embedded reports support in SummaryReport for full-fidelity archival" },
+        { "description": "JSON Schema for ClaimsReport with automated generation" }
+      ],
+      "added": [
+        { "description": "`claims` package with claim extraction and source validation types", "commit": "2a6d91a" },
+        { "description": "`Claim` type with ID, text, location, category, validation, and verdict", "commit": "2a6d91a" },
+        { "description": "`SourceType` enum: external, internal, derived, subjective", "commit": "2a6d91a" },
+        { "description": "`ExternalValidation` with URL, sourceType, reliability tier, and quoted text", "commit": "2a6d91a" },
+        { "description": "`InternalValidation` with method, evidence path, reproducibility, and environment", "commit": "2a6d91a" },
+        { "description": "`DerivedValidation` for claims calculated from other validated claims", "commit": "2a6d91a" },
+        { "description": "`SubjectiveValidation` with acknowledgment and recommendation fields", "commit": "2a6d91a" },
+        { "description": "`ReliabilityTier` enum: authoritative, high, medium, low", "commit": "2a6d91a" },
+        { "description": "`Verdict` enum: verified, unverified, needs-review, rejected", "commit": "2a6d91a" },
+        { "description": "`ClaimsReport` with metadata, claims array, summary, criteria, and decision", "commit": "2a6d91a" },
+        { "description": "`ClaimsCriteria` for configurable pass requirements", "commit": "2a6d91a" },
+        { "description": "`EvaluateClaims()` for computing decisions from criteria", "commit": "2a6d91a" },
+        { "description": "`EmbeddedReports` field in `SummaryReport` for full-fidelity archival", "commit": "babd91b" },
+        { "description": "`EmbedRubricReport()` and `EmbedClaimsReport()` methods on SummaryReport", "commit": "babd91b" },
+        { "description": "`GetEmbeddedRubricReport()` and `GetEmbeddedClaimsReport()` retrieval methods", "commit": "babd91b" },
+        { "description": "`HasEmbeddedReports()` helper for checking embedded content", "commit": "babd91b" },
+        { "description": "`GenerateClaimsSchema()` in schema package for JSON Schema generation", "commit": "2a6d91a" },
+        { "description": "Embedded `claims.schema.json` via go:embed", "commit": "2a6d91a" },
+        { "description": "`cmd/genschema` tool for regenerating all JSON schemas", "commit": "42f13f6" }
+      ],
+      "changed": [
+        { "description": "**Breaking**: `evaluation` package renamed to `rubric`", "commit": "0a7f07e" },
+        { "description": "**Breaking**: `EvaluationReport` type renamed to `Rubric`", "commit": "0a7f07e" },
+        { "description": "**Breaking**: `NewEvaluationReport()` renamed to `NewRubric()`", "commit": "0a7f07e" },
+        { "description": "**Breaking**: `evaluation.schema.json` renamed to `rubric.schema.json`", "commit": "0a7f07e" },
+        { "description": "`SummaryReport` now supports optional embedded reports via `EmbeddedReports` field", "commit": "babd91b" },
+        { "description": "Schema embed.go updated to include claims.schema.json", "commit": "2a6d91a" }
+      ],
+      "documentation": [
+        { "description": "Added Claims Validation documentation page", "commit": "fbe53f7" },
+        { "description": "Updated Report Types page to include ClaimsReport", "commit": "fbe53f7" },
+        { "description": "Added v0.6.0 release notes" }
+      ],
+      "tests": [
+        { "description": "Unit tests for claims package", "commit": "2a6d91a" },
+        { "description": "Embed tests for SummaryReport with embedded reports", "commit": "d784399" }
+      ]
+    },
+    {
       "version": "v0.5.0",
       "date": "2026-05-23",
       "highlights": [
@@ -14,27 +62,27 @@
         { "description": "Inter-rater reliability (IRR) metrics for LLM calibration" }
       ],
       "added": [
-        { "description": "`ScaleTypeLikert` scale type with configurable anchors and thresholds" },
-        { "description": "`LikertConfig` with min/max values and pass/partial thresholds" },
-        { "description": "`LikertAnchor` for describing score levels (value, label, description)" },
-        { "description": "`StandardLikert5Anchors()` helper for standard 1-5 scale" },
-        { "description": "`WithLikert5()` and `WithLikert()` methods for creating Likert categories" },
-        { "description": "`LikertToCategorical()` for converting numeric scores to pass/partial/fail" },
-        { "description": "Optional `NumericScore` field on `CategoryResult` for dual-scale support" },
-        { "description": "`NewCategoryResultWithNumeric()` for creating results with both categorical and numeric scores" },
-        { "description": "`NewCategoryResultFromLikert()` for creating results from Likert scores" },
-        { "description": "`IRRMetrics` type with exact agreement, adjacent agreement, MAD, and Pearson correlation" },
-        { "description": "`ComputeIRR()` for computing IRR from rating pairs" },
-        { "description": "`ComputeIRRFromResults()` for comparing two sets of CategoryResults" },
-        { "description": "`CategoricalAgreement` type with confusion matrix for categorical comparisons" },
-        { "description": "`ComputeCategoricalAgreement()` for categorical IRR analysis" }
+        { "description": "`ScaleTypeLikert` scale type with configurable anchors and thresholds", "commit": "96e608b" },
+        { "description": "`LikertConfig` with min/max values and pass/partial thresholds", "commit": "96e608b" },
+        { "description": "`LikertAnchor` for describing score levels (value, label, description)", "commit": "96e608b" },
+        { "description": "`StandardLikert5Anchors()` helper for standard 1-5 scale", "commit": "96e608b" },
+        { "description": "`WithLikert5()` and `WithLikert()` methods for creating Likert categories", "commit": "96e608b" },
+        { "description": "`LikertToCategorical()` for converting numeric scores to pass/partial/fail", "commit": "96e608b" },
+        { "description": "Optional `NumericScore` field on `CategoryResult` for dual-scale support", "commit": "273776a" },
+        { "description": "`NewCategoryResultWithNumeric()` for creating results with both categorical and numeric scores", "commit": "273776a" },
+        { "description": "`NewCategoryResultFromLikert()` for creating results from Likert scores", "commit": "273776a" },
+        { "description": "`IRRMetrics` type with exact agreement, adjacent agreement, MAD, and Pearson correlation", "commit": "98f11eb" },
+        { "description": "`ComputeIRR()` for computing IRR from rating pairs", "commit": "98f11eb" },
+        { "description": "`ComputeIRRFromResults()` for comparing two sets of CategoryResults", "commit": "98f11eb" },
+        { "description": "`CategoricalAgreement` type with confusion matrix for categorical comparisons", "commit": "98f11eb" },
+        { "description": "`ComputeCategoricalAgreement()` for categorical IRR analysis", "commit": "98f11eb" }
       ],
       "documentation": [
-        { "description": "Added Likert Scales documentation page" },
-        { "description": "Added Inter-Rater Reliability documentation page" }
+        { "description": "Added Likert Scales documentation page", "commit": "665f0c1" },
+        { "description": "Added Inter-Rater Reliability documentation page", "commit": "665f0c1" }
       ],
       "tests": [
-        { "description": "Comprehensive tests for Likert scales and IRR metrics" }
+        { "description": "Comprehensive tests for Likert scales and IRR metrics", "commit": "7e25548" }
       ]
     },
     {
