@@ -41,6 +41,40 @@ A reusable evaluation framework for LLM-as-Judge and multi-agent workflows.
 - 🔗 **Multi-agent coordination** with DAG-based report aggregation
 - 📋 **Claims validation** for factual claim extraction and source verification
 
+## Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    SummaryReport (GO/NO-GO)                 │
+│  ┌──────────────────────┐  ┌──────────────────────┐        │
+│  │  Embedded Reports    │  │   Team Sections      │        │
+│  │  (Full-Fidelity)     │  │   (Task Results)     │        │
+│  └──────────────────────┘  └──────────────────────┘        │
+└─────────────────────────────────────────────────────────────┘
+                              ▲
+              ┌───────────────┴───────────────┐
+              │                               │
+┌─────────────┴─────────────┐   ┌─────────────┴─────────────┐
+│     Rubric (rubric/)      │   │   ClaimsReport (claims/)  │
+│  ┌─────────────────────┐  │   │  ┌─────────────────────┐  │
+│  │ Category Results    │  │   │  │ Claims + Validation │  │
+│  │ (pass/partial/fail) │  │   │  │ (verified/rejected) │  │
+│  ├─────────────────────┤  │   │  ├─────────────────────┤  │
+│  │ Findings            │  │   │  │ Sources             │  │
+│  │ (severity-based)    │  │   │  │ (external/internal) │  │
+│  └─────────────────────┘  │   │  └─────────────────────┘  │
+│  LLM-as-Judge scoring     │   │  Fact verification       │
+└───────────────────────────┘   └───────────────────────────┘
+```
+
+**Three complementary report types:**
+
+| Package | Purpose | Evaluation Type |
+|---------|---------|-----------------|
+| `rubric/` | Categorical scoring with findings | Subjective (LLM-as-Judge) |
+| `claims/` | Fact verification with sources | Objective (source-backed) |
+| `summary/` | GO/NO-GO aggregation | Deterministic |
+
 ## Installation
 
 ```bash
@@ -51,38 +85,38 @@ go get github.com/plexusone/structured-evaluation
 
 | Package | Description |
 |---------|-------------|
-| `evaluation` | EvaluationReport, CategoryResult, Finding, Severity types |
-| `summary` | SummaryReport, TeamSection, TaskResult for GO/NO-GO checks |
+| `rubric` | Rubric, CategoryResult, Finding, Severity types for LLM-as-Judge |
 | `claims` | ClaimsReport, Claim, Validation, Verdict for source verification |
+| `summary` | SummaryReport, TeamSection, TaskResult for GO/NO-GO checks |
 | `combine` | DAG-based report aggregation using Kahn's algorithm |
 | `render/box` | Box-format terminal renderer for summary reports |
-| `render/detailed` | Detailed terminal renderer for evaluation reports |
+| `render/detailed` | Detailed terminal renderer for rubric reports |
 | `render/terminal` | ANSI-colored terminal renderer with UTF8 icons |
 | `render/markdown` | Markdown report renderer |
 | `schema` | JSON Schema generation and embedding |
 
 ## Report Types
 
-### Evaluation Report (LLM-as-Judge)
+### Rubric (LLM-as-Judge)
 
 For subjective quality assessments with detailed findings:
 
 ```go
-import "github.com/plexusone/structured-evaluation/evaluation"
+import "github.com/plexusone/structured-evaluation/rubric"
 
-report := evaluation.NewEvaluationReport("prd", "document.md")
-report.AddCategory(evaluation.CategoryResult{
+report := rubric.NewRubric("prd", "document.md")
+report.AddCategoryResult(rubric.CategoryResult{
     Category:  "problem_definition",
-    Score:     evaluation.ScorePass,
+    Score:     rubric.ScorePass,
     Reasoning: "Clear problem statement with measurable goals",
 })
-report.AddFinding(evaluation.Finding{
-    Severity:       evaluation.SeverityMedium,
+report.AddFinding(rubric.Finding{
+    Severity:       rubric.SeverityMedium,
     Category:       "metrics",
     Title:          "Missing baseline metrics",
     Recommendation: "Add current baseline measurements",
 })
-report.Finalize("sevaluation check document.md")
+report.Finalize(nil, "sevaluation check document.md")
 ```
 
 ### Summary Report (GO/NO-GO)
@@ -150,10 +184,10 @@ Following InfoSec conventions:
 Default criteria (zero blocking findings, all categories passing):
 
 ```go
-criteria := evaluation.DefaultPassCriteria()
+criteria := rubric.DefaultPassCriteria()
 // MaxCritical: 0, MaxHigh: 0, MaxMedium: -1 (unlimited), RequireAllPass: false
 
-criteria := evaluation.StrictPassCriteria()
+criteria := rubric.StrictPassCriteria()
 // MaxCritical: 0, MaxHigh: 0, MaxMedium: 3, RequireAllPass: true
 ```
 
@@ -204,22 +238,25 @@ Schemas are embedded for runtime validation:
 ```go
 import "github.com/plexusone/structured-evaluation/schema"
 
-evalSchema := schema.EvaluationSchemaJSON
+rubricSchema := schema.RubricSchemaJSON
+claimsSchema := schema.ClaimsSchemaJSON
 summarySchema := schema.SummarySchemaJSON
 ```
 
-## Rubrics (v0.4.0)
+## RubricSet (v0.4.0)
 
 Define explicit criteria for consistent categorical evaluations:
 
 ```go
-rubric := evaluation.NewRubric("quality", "Output quality").
-    WithPassCriteria("Meets all requirements, no significant issues").
-    WithPartialCriteria("Meets most requirements, minor issues").
-    WithFailCriteria("Missing key requirements or major issues")
+cat := rubric.NewCategory("quality", "Output Quality", "Overall quality assessment").
+    WithPassPartialFail(
+        []string{"Meets all requirements, no significant issues"},
+        []string{"Meets most requirements, minor issues"},
+        []string{"Missing key requirements or major issues"},
+    )
 
 // Use default PRD rubric
-rubricSet := evaluation.DefaultPRDRubricSet()
+rubricSet := rubric.DefaultPRDRubricSet()
 ```
 
 ## Judge Metadata (v0.2.0)
@@ -227,7 +264,7 @@ rubricSet := evaluation.DefaultPRDRubricSet()
 Track LLM judge configuration for reproducibility:
 
 ```go
-judge := evaluation.NewJudgeMetadata("claude-3-opus").
+judge := rubric.NewJudgeMetadata("claude-3-opus").
     WithProvider("anthropic").
     WithPrompt("prd-eval-v1", "1.0").
     WithTemperature(0.0).
@@ -241,11 +278,11 @@ report.SetJudge(judge)
 Compare two outputs instead of absolute scoring:
 
 ```go
-comparison := evaluation.NewPairwiseComparison(input, outputA, outputB)
-comparison.SetWinner(evaluation.WinnerA, "A is more accurate", 0.9)
+comparison := rubric.NewPairwiseComparison(input, outputA, outputB)
+comparison.SetWinner(rubric.WinnerA, "A is more accurate", 0.9)
 
 // Aggregate multiple comparisons
-result := evaluation.ComputePairwiseResult(comparisons)
+result := rubric.ComputePairwiseResult(comparisons)
 // result.WinRateA, result.OverallWinner
 ```
 
@@ -254,7 +291,7 @@ result := evaluation.ComputePairwiseResult(comparisons)
 Combine evaluations from multiple judges:
 
 ```go
-result := evaluation.AggregateEvaluations(evaluations, evaluation.AggregationMajority)
+result := rubric.AggregateEvaluations(evaluations, rubric.AggregationMajority)
 
 // Methods: AggregationMajority, AggregationConservative, AggregationOptimistic
 // result.Agreement - inter-judge agreement (0-1)
@@ -268,15 +305,15 @@ Use 1-5 numeric scales for human comparison studies:
 
 ```go
 // Create a Likert-scale category
-cat := evaluation.NewCategory("quality", "Content Quality", "Overall quality").
-    WithLikert5(evaluation.StandardLikert5Anchors())
+cat := rubric.NewCategory("quality", "Content Quality", "Overall quality").
+    WithLikert5(rubric.StandardLikert5Anchors())
 
 // Record a Likert score (automatically maps to categorical)
-result := evaluation.NewCategoryResultFromLikert("quality", 4, config, "Good quality")
+result := rubric.NewCategoryResultFromLikert("quality", 4, config, "Good quality")
 // result.Score = ScorePass, result.NumericScore = 4.0
 
 // Or record both categorical and numeric
-result := evaluation.NewCategoryResultWithNumeric("quality", evaluation.ScorePass, 4.5, "reasoning")
+result := rubric.NewCategoryResultWithNumeric("quality", rubric.ScorePass, 4.5, "reasoning")
 ```
 
 ## Inter-Rater Reliability (v0.5.0)
@@ -285,14 +322,14 @@ Compare LLM evaluations with human ground truth:
 
 ```go
 // Compute IRR metrics
-metrics := evaluation.ComputeIRRFromResults(humanResults, llmResults)
+metrics := rubric.ComputeIRRFromResults(humanResults, llmResults)
 
 fmt.Printf("Exact Agreement: %.1f%%\n", metrics.ExactAgreement*100)
 fmt.Printf("Adjacent Agreement: %.1f%%\n", metrics.AdjacentAgreement*100)
 fmt.Printf("Pearson r: %.3f\n", metrics.PearsonCorrelation)
 
 // Categorical agreement with confusion matrix
-agreement := evaluation.ComputeCategoricalAgreement(humanResults, llmResults)
+agreement := rubric.ComputeCategoricalAgreement(humanResults, llmResults)
 ```
 
 ## Claims Validation (v0.6.0)
@@ -326,15 +363,15 @@ if report.IsPassing() {
 Archive full-fidelity reports within SummaryReport:
 
 ```go
-summary := summary.NewSummaryReport("project", "v1.0.0", "RELEASE")
+report := summary.NewSummaryReport("project", "v1.0.0", "RELEASE")
 
 // Embed detailed reports
-summary.EmbedEvaluationReport("quality-review", evalReport)
-summary.EmbedClaimsReport("source-validation", claimsReport)
+report.EmbedRubricReport("quality-review", rubricReport)
+report.EmbedClaimsReport("source-validation", claimsReport)
 
 // Retrieve later
-var eval evaluation.EvaluationReport
-summary.GetEmbeddedEvaluation("quality-review", &eval)
+var r rubric.Rubric
+report.GetEmbeddedRubricReport("quality-review", &r)
 ```
 
 ## OmniObserve Integration

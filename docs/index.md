@@ -14,47 +14,80 @@ Structured Evaluation provides standardized Go types for evaluation reports, ena
 - 🔄 **Pairwise Comparison** - Compare outputs instead of absolute scoring
 - 👥 **Multi-Judge Aggregation** - Combine evaluations from multiple judges with agreement metrics
 
+## Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    SummaryReport (GO/NO-GO)                 │
+│  ┌──────────────────────┐  ┌──────────────────────┐        │
+│  │  Embedded Reports    │  │   Team Sections      │        │
+│  │  (Full-Fidelity)     │  │   (Task Results)     │        │
+│  └──────────────────────┘  └──────────────────────┘        │
+└─────────────────────────────────────────────────────────────┘
+                              ▲
+              ┌───────────────┴───────────────┐
+              │                               │
+┌─────────────┴─────────────┐   ┌─────────────┴─────────────┐
+│     Rubric (rubric/)      │   │   ClaimsReport (claims/)  │
+│  ┌─────────────────────┐  │   │  ┌─────────────────────┐  │
+│  │ Category Results    │  │   │  │ Claims + Validation │  │
+│  │ (pass/partial/fail) │  │   │  │ (verified/rejected) │  │
+│  ├─────────────────────┤  │   │  ├─────────────────────┤  │
+│  │ Findings            │  │   │  │ Sources             │  │
+│  │ (severity-based)    │  │   │  │ (external/internal) │  │
+│  └─────────────────────┘  │   │  └─────────────────────┘  │
+│  LLM-as-Judge scoring     │   │  Fact verification       │
+└───────────────────────────┘   └───────────────────────────┘
+```
+
+**Three complementary report types:**
+
+| Package | Purpose | Evaluation Type |
+|---------|---------|-----------------|
+| `rubric/` | Categorical scoring with findings | Subjective (LLM-as-Judge) |
+| `claims/` | Fact verification with sources | Objective (source-backed) |
+| `summary/` | GO/NO-GO aggregation | Deterministic |
+
 ## Quick Example
 
 ```go
 package main
 
 import (
-    "fmt"
     "os"
 
-    "github.com/plexusone/structured-evaluation/evaluation"
+    "github.com/plexusone/structured-evaluation/rubric"
     "github.com/plexusone/structured-evaluation/render/terminal"
 )
 
 func main() {
-    report := evaluation.NewEvaluationReport("prd", "document.md")
+    report := rubric.NewRubric("prd", "document.md")
 
     // Add category results (pass/partial/fail)
-    report.AddCategory(evaluation.CategoryResult{
+    report.AddCategoryResult(rubric.CategoryResult{
         Category:  "problem_definition",
-        Score:     evaluation.ScorePass,
+        Score:     rubric.ScorePass,
         Reasoning: "Clear problem statement with measurable goals",
     })
-    report.AddCategory(evaluation.CategoryResult{
+    report.AddCategoryResult(rubric.CategoryResult{
         Category:  "user_stories",
-        Score:     evaluation.ScorePartial,
+        Score:     rubric.ScorePartial,
         Reasoning: "Stories present but missing acceptance criteria",
     })
 
     // Add findings
-    report.AddFinding(evaluation.Finding{
-        Severity:       evaluation.SeverityMedium,
+    report.AddFinding(rubric.Finding{
+        Severity:       rubric.SeverityMedium,
         Category:       "metrics",
         Title:          "Missing baseline metrics",
         Recommendation: "Add current baseline measurements",
     })
 
-    report.Finalize("sevaluation check document.md")
+    report.Finalize(nil, "sevaluation check document.md")
 
     // Render to terminal
     renderer := terminal.New(os.Stdout)
-    renderer.Render(&report)
+    renderer.Render(report)
 }
 ```
 
