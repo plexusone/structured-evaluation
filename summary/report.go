@@ -1,6 +1,9 @@
 package summary
 
-import "time"
+import (
+	"encoding/json"
+	"time"
+)
 
 // TeamSection represents results from a single agent or validation area.
 type TeamSection struct {
@@ -33,7 +36,8 @@ func (t *TeamSection) ComputeStatus() Status {
 }
 
 // SummaryReport is the top-level report for summary-style evaluations.
-// It aggregates results from multiple teams/agents.
+// It aggregates results from multiple teams/agents and can embed full
+// EvaluationReport and ClaimsReport for complete fidelity.
 type SummaryReport struct {
 	// Schema is the JSON Schema URL for validation.
 	Schema string `json:"$schema,omitempty"`
@@ -61,6 +65,28 @@ type SummaryReport struct {
 
 	// GeneratedBy identifies what created this report.
 	GeneratedBy string `json:"generated_by,omitempty"`
+
+	// EmbeddedReports contains full-fidelity embedded reports.
+	// This allows the SummaryReport to serve as a container for
+	// detailed reports while providing a summary view.
+	EmbeddedReports *EmbeddedReports `json:"embeddedReports,omitempty"`
+}
+
+// EmbeddedReports contains full-fidelity embedded reports.
+// Reports are stored as json.RawMessage to avoid circular imports
+// and allow flexible report types.
+type EmbeddedReports struct {
+	// Evaluations contains embedded EvaluationReport(s).
+	// Key is a report identifier (e.g., "prd-review", "article-quality").
+	Evaluations map[string]json.RawMessage `json:"evaluations,omitempty"`
+
+	// Claims contains embedded ClaimsReport(s).
+	// Key is a report identifier (e.g., "source-validation").
+	Claims map[string]json.RawMessage `json:"claims,omitempty"`
+
+	// Custom contains any other embedded reports.
+	// Key is a report identifier, value is the full report JSON.
+	Custom map[string]json.RawMessage `json:"custom,omitempty"`
 }
 
 // ComputeOverallStatus calculates the overall status from all teams.
@@ -109,4 +135,109 @@ func NewSummaryReport(project, version, phase string) *SummaryReport {
 func (r *SummaryReport) AddTeam(team TeamSection) {
 	team.ComputeStatus()
 	r.Teams = append(r.Teams, team)
+}
+
+// EnsureEmbeddedReports initializes the EmbeddedReports field if nil.
+func (r *SummaryReport) EnsureEmbeddedReports() {
+	if r.EmbeddedReports == nil {
+		r.EmbeddedReports = &EmbeddedReports{
+			Evaluations: make(map[string]json.RawMessage),
+			Claims:      make(map[string]json.RawMessage),
+			Custom:      make(map[string]json.RawMessage),
+		}
+	}
+	if r.EmbeddedReports.Evaluations == nil {
+		r.EmbeddedReports.Evaluations = make(map[string]json.RawMessage)
+	}
+	if r.EmbeddedReports.Claims == nil {
+		r.EmbeddedReports.Claims = make(map[string]json.RawMessage)
+	}
+	if r.EmbeddedReports.Custom == nil {
+		r.EmbeddedReports.Custom = make(map[string]json.RawMessage)
+	}
+}
+
+// EmbedEvaluationReport embeds an EvaluationReport with the given key.
+// The report is marshaled to JSON for storage.
+func (r *SummaryReport) EmbedEvaluationReport(key string, report any) error {
+	r.EnsureEmbeddedReports()
+	data, err := json.Marshal(report)
+	if err != nil {
+		return err
+	}
+	r.EmbeddedReports.Evaluations[key] = data
+	return nil
+}
+
+// EmbedClaimsReport embeds a ClaimsReport with the given key.
+// The report is marshaled to JSON for storage.
+func (r *SummaryReport) EmbedClaimsReport(key string, report any) error {
+	r.EnsureEmbeddedReports()
+	data, err := json.Marshal(report)
+	if err != nil {
+		return err
+	}
+	r.EmbeddedReports.Claims[key] = data
+	return nil
+}
+
+// EmbedCustomReport embeds a custom report with the given key.
+// The report is marshaled to JSON for storage.
+func (r *SummaryReport) EmbedCustomReport(key string, report any) error {
+	r.EnsureEmbeddedReports()
+	data, err := json.Marshal(report)
+	if err != nil {
+		return err
+	}
+	r.EmbeddedReports.Custom[key] = data
+	return nil
+}
+
+// GetEmbeddedEvaluation retrieves and unmarshals an embedded EvaluationReport.
+// Returns nil if not found. The target should be a pointer to the report struct.
+func (r *SummaryReport) GetEmbeddedEvaluation(key string, target any) error {
+	if r.EmbeddedReports == nil || r.EmbeddedReports.Evaluations == nil {
+		return nil
+	}
+	data, ok := r.EmbeddedReports.Evaluations[key]
+	if !ok {
+		return nil
+	}
+	return json.Unmarshal(data, target)
+}
+
+// GetEmbeddedClaims retrieves and unmarshals an embedded ClaimsReport.
+// Returns nil if not found. The target should be a pointer to the report struct.
+func (r *SummaryReport) GetEmbeddedClaims(key string, target any) error {
+	if r.EmbeddedReports == nil || r.EmbeddedReports.Claims == nil {
+		return nil
+	}
+	data, ok := r.EmbeddedReports.Claims[key]
+	if !ok {
+		return nil
+	}
+	return json.Unmarshal(data, target)
+}
+
+// GetEmbeddedCustom retrieves and unmarshals an embedded custom report.
+// Returns nil if not found. The target should be a pointer to the report struct.
+func (r *SummaryReport) GetEmbeddedCustom(key string, target any) error {
+	if r.EmbeddedReports == nil || r.EmbeddedReports.Custom == nil {
+		return nil
+	}
+	data, ok := r.EmbeddedReports.Custom[key]
+	if !ok {
+		return nil
+	}
+	return json.Unmarshal(data, target)
+}
+
+// HasEmbeddedReports returns true if any embedded reports exist.
+func (r *SummaryReport) HasEmbeddedReports() bool {
+	if r.EmbeddedReports == nil {
+		return false
+	}
+	return len(r.EmbeddedReports.Evaluations) > 0 ||
+		len(r.EmbeddedReports.Claims) > 0 ||
+		len(r.EmbeddedReports.Custom) > 0
 }

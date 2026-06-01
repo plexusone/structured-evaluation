@@ -80,6 +80,24 @@
     },
     "generated_by": {
       "type": "string"
+    },
+    "embeddedReports": {
+      "properties": {
+        "evaluations": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "claims": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "custom": {
+          "additionalProperties": true,
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     }
   },
   "additionalProperties": false,
