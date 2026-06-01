@@ -39,6 +39,7 @@ A reusable evaluation framework for LLM-as-Judge and multi-agent workflows.
 - 📈 **Inter-rater reliability** metrics for LLM calibration and quality assurance
 - ✅ **GO/NO-GO summary reports** for deterministic checks (CI, tests, validation)
 - 🔗 **Multi-agent coordination** with DAG-based report aggregation
+- 📋 **Claims validation** for factual claim extraction and source verification
 
 ## Installation
 
@@ -52,6 +53,7 @@ go get github.com/plexusone/structured-evaluation
 |---------|-------------|
 | `evaluation` | EvaluationReport, CategoryResult, Finding, Severity types |
 | `summary` | SummaryReport, TeamSection, TaskResult for GO/NO-GO checks |
+| `claims` | ClaimsReport, Claim, Validation, Verdict for source verification |
 | `combine` | DAG-based report aggregation using Kahn's algorithm |
 | `render/box` | Box-format terminal renderer for summary reports |
 | `render/detailed` | Detailed terminal renderer for evaluation reports |
@@ -99,6 +101,36 @@ report.AddTeam(summary.TeamSection{
         {ID: "e2e-tests", Status: summary.StatusWarn, Detail: "2 flaky tests"},
     },
 })
+```
+
+### Claims Report (v0.6.0)
+
+For factual claim extraction and source validation:
+
+```go
+import "github.com/plexusone/structured-evaluation/claims"
+
+report := claims.NewClaimsReport("security-advisory.md")
+
+// External source: CVE from NVD
+claim := claims.NewClaim("cvss", "CVSS 8.8 High", claims.ClaimRiskAssessment,
+    claims.Location{Section: "severity"})
+claim.SetValidation(claims.NewExternalValidation(
+    "https://nvd.nist.gov/vuln/detail/CVE-2026-25253",
+    claims.ExternalNVD,
+))
+report.AddClaim(*claim)
+
+// Internal validation: exploit confirmed via code
+exploit := claims.NewClaim("exploit", "RCE confirmed", claims.ClaimTechnicalFinding,
+    claims.Location{Section: "impact"})
+exploit.SetValidation(claims.NewInternalValidation(
+    claims.MethodCodeExecution, "poc.py", true,
+))
+report.AddClaim(*exploit)
+
+report.Finalize()
+// report.Decision.Passed, report.Summary.Counts
 ```
 
 ## Severity Levels
@@ -261,6 +293,48 @@ fmt.Printf("Pearson r: %.3f\n", metrics.PearsonCorrelation)
 
 // Categorical agreement with confusion matrix
 agreement := evaluation.ComputeCategoricalAgreement(humanResults, llmResults)
+```
+
+## Claims Validation (v0.6.0)
+
+Validate factual claims have proper source backing:
+
+```go
+import "github.com/plexusone/structured-evaluation/claims"
+
+report := claims.NewClaimsReport("article.md")
+
+// Source types: external (URL), internal (code/lab), derived, subjective
+// Reliability tiers: authoritative, high, medium, low
+// Verdicts: verified, unverified, needs-review, rejected
+
+// Configure pass criteria
+report.SetCriteria(claims.ClaimsCriteria{
+    RequireAllVerified:           true,
+    AllowSubjectiveWithDisclaimer: false,
+    MinReliabilityTier:           claims.ReliabilityHigh,
+})
+
+report.Finalize()
+if report.IsPassing() {
+    fmt.Println("Ready for publication")
+}
+```
+
+## Embedded Reports (v0.6.0)
+
+Archive full-fidelity reports within SummaryReport:
+
+```go
+summary := summary.NewSummaryReport("project", "v1.0.0", "RELEASE")
+
+// Embed detailed reports
+summary.EmbedEvaluationReport("quality-review", evalReport)
+summary.EmbedClaimsReport("source-validation", claimsReport)
+
+// Retrieve later
+var eval evaluation.EvaluationReport
+summary.GetEmbeddedEvaluation("quality-review", &eval)
 ```
 
 ## OmniObserve Integration

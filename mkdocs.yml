@@ -55,6 +55,7 @@ nav:
       - Pass Criteria: concepts/pass-criteria.md
   - Features:
       - Rubrics: features/rubrics.md
+      - Claims Validation: features/claims.md
       - Likert Scales: features/likert-scales.md
       - Inter-Rater Reliability: features/inter-rater-reliability.md
       - Pairwise Comparison: features/pairwise.md
@@ -67,6 +68,7 @@ nav:
   - API Reference: https://pkg.go.dev/github.com/plexusone/structured-evaluation
   - Releases:
       - Changelog: releases/changelog.md
+      - v0.6.0: releases/v0.6.0.md
       - v0.5.0: releases/v0.5.0.md
       - v0.4.0: releases/v0.4.0.md
       - v0.3.0: releases/v0.3.0.md

@@ -8,6 +8,7 @@ Structured Evaluation provides standardized Go types for evaluation reports, ena
 
 - ⚖️ **LLM-as-Judge Assessments** - Categorical scoring (pass/partial/fail) with severity-based findings
 - ✅ **GO/NO-GO Summary Reports** - Deterministic checks for CI, tests, and validation
+- 📋 **Claims Validation** - Factual claim extraction and source verification
 - 🔗 **Multi-Agent Coordination** - DAG-based report aggregation using Kahn's algorithm
 - 📊 **Rubric Definitions** - Explicit criteria for consistent evaluations
 - 🔄 **Pairwise Comparison** - Compare outputs instead of absolute scoring
@@ -63,6 +64,7 @@ func main() {
 |------|---------|----------|
 | **EvaluationReport** | LLM-as-Judge assessments | PRD reviews, code quality, content evaluation |
 | **SummaryReport** | GO/NO-GO deterministic checks | CI pipelines, release validation, test results |
+| **ClaimsReport** | Factual claim validation | Security advisories, blog posts, documentation |
 
 ## Severity Levels
 

@@ -1,6 +1,6 @@
 # Report Types
 
-Structured Evaluation provides two report types for different use cases.
+Structured Evaluation provides three report types for different use cases.
 
 ## EvaluationReport
 
@@ -96,15 +96,74 @@ report.AddTeam(summary.TeamSection{
 })
 ```
 
+## ClaimsReport
+
+For **factual claim validation** with source tracking and verification.
+
+### Structure
+
+```go
+type ClaimsReport struct {
+    Metadata   ClaimsMetadata  // Document info, timestamps
+    Claims     []Claim         // Extracted claims with validation
+    Summary    ClaimsSummary   // Counts by verdict, category
+    Criteria   ClaimsCriteria  // Pass requirements
+    Decision   ClaimsDecision  // Overall pass/fail decision
+}
+
+type Claim struct {
+    ID          string       // Unique identifier
+    Text        string       // Claim text
+    Location    Location     // Where in document
+    Category    ClaimCategory // metadata, technical-finding, etc.
+    Validation  *Validation  // How validated
+    Verdict     Verdict      // verified, unverified, needs-review, rejected
+    Rationale   string       // Explanation
+}
+```
+
+### Use Cases
+
+- Security advisory validation
+- Blog post fact-checking
+- Technical documentation review
+- Research paper claims
+- Compliance verification
+
+### Example
+
+```go
+report := claims.NewClaimsReport("security-advisory.md")
+
+// External source validation
+claim := claims.NewClaim("cvss", "CVSS 8.8", claims.ClaimRiskAssessment,
+    claims.Location{Section: "severity"})
+claim.SetValidation(claims.NewExternalValidation(
+    "https://nvd.nist.gov/vuln/detail/CVE-2026-25253",
+    claims.ExternalNVD,
+))
+report.AddClaim(*claim)
+
+// Internal validation via code
+exploit := claims.NewClaim("exploit", "RCE confirmed", claims.ClaimTechnicalFinding,
+    claims.Location{Section: "impact"})
+exploit.SetValidation(claims.NewInternalValidation(
+    claims.MethodCodeExecution, "poc.py", true,
+))
+report.AddClaim(*exploit)
+
+report.Finalize()
+```
+
 ## Comparison
 
-| Aspect | EvaluationReport | SummaryReport |
-|--------|------------------|---------------|
-| **Purpose** | Subjective assessment | Deterministic checks |
-| **Scoring** | Categorical (pass/partial/fail) | Binary (go/warn/nogo) |
-| **Structure** | Categories + Findings | Teams + Tasks |
-| **Source** | LLM or human reviewer | Automated systems |
-| **Findings** | Detailed with severity | Simple status + detail |
+| Aspect | EvaluationReport | SummaryReport | ClaimsReport |
+|--------|------------------|---------------|--------------|
+| **Purpose** | Subjective assessment | Deterministic checks | Source validation |
+| **Scoring** | Categorical (pass/partial/fail) | Binary (go/warn/nogo) | Verdict (verified/unverified) |
+| **Structure** | Categories + Findings | Teams + Tasks | Claims + Validation |
+| **Source** | LLM or human reviewer | Automated systems | External URLs or internal evidence |
+| **Output** | Quality assessment | GO/NO-GO decision | Publication readiness |
 
 ## When to Use Which
 
@@ -122,8 +181,16 @@ report.AddTeam(summary.TeamSection{
 - Aggregating across teams/domains
 - CI/CD pipeline integration
 
+### Use ClaimsReport when:
+
+- Document contains factual claims
+- Claims need source references (URLs)
+- Internal evidence validates claims (code, testing)
+- Publishing requires fact-checking
+
 ## Next Steps
 
 - [Categorical Scoring](scoring.md) - Understand pass/partial/fail
 - [Findings & Severity](findings.md) - Issue tracking
+- [Claims Validation](../features/claims.md) - Source verification
 - [DAG Aggregation](../features/dag-aggregation.md) - Multi-agent coordination
