@@ -47,11 +47,16 @@
       "documentation": [
         { "description": "Added Claims Validation documentation page", "commit": "fbe53f7" },
         { "description": "Updated Report Types page to include ClaimsReport", "commit": "fbe53f7" },
-        { "description": "Added v0.6.0 release notes" }
+        { "description": "Added v0.6.0 release notes", "commit": "b4d41ec" },
+        { "description": "Added architecture diagram to README.md and docs/index.md", "commit": "b92f459" },
+        { "description": "Updated MkDocs site for evaluation to rubric rename", "commit": "f71d8b7" }
       ],
       "tests": [
         { "description": "Unit tests for claims package", "commit": "2a6d91a" },
         { "description": "Embed tests for SummaryReport with embedded reports", "commit": "d784399" }
+      ],
+      "fixed": [
+        { "description": "Address gosec G703 path traversal lint error in genschema", "commit": "bf1c16f" }
       ]
     },
     {
