@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Valid enum values for structured evaluation types. Use these for validation in any language.",
+  "enums": {
+    "DecisionStatus": [
+      "pass",
+      "conditional",
+      "fail",
+      "human_review"
+    ],
+    "EvaluationType": [
+      "analytic",
+      "holistic"
+    ],
+    "ScaleType": [
+      "categorical",
+      "checklist",
+      "binary",
+      "likert"
+    ],
+    "ScoreValue": [
+      "pass",
+      "partial",
+      "fail"
+    ],
+    "Severity": [
+      "critical",
+      "high",
+      "medium",
+      "low",
+      "info"
+    ]
+  },
+  "title": "Structured Evaluation Enum Definitions",
+  "validation": {
+    "decisionStatus": {
+      "description": "Decision status values",
+      "passing": [
+        "pass",
+        "conditional"
+      ],
+      "usage": "Decision.status and overallDecision fields",
+      "values": [
+        "pass",
+        "conditional",
+        "fail",
+        "human_review"
+      ]
+    },
+    "evaluationType": {
+      "description": "Evaluation methodology types",
+      "usage": "RubricSet.evaluationType field",
+      "values": [
+        "analytic",
+        "holistic"
+      ]
+    },
+    "scaleType": {
+      "description": "Scale types for rubric categories",
+      "usage": "Category.scale.type field",
+      "values": [
+        "categorical",
+        "checklist",
+        "binary",
+        "likert"
+      ]
+    },
+    "score": {
+      "description": "Category score values",
+      "usage": "CategoryResult.score field",
+      "values": [
+        "pass",
+        "partial",
+        "fail"
+      ]
+    },
+    "severity": {
+      "blocking": [
+        "critical",
+        "high"
+      ],
+      "description": "Finding severity levels",
+      "usage": "Finding.severity field",
+      "values": [
+        "critical",
+        "high",
+        "medium",
+        "low",
+        "info"
+      ]
+    }
+  }
+}
