@@ -7,6 +7,36 @@
   "commitConvention": "conventional",
   "releases": [
     {
+      "version": "v0.7.0",
+      "date": "2026-06-07",
+      "highlights": [
+        { "description": "Report validation with comprehensive enum checking" },
+        { "description": "JSON Schema enhanced with enum constraints for all fields" },
+        { "description": "New `sevaluation lint` command for report correctness validation" }
+      ],
+      "added": [
+        { "description": "`ValidationResult` and `ValidationIssue` types for structured error reporting", "commit": "bf47249" },
+        { "description": "`ValidateReport()` function to check rubric report correctness", "commit": "bf47249" },
+        { "description": "Enum validation for `ScoreValue` (pass/partial/fail)", "commit": "bf47249" },
+        { "description": "Enum validation for `Severity` (critical/high/medium/low/info)", "commit": "bf47249" },
+        { "description": "Enum validation for `DecisionStatus` (pass/conditional/fail/human_review)", "commit": "bf47249" },
+        { "description": "Count verification for category and finding counts", "commit": "bf47249" },
+        { "description": "Semantic consistency checks (decision vs findings alignment)", "commit": "bf47249" },
+        { "description": "`ValidScoreValues()`, `ValidSeverityValues()`, `ValidDecisionStatusValues()` helper functions", "commit": "bf47249" },
+        { "description": "`ValidEvaluationTypeValues()` and `ValidScaleTypeValues()` helper functions", "commit": "bf47249" },
+        { "description": "`EnumDefinitions` export for cross-language tooling", "commit": "ab3f103" },
+        { "description": "`GenerateEnumsJSON()` function to generate enums.json", "commit": "ab3f103" },
+        { "description": "`schema/enums.json` with validation metadata (blocking severities, passing statuses)", "commit": "ab3f103" },
+        { "description": "`sevaluation lint` command for validating evaluation reports", "commit": "875464e" },
+        { "description": "`--strict` flag for lint command (treat warnings as errors)", "commit": "875464e" },
+        { "description": "`--format=text|json` option for lint output format", "commit": "875464e" }
+      ],
+      "changed": [
+        { "description": "`rubric.schema.json` updated with enum constraints for score, severity, and status fields", "commit": "ab3f103" },
+        { "description": "`schema` command now also generates `enums.json`", "commit": "875464e" }
+      ]
+    },
+    {
       "version": "v0.6.0",
       "date": "2026-06-01",
       "highlights": [

@@ -191,6 +191,25 @@ criteria := rubric.StrictPassCriteria()
 // MaxCritical: 0, MaxHigh: 0, MaxMedium: 3, RequireAllPass: true
 ```
 
+## Report Validation (v0.7.0)
+
+Validate evaluation reports for correctness:
+
+```go
+result := rubric.ValidateReport(&report)
+
+if !result.Valid {
+    fmt.Printf("Invalid: %d errors, %d warnings\n", result.ErrorCount, result.WarningCount)
+    for _, issue := range result.Issues {
+        fmt.Printf("[%s] %s: %s\n", issue.Severity, issue.Path, issue.Message)
+    }
+}
+
+// Get valid enum values for tooling
+scores := rubric.ValidScoreValues()         // ["pass", "partial", "fail"]
+severities := rubric.ValidSeverityValues()  // ["critical", "high", "medium", "low", "info"]
+```
+
 ## CLI Tool
 
 ```bash
@@ -203,6 +222,11 @@ sevaluation render report.json --format=terminal   # ANSI colors + UTF8 icons
 sevaluation render report.json --format=markdown   # Markdown output
 sevaluation render report.json --format=box
 sevaluation render report.json --format=json
+
+# Lint reports for correctness (v0.7.0)
+sevaluation lint report.json              # Basic validation
+sevaluation lint report.json --strict     # Warnings are errors
+sevaluation lint report.json --format=json
 
 # Check pass/fail (exit code 0/1)
 sevaluation check report.json
