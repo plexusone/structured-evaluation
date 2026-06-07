@@ -13,6 +13,7 @@ Structured Evaluation provides standardized Go types for evaluation reports, ena
 - 📊 **Rubric Definitions** - Explicit criteria for consistent evaluations
 - 🔄 **Pairwise Comparison** - Compare outputs instead of absolute scoring
 - 👥 **Multi-Judge Aggregation** - Combine evaluations from multiple judges with agreement metrics
+- 🔍 **Report Validation** - Validate reports for enum correctness, counts, and consistency
 
 ## Architecture
 

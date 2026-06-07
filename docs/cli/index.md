@@ -14,6 +14,7 @@ go install github.com/plexusone/structured-evaluation/cmd/sevaluation@latest
 |---------|-------------|
 | `render` | Render a report in various formats |
 | `check` | Check if a report passes criteria (exit code 0/1) |
+| `lint` | Validate report correctness (enum values, counts, consistency) |
 | `validate` | Validate JSON structure against schema |
 | `schema` | Generate or view JSON schemas |
 | `version` | Print version information |
@@ -27,6 +28,9 @@ sevaluation render report.json --format=terminal
 # Check pass/fail for CI
 sevaluation check report.json
 echo $?  # 0 = pass, 1 = fail
+
+# Lint report for correctness
+sevaluation lint report.json --strict
 
 # Generate markdown report
 sevaluation render report.json --format=markdown > report.md

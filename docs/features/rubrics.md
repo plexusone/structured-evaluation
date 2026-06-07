@@ -167,6 +167,34 @@ rubricSet := rubric.NewRubricSet("prd-review-v2", "PRD Review v2", "2.0.0")
 report.RubricID = "prd-review-v2"
 ```
 
+## Report Validation
+
+Validate rubric reports for correctness before processing (v0.7.0):
+
+```go
+result := rubric.ValidateReport(&report)
+
+if !result.Valid {
+    for _, issue := range result.Issues {
+        fmt.Printf("[%s] %s: %s\n", issue.Severity, issue.Path, issue.Message)
+    }
+}
+```
+
+Validation checks include:
+
+- **Enum values** - Score, severity, and decision status must be valid
+- **Required fields** - `metadata.document` and `reviewType` are required
+- **Finding titles** - Each finding must have a title
+- **Count accuracy** - Reported counts must match actual data
+- **Decision consistency** - Decision should align with blocking findings
+
+Use the CLI for quick validation:
+
+```bash
+sevaluation lint report.json --strict
+```
+
 ## Next Steps
 
 - [Multi-Judge Aggregation](multi-judge.md) - Combine evaluations

@@ -47,6 +47,79 @@ The command auto-detects report type (rubric vs summary) and uses the appropriat
 
 ---
 
+## lint
+
+Validate report correctness including enum values, count accuracy, and decision consistency. Added in v0.7.0.
+
+### Usage
+
+```bash
+sevaluation lint <file> [--strict] [--format=<format>]
+```
+
+### Flags
+
+| Flag | Description |
+|------|-------------|
+| `--strict` | Treat warnings as errors |
+| `--format` | Output format: `text` (default), `json` |
+
+### Validation Checks
+
+| Check | Level | Description |
+|-------|-------|-------------|
+| Enum Values | Error | Score, severity, decision status must be valid |
+| Required Fields | Error | `metadata.document` and `reviewType` are required |
+| Finding Title | Error | Each finding must have a title |
+| Count Accuracy | Warning | Reported counts must match actual data |
+| Decision Consistency | Warning | Decision should align with findings |
+| OverallDecision Match | Warning | `overallDecision` should match `decision.status` |
+
+### Exit Codes
+
+| Code | Status | Meaning |
+|------|--------|---------|
+| 0 | Valid | No errors (warnings allowed unless `--strict`) |
+| 1 | Invalid | Has errors, or has warnings with `--strict` |
+
+### Examples
+
+```bash
+# Basic validation
+sevaluation lint report.json
+
+# Strict mode (warnings are errors)
+sevaluation lint report.json --strict
+
+# JSON output for programmatic use
+sevaluation lint report.json --format=json
+
+# CI pipeline validation
+for report in reports/*.json; do
+    if ! sevaluation lint "$report" --strict; then
+        echo "Invalid report: $report"
+        exit 1
+    fi
+done
+```
+
+### Output
+
+```
+✅ Valid: 0 errors, 0 warnings
+```
+
+or
+
+```
+❌ Invalid: 2 errors, 1 warning
+  [error] categories[0].score: invalid score value "passed", must be one of: pass, partial, fail
+  [error] findings[1].title: finding must have a title
+  [warning] summary.categoryCount: reported 5, actual 4
+```
+
+---
+
 ## check
 
 Check if a report passes evaluation criteria. Useful for CI/CD gates.
@@ -178,7 +251,7 @@ sevaluation version
 ### Output
 
 ```
-sevaluation v0.6.0
+sevaluation v0.7.0
 ```
 
 ---
@@ -211,6 +284,18 @@ done
 #!/bin/bash
 for report in reports/*.json; do
     if ! sevaluation validate "$report"; then
+        echo "Invalid report: $report"
+        exit 1
+    fi
+done
+```
+
+### Lint Reports in CI
+
+```bash
+# Validate all reports with strict mode
+for report in reports/*.json; do
+    if ! sevaluation lint "$report" --strict; then
         echo "Invalid report: $report"
         exit 1
     fi
