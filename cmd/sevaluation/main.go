@@ -88,6 +88,31 @@ var validateCmd = &cobra.Command{
 	RunE:  runValidate,
 }
 
+// Lint command flags
+var lintFlags struct {
+	strict bool
+	format string
+}
+
+// Lint command
+var lintCmd = &cobra.Command{
+	Use:   "lint <file.json>",
+	Short: "Lint evaluation report for correctness",
+	Long: `Lint an evaluation report for correctness and consistency.
+
+Checks performed:
+  - All enum values are valid (score, severity, decision status)
+  - Required fields are present
+  - Reported counts match actual data
+  - Decision is consistent with findings and category results
+
+Exit codes:
+  0 - Valid (no errors, warnings allowed unless --strict)
+  1 - Invalid (has errors or has warnings with --strict)`,
+	Args: cobra.ExactArgs(1),
+	RunE: runLint,
+}
+
 // Schema command
 var schemaFlags struct {
 	outputDir string
@@ -132,17 +157,31 @@ func runSchemaGenerate(cmd *cobra.Command, args []string) error {
 	}
 	fmt.Printf("Generated: %s\n", summaryPath)
 
+	// Generate enums JSON for cross-language validation
+	enumsJSON, err := schema.GenerateEnumsJSON()
+	if err != nil {
+		return fmt.Errorf("generating enums JSON: %w", err)
+	}
+	enumsPath := outputDir + "/enums.json"
+	if err := schema.WriteSchemaFile(enumsPath, enumsJSON); err != nil {
+		return fmt.Errorf("writing enums JSON: %w", err)
+	}
+	fmt.Printf("Generated: %s\n", enumsPath)
+
 	return nil
 }
 
 func init() {
 	renderCmd.Flags().StringVarP(&renderFlags.format, "format", "f", "detailed", "Output format (box, detailed, json)")
 	schemaCmd.Flags().StringVarP(&schemaFlags.outputDir, "output", "o", ".", "Output directory for schema files")
+	lintCmd.Flags().BoolVar(&lintFlags.strict, "strict", false, "Treat warnings as errors")
+	lintCmd.Flags().StringVarP(&lintFlags.format, "format", "f", "text", "Output format (text, json)")
 
 	rootCmd.AddCommand(renderCmd)
 	rootCmd.AddCommand(checkCmd)
 	rootCmd.AddCommand(validateCmd)
 	rootCmd.AddCommand(schemaCmd)
+	rootCmd.AddCommand(lintCmd)
 }
 
 func runRender(cmd *cobra.Command, args []string) error {
@@ -303,4 +342,54 @@ func runValidate(cmd *cobra.Command, args []string) error {
 	}
 
 	return fmt.Errorf("unknown report type: expected 'categories' or 'teams'")
+}
+
+func runLint(cmd *cobra.Command, args []string) error {
+	filename := args[0]
+
+	data, err := os.ReadFile(filename)
+	if err != nil {
+		return fmt.Errorf("reading file: %w", err)
+	}
+
+	var raw map[string]any
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return fmt.Errorf("invalid JSON: %w", err)
+	}
+
+	// Only lint evaluation reports for now
+	if _, hasCategories := raw["categories"]; !hasCategories {
+		return fmt.Errorf("lint only supports evaluation reports (expected 'categories' field)")
+	}
+
+	var report rubric.Rubric
+	if err := json.Unmarshal(data, &report); err != nil {
+		return fmt.Errorf("parsing evaluation report: %w", err)
+	}
+
+	// Run validation
+	result := rubric.ValidateReport(&report)
+
+	// Output based on format
+	switch lintFlags.format {
+	case "json":
+		output, err := json.MarshalIndent(result, "", "  ")
+		if err != nil {
+			return fmt.Errorf("marshaling result: %w", err)
+		}
+		fmt.Println(string(output))
+	default:
+		fmt.Print(result.String())
+	}
+
+	// Exit with error if invalid or strict mode with warnings
+	if !result.Valid {
+		os.Exit(1)
+	}
+	if lintFlags.strict && result.HasWarnings() {
+		fmt.Println("\n(strict mode: treating warnings as errors)")
+		os.Exit(1)
+	}
+
+	return nil
 }
