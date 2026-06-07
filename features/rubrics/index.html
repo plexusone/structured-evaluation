@@ -754,6 +754,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#report-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Report Validation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#next-steps" class="md-nav__link">
     <span class="md-ellipsis">
       Next Steps
@@ -1451,6 +1460,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#report-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Report Validation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#next-steps" class="md-nav__link">
     <span class="md-ellipsis">
       Next Steps
@@ -1609,6 +1627,27 @@
 <p>Track rubric versions for reproducibility:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nx">rubricSet</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewRubricSet</span><span class="p">(</span><span class="s">&quot;prd-review-v2&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;PRD Review v2&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2.0.0&quot;</span><span class="p">)</span>
 <a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nx">report</span><span class="p">.</span><span class="nx">RubricID</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;prd-review-v2&quot;</span>
+</code></pre></div>
+<h2 id="report-validation">Report Validation<a class="headerlink" href="#report-validation" title="Permanent link">&para;</a></h2>
+<p>Validate rubric reports for correctness before processing (v0.7.0):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nx">result</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">ValidateReport</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">report</span><span class="p">)</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="k">if</span><span class="w"> </span><span class="p">!</span><span class="nx">result</span><span class="p">.</span><span class="nx">Valid</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">issue</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">result</span><span class="p">.</span><span class="nx">Issues</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;[%s] %s: %s\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">issue</span><span class="p">.</span><span class="nx">Severity</span><span class="p">,</span><span class="w"> </span><span class="nx">issue</span><span class="p">.</span><span class="nx">Path</span><span class="p">,</span><span class="w"> </span><span class="nx">issue</span><span class="p">.</span><span class="nx">Message</span><span class="p">)</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="p">}</span>
+</code></pre></div>
+<p>Validation checks include:</p>
+<ul>
+<li><strong>Enum values</strong> - Score, severity, and decision status must be valid</li>
+<li><strong>Required fields</strong> - <code>metadata.document</code> and <code>reviewType</code> are required</li>
+<li><strong>Finding titles</strong> - Each finding must have a title</li>
+<li><strong>Count accuracy</strong> - Reported counts must match actual data</li>
+<li><strong>Decision consistency</strong> - Decision should align with blocking findings</li>
+</ul>
+<p>Use the CLI for quick validation:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>sevaluation<span class="w"> </span>lint<span class="w"> </span>report.json<span class="w"> </span>--strict
 </code></pre></div>
 <h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
 <ul>
