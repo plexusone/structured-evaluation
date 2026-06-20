@@ -848,11 +848,50 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#evaluation-reports" class="md-nav__link">
+    <span class="md-ellipsis">
+      Evaluation Reports
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Evaluation Reports">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#output-example_2" class="md-nav__link">
     <span class="md-ellipsis">
       Output Example
     </span>
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#summary-reports" class="md-nav__link">
+    <span class="md-ellipsis">
+      Summary Reports
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Summary Reports">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#output-example_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      Output Example
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -1413,11 +1452,50 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#evaluation-reports" class="md-nav__link">
+    <span class="md-ellipsis">
+      Evaluation Reports
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Evaluation Reports">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#output-example_2" class="md-nav__link">
     <span class="md-ellipsis">
       Output Example
     </span>
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#summary-reports" class="md-nav__link">
+    <span class="md-ellipsis">
+      Summary Reports
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Summary Reports">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#output-example_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      Output Example
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -1519,8 +1597,8 @@
 </tr>
 <tr>
 <td><code>render/box</code></td>
-<td>Box format</td>
-<td>Summary reports</td>
+<td>ASCII box format</td>
+<td>Deterministic TUI output</td>
 </tr>
 </tbody>
 </table>
@@ -1532,21 +1610,21 @@
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">renderer</span><span class="p">.</span><span class="nx">Render</span><span class="p">(</span><span class="nx">report</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="output-example">Output Example<a class="headerlink" href="#output-example" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>┌──────────────────────────────────────────────────────────────────────────┐
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>┌───────────────────────────────────────────────────────────────────────────┐
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>│ EVALUATION REPORT: requirements.md                                        │
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>├──────────────────────────────────────────────────────────────────────────┤
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>├───────────────────────────────────────────────────────────────────────────┤
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>│ Results:  2 pass, 1 partial, 1 fail                                       │
 <a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>│ Decision: CONDITIONAL (1 Critical, 0 High, 2 Medium)                      │
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>├──────────────────────────────────────────────────────────────────────────┤
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>├───────────────────────────────────────────────────────────────────────────┤
 <a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>│ RESULTS BY CATEGORY                                                       │
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>├──────────────────────────────────────────────────────────────────────────┤
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>├───────────────────────────────────────────────────────────────────────────┤
 <a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>│   problem_definition     🟢 PASS     Clear problem with measurable impact │
 <a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>│   user_stories           🟡 PARTIAL  Some lack acceptance criteria        │
 <a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>│   success_metrics        🔴 FAIL     No quantitative metrics defined      │
 <a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>│   scope_definition       🟢 PASS     Clear boundaries established         │
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>├──────────────────────────────────────────────────────────────────────────┤
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>├───────────────────────────────────────────────────────────────────────────┤
 <a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>│ ⚠️ PRD-REVIEW CONDITIONAL (2/4 categories passed)                         │
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>└──────────────────────────────────────────────────────────────────────────┘
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>└───────────────────────────────────────────────────────────────────────────┘
 </code></pre></div>
 <h3 id="color-options">Color Options<a class="headerlink" href="#color-options" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1">// Disable colors (e.g., for piping)</span>
@@ -1604,80 +1682,101 @@
 <a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">renderer</span><span class="p">.</span><span class="nx">Render</span><span class="p">(</span><span class="nx">report</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="box-renderer">Box Renderer<a class="headerlink" href="#box-renderer" title="Permanent link">&para;</a></h2>
-<p>For summary reports (GO/NO-GO):</p>
+<p>ASCII box format for deterministic TUI output. Works with both evaluation (rubric) and summary reports.</p>
+<h3 id="evaluation-reports">Evaluation Reports<a class="headerlink" href="#evaluation-reports" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">import</span><span class="w"> </span><span class="s">&quot;github.com/plexusone/structured-evaluation/render/box&quot;</span>
 <a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="nx">renderer</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">box</span><span class="p">.</span><span class="nx">NewRenderer</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">)</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">renderer</span><span class="p">.</span><span class="nx">Render</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">summaryReport</span><span class="p">)</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="nx">renderer</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">box</span><span class="p">.</span><span class="nx">NewEvaluationRenderer</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">)</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">renderer</span><span class="p">.</span><span class="nx">Render</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">rubricReport</span><span class="p">)</span>
 </code></pre></div>
-<h3 id="output-example_2">Output Example<a class="headerlink" href="#output-example_2" title="Permanent link">&para;</a></h3>
+<h4 id="output-example_2">Output Example<a class="headerlink" href="#output-example_2" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>╔══════════════════════════════════════════════════════════════════════════╗
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>║                    RELEASE VALIDATION: my-service v2.0.0                  ║
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>║                           EVALUATION REPORT                               ║
 <a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>╠══════════════════════════════════════════════════════════════════════════╣
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>║ TESTING                                                                   ║
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>║   ✅ unit-tests         Coverage: 92%                                     ║
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>║   ✅ integration-tests  All 47 tests pass                                 ║
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>║   ⚠️ e2e-tests          2 flaky tests skipped                             ║
-<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>╠══════════════════════════════════════════════════════════════════════════╣
-<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>║ SECURITY                                                                  ║
-<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>║   ✅ sast               No critical findings                              ║
-<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>║   ✅ dependency-scan    All deps up to date                               ║
-<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>╠══════════════════════════════════════════════════════════════════════════╣
-<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>║                              ✅ GO FOR RELEASE                            ║
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>║                            ✅  PASS  ✅                                   ║
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>╠══════════════════════════════════════════════════════════════════════════╣
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>║ CATEGORY                   ST SCORE  DETAIL                               ║
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>╟──────────────────────────────────────────────────────────────────────────╢
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>║ problem_definition         🟢 pass   Clear problem statement              ║
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>║ user_stories               🟢 4/5    Good coverage of use cases           ║
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>║ success_metrics            🟡 partial Missing baseline metrics            ║
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>╠══════════════════════════════════════════════════════════════════════════╣
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>║ Categories: 2 pass, 1 partial, 0 fail                                     ║
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>║ Findings:   0 critical, 0 high, 1 medium, 0 low                           ║
 <a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>╚══════════════════════════════════════════════════════════════════════════╝
+</code></pre></div>
+<h3 id="summary-reports">Summary Reports<a class="headerlink" href="#summary-reports" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nx">renderer</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">box</span><span class="p">.</span><span class="nx">NewRenderer</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">)</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">renderer</span><span class="p">.</span><span class="nx">Render</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">summaryReport</span><span class="p">)</span>
+</code></pre></div>
+<h4 id="output-example_3">Output Example<a class="headerlink" href="#output-example_3" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>╔══════════════════════════════════════════════════════════════════════════╗
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>║                    RELEASE VALIDATION: my-service v2.0.0                  ║
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>╠══════════════════════════════════════════════════════════════════════════╣
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>║ TESTING                                                                   ║
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>║   ✅ unit-tests         Coverage: 92%                                     ║
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>║   ✅ integration-tests  All 47 tests pass                                 ║
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>║   ⚠️ e2e-tests          2 flaky tests skipped                             ║
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>╠══════════════════════════════════════════════════════════════════════════╣
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>║ SECURITY                                                                  ║
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>║   ✅ sast               No critical findings                              ║
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>║   ✅ dependency-scan    All deps up to date                               ║
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>╠══════════════════════════════════════════════════════════════════════════╣
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>║                              ✅ GO FOR RELEASE                            ║
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>╚══════════════════════════════════════════════════════════════════════════╝
 </code></pre></div>
 <h2 id="json-output">JSON Output<a class="headerlink" href="#json-output" title="Permanent link">&para;</a></h2>
 <p>For programmatic use:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">import</span><span class="w"> </span><span class="s">&quot;encoding/json&quot;</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="nx">output</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">json</span><span class="p">.</span><span class="nx">MarshalIndent</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">report</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;  &quot;</span><span class="p">)</span>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">err</span>
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="p">}</span>
-<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nb">string</span><span class="p">(</span><span class="nx">output</span><span class="p">))</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kn">import</span><span class="w"> </span><span class="s">&quot;encoding/json&quot;</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="nx">output</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">json</span><span class="p">.</span><span class="nx">MarshalIndent</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">report</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;  &quot;</span><span class="p">)</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">err</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="p">}</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nb">string</span><span class="p">(</span><span class="nx">output</span><span class="p">))</span>
 </code></pre></div>
 <h2 id="cli-usage">CLI Usage<a class="headerlink" href="#cli-usage" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># Terminal format (default)</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>sevaluation<span class="w"> </span>render<span class="w"> </span>report.json<span class="w"> </span>--format<span class="o">=</span>terminal
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="c1"># Markdown</span>
-<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>sevaluation<span class="w"> </span>render<span class="w"> </span>report.json<span class="w"> </span>--format<span class="o">=</span>markdown<span class="w"> </span>&gt;<span class="w"> </span>report.md
-<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>
-<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="c1"># Detailed</span>
-<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>sevaluation<span class="w"> </span>render<span class="w"> </span>report.json<span class="w"> </span>--format<span class="o">=</span>detailed
-<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>
-<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="c1"># Box (for summary reports)</span>
-<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>sevaluation<span class="w"> </span>render<span class="w"> </span>summary.json<span class="w"> </span>--format<span class="o">=</span>box
-<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>
-<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="c1"># JSON</span>
-<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>sevaluation<span class="w"> </span>render<span class="w"> </span>report.json<span class="w"> </span>--format<span class="o">=</span>json
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># Terminal format (default)</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>sevaluation<span class="w"> </span>render<span class="w"> </span>report.json<span class="w"> </span>--format<span class="o">=</span>terminal
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="c1"># Markdown</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>sevaluation<span class="w"> </span>render<span class="w"> </span>report.json<span class="w"> </span>--format<span class="o">=</span>markdown<span class="w"> </span>&gt;<span class="w"> </span>report.md
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="c1"># Detailed</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>sevaluation<span class="w"> </span>render<span class="w"> </span>report.json<span class="w"> </span>--format<span class="o">=</span>detailed
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="c1"># Box (for summary reports)</span>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>sevaluation<span class="w"> </span>render<span class="w"> </span>summary.json<span class="w"> </span>--format<span class="o">=</span>box
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a><span class="c1"># JSON</span>
+<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a>sevaluation<span class="w"> </span>render<span class="w"> </span>report.json<span class="w"> </span>--format<span class="o">=</span>json
 </code></pre></div>
 <h2 id="writing-to-files">Writing to Files<a class="headerlink" href="#writing-to-files" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nx">file</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">Create</span><span class="p">(</span><span class="s">&quot;report.md&quot;</span><span class="p">)</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">err</span>
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="p">}</span>
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="k">defer</span><span class="w"> </span><span class="nx">file</span><span class="p">.</span><span class="nx">Close</span><span class="p">()</span>
-<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>
-<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="nx">renderer</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">markdown</span><span class="p">.</span><span class="nx">New</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span>
-<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="k">return</span><span class="w"> </span><span class="nx">renderer</span><span class="p">.</span><span class="nx">Render</span><span class="p">(</span><span class="nx">report</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nx">file</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">Create</span><span class="p">(</span><span class="s">&quot;report.md&quot;</span><span class="p">)</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">err</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="p">}</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="k">defer</span><span class="w"> </span><span class="nx">file</span><span class="p">.</span><span class="nx">Close</span><span class="p">()</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="nx">renderer</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">markdown</span><span class="p">.</span><span class="nx">New</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="k">return</span><span class="w"> </span><span class="nx">renderer</span><span class="p">.</span><span class="nx">Render</span><span class="p">(</span><span class="nx">report</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="custom-renderers">Custom Renderers<a class="headerlink" href="#custom-renderers" title="Permanent link">&para;</a></h2>
 <p>Implement the Renderer interface:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kd">type</span><span class="w"> </span><span class="nx">Renderer</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">    </span><span class="nx">Render</span><span class="p">(</span><span class="nx">report</span><span class="w"> </span><span class="o">*</span><span class="nx">rubric</span><span class="p">.</span><span class="nx">Rubric</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span>
-<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="p">}</span>
-<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>
-<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="c1">// Example: HTML renderer</span>
-<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="kd">type</span><span class="w"> </span><span class="nx">HTMLRenderer</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="w">    </span><span class="nx">w</span><span class="w"> </span><span class="nx">io</span><span class="p">.</span><span class="nx">Writer</span>
-<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="p">}</span>
-<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>
-<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">r</span><span class="w"> </span><span class="o">*</span><span class="nx">HTMLRenderer</span><span class="p">)</span><span class="w"> </span><span class="nx">Render</span><span class="p">(</span><span class="nx">report</span><span class="w"> </span><span class="o">*</span><span class="nx">rubric</span><span class="p">.</span><span class="nx">Rubric</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="w">    </span><span class="c1">// Generate HTML output</span>
-<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="w">    </span><span class="nx">tmpl</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">template</span><span class="p">.</span><span class="nx">Must</span><span class="p">(</span><span class="nx">template</span><span class="p">.</span><span class="nx">ParseFiles</span><span class="p">(</span><span class="s">&quot;report.html&quot;</span><span class="p">))</span>
-<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">tmpl</span><span class="p">.</span><span class="nx">Execute</span><span class="p">(</span><span class="nx">r</span><span class="p">.</span><span class="nx">w</span><span class="p">,</span><span class="w"> </span><span class="nx">report</span><span class="p">)</span>
-<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="kd">type</span><span class="w"> </span><span class="nx">Renderer</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">    </span><span class="nx">Render</span><span class="p">(</span><span class="nx">report</span><span class="w"> </span><span class="o">*</span><span class="nx">rubric</span><span class="p">.</span><span class="nx">Rubric</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="p">}</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="c1">// Example: HTML renderer</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="kd">type</span><span class="w"> </span><span class="nx">HTMLRenderer</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="w">    </span><span class="nx">w</span><span class="w"> </span><span class="nx">io</span><span class="p">.</span><span class="nx">Writer</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="p">}</span>
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">r</span><span class="w"> </span><span class="o">*</span><span class="nx">HTMLRenderer</span><span class="p">)</span><span class="w"> </span><span class="nx">Render</span><span class="p">(</span><span class="nx">report</span><span class="w"> </span><span class="o">*</span><span class="nx">rubric</span><span class="p">.</span><span class="nx">Rubric</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="w">    </span><span class="c1">// Generate HTML output</span>
+<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a><span class="w">    </span><span class="nx">tmpl</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">template</span><span class="p">.</span><span class="nx">Must</span><span class="p">(</span><span class="nx">template</span><span class="p">.</span><span class="nx">ParseFiles</span><span class="p">(</span><span class="s">&quot;report.html&quot;</span><span class="p">))</span>
+<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">tmpl</span><span class="p">.</span><span class="nx">Execute</span><span class="p">(</span><span class="nx">r</span><span class="p">.</span><span class="nx">w</span><span class="p">,</span><span class="w"> </span><span class="nx">report</span><span class="p">)</span>
+<a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a><span class="p">}</span>
 </code></pre></div>
 <h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
 <ul>
