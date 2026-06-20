@@ -57,11 +57,15 @@ var renderCmd = &cobra.Command{
 	Short: "Render a report to terminal",
 	Long: `Render an evaluation or summary report.
 
-Formats:
-  box      - Summary box format (for summary reports)
-  detailed - Detailed format with findings (for evaluation reports)
-  terminal - ANSI-colored terminal output with UTF8 icons (for evaluation reports)
-  markdown - Markdown report format (for evaluation reports)
+Formats for evaluation reports:
+  box      - ASCII box format for TUI (deterministic, no colors/emojis)
+  detailed - Detailed format with findings
+  terminal - ANSI-colored terminal output with UTF8 icons
+  markdown - Markdown report format
+  json     - Pretty-printed JSON
+
+Formats for summary reports:
+  box      - ASCII box format
   json     - Pretty-printed JSON`,
 	Args: cobra.ExactArgs(1),
 	RunE: runRender,
@@ -218,6 +222,9 @@ func renderEvaluation(data []byte, format string) error {
 	}
 
 	switch format {
+	case "box", "ascii":
+		renderer := box.NewEvaluationRenderer(os.Stdout)
+		return renderer.Render(&report)
 	case "detailed":
 		renderer := detailed.NewTerminal(os.Stdout)
 		return renderer.Render(&report)
@@ -235,7 +242,7 @@ func renderEvaluation(data []byte, format string) error {
 		fmt.Println(string(output))
 		return nil
 	default:
-		return fmt.Errorf("format %q not supported for evaluation reports (use detailed, terminal, markdown, or json)", format)
+		return fmt.Errorf("format %q not supported for evaluation reports (use box, detailed, terminal, markdown, or json)", format)
 	}
 }
 
