@@ -231,15 +231,48 @@ func (r *Renderer) formatCategoryLine(cr rubric.CategoryResult) string {
 		name = name[:21] + "..."
 	}
 
-	scoreColor := r.scoreColor(cr.Score)
-	icon := cr.Score.Icon()
-	scoreText := strings.ToUpper(string(cr.Score))
+	var scoreText string
+	var scoreColor string
+	var icon string
+
+	if cr.NumericScore != nil {
+		score := int(*cr.NumericScore)
+		scoreText = fmt.Sprintf("%d/5", score)
+		scoreColor = r.numericScoreColor(score)
+		icon = numericScoreIcon(score)
+	} else {
+		scoreColor = r.scoreColor(cr.Score)
+		icon = cr.Score.Icon()
+		scoreText = strings.ToUpper(string(cr.Score))
+	}
 
 	reasoning := truncate(cr.Reasoning, 35)
 
 	return fmt.Sprintf("  %-24s %s %s%-7s%s  %s%s%s",
 		name, icon, r.c(scoreColor), scoreText, r.c(Reset),
 		r.c(Gray), reasoning, r.c(Reset))
+}
+
+func (r *Renderer) numericScoreColor(score int) string {
+	switch {
+	case score >= 5:
+		return Green
+	case score >= 3:
+		return Yellow
+	default:
+		return Red
+	}
+}
+
+func numericScoreIcon(score int) string {
+	switch {
+	case score >= 5:
+		return "🟢"
+	case score >= 3:
+		return "🟡"
+	default:
+		return "🔴"
+	}
 }
 
 func (r *Renderer) finalMessage(report *rubric.Rubric) string {

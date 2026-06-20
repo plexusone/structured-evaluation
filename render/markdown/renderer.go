@@ -72,13 +72,12 @@ func (r *Renderer) Render(report *rubric.Rubric) error {
 	b.WriteString("|----------|-------|--------|----------|----------|\n")
 
 	for _, cr := range report.Categories {
-		icon := scoreIcon(cr.Score)
 		required := ""
 		// Note: We don't have required info in CategoryResult, would need rubric
-		b.WriteString(fmt.Sprintf("| **%s** | %s %s | - | %s | %s |\n",
+		scoreStr := formatScore(cr)
+		b.WriteString(fmt.Sprintf("| **%s** | %s | - | %s | %s |\n",
 			cr.Category,
-			icon,
-			strings.Title(string(cr.Score)),
+			scoreStr,
 			required,
 			truncate(cr.Reasoning, 60)))
 	}
@@ -186,7 +185,6 @@ func (r *Renderer) RenderWithRubric(report *rubric.Rubric, rubricSet *rubric.Rub
 	b.WriteString("|----------|-------|--------|----------|----------|\n")
 
 	for _, cr := range report.Categories {
-		icon := scoreIcon(cr.Score)
 		weight := "-"
 		required := ""
 
@@ -202,10 +200,10 @@ func (r *Renderer) RenderWithRubric(report *rubric.Rubric, rubricSet *rubric.Rub
 			}
 		}
 
-		b.WriteString(fmt.Sprintf("| **%s** | %s %s | %s | %s | %s |\n",
+		scoreStr := formatScore(cr)
+		b.WriteString(fmt.Sprintf("| **%s** | %s | %s | %s | %s |\n",
 			cr.Category,
-			icon,
-			strings.Title(string(cr.Score)),
+			scoreStr,
 			weight,
 			required,
 			truncate(cr.Reasoning, 50)))
@@ -375,4 +373,30 @@ func truncate(s string, maxLen int) string {
 		return s
 	}
 	return s[:maxLen-3] + "..."
+}
+
+// formatScore formats a category score, preferring numeric score when available.
+// Returns "5/5 🟢" format for numeric scores, "🟢 Pass" for categorical only.
+func formatScore(cr rubric.CategoryResult) string {
+	if cr.NumericScore != nil {
+		score := int(*cr.NumericScore)
+		icon := numericScoreIcon(score)
+		return fmt.Sprintf("%d/5 %s", score, icon)
+	}
+	// Fall back to categorical
+	icon := scoreIcon(cr.Score)
+	return fmt.Sprintf("%s %s", icon, strings.Title(string(cr.Score)))
+}
+
+// numericScoreIcon returns an icon based on 5-point scale.
+// 5 = green, 3-4 = yellow, 1-2 = red
+func numericScoreIcon(score int) string {
+	switch {
+	case score >= 5:
+		return "🟢"
+	case score >= 3:
+		return "🟡"
+	default:
+		return "🔴"
+	}
 }
