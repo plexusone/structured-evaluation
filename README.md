@@ -89,7 +89,7 @@ go get github.com/plexusone/structured-evaluation
 | `claims` | ClaimsReport, Claim, Validation, Verdict for source verification |
 | `summary` | SummaryReport, TeamSection, TaskResult for GO/NO-GO checks |
 | `combine` | DAG-based report aggregation using Kahn's algorithm |
-| `render/box` | Box-format terminal renderer for summary reports |
+| `render/box` | ASCII box renderer for deterministic TUI output |
 | `render/detailed` | Detailed terminal renderer for rubric reports |
 | `render/terminal` | ANSI-colored terminal renderer with UTF8 icons |
 | `render/markdown` | Markdown report renderer |

@@ -9,7 +9,7 @@ Structured Evaluation provides multiple renderers for displaying reports in diff
 | `render/terminal` | ANSI terminal | CLI output with colors |
 | `render/markdown` | Markdown | Documentation, GitHub |
 | `render/detailed` | Detailed terminal | Verbose CLI output |
-| `render/box` | Box format | Summary reports |
+| `render/box` | ASCII box format | Deterministic TUI output |
 
 ## Terminal Renderer
 
@@ -25,21 +25,21 @@ err := renderer.Render(report)
 ### Output Example
 
 ```
-┌──────────────────────────────────────────────────────────────────────────┐
+┌───────────────────────────────────────────────────────────────────────────┐
 │ EVALUATION REPORT: requirements.md                                        │
-├──────────────────────────────────────────────────────────────────────────┤
+├───────────────────────────────────────────────────────────────────────────┤
 │ Results:  2 pass, 1 partial, 1 fail                                       │
 │ Decision: CONDITIONAL (1 Critical, 0 High, 2 Medium)                      │
-├──────────────────────────────────────────────────────────────────────────┤
+├───────────────────────────────────────────────────────────────────────────┤
 │ RESULTS BY CATEGORY                                                       │
-├──────────────────────────────────────────────────────────────────────────┤
+├───────────────────────────────────────────────────────────────────────────┤
 │   problem_definition     🟢 PASS     Clear problem with measurable impact │
 │   user_stories           🟡 PARTIAL  Some lack acceptance criteria        │
 │   success_metrics        🔴 FAIL     No quantitative metrics defined      │
 │   scope_definition       🟢 PASS     Clear boundaries established         │
-├──────────────────────────────────────────────────────────────────────────┤
+├───────────────────────────────────────────────────────────────────────────┤
 │ ⚠️ PRD-REVIEW CONDITIONAL (2/4 categories passed)                         │
-└──────────────────────────────────────────────────────────────────────────┘
+└───────────────────────────────────────────────────────────────────────────┘
 ```
 
 ### Color Options
@@ -113,16 +113,44 @@ err := renderer.Render(report)
 
 ## Box Renderer
 
-For summary reports (GO/NO-GO):
+ASCII box format for deterministic TUI output. Works with both evaluation (rubric) and summary reports.
+
+### Evaluation Reports
 
 ```go
 import "github.com/plexusone/structured-evaluation/render/box"
 
+renderer := box.NewEvaluationRenderer(os.Stdout)
+err := renderer.Render(&rubricReport)
+```
+
+#### Output Example
+
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║                           EVALUATION REPORT                               ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║                            ✅  PASS  ✅                                   ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║ CATEGORY                   ST SCORE  DETAIL                               ║
+╟──────────────────────────────────────────────────────────────────────────╢
+║ problem_definition         🟢 pass   Clear problem statement              ║
+║ user_stories               🟢 4/5    Good coverage of use cases           ║
+║ success_metrics            🟡 partial Missing baseline metrics            ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║ Categories: 2 pass, 1 partial, 0 fail                                     ║
+║ Findings:   0 critical, 0 high, 1 medium, 0 low                           ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
+
+### Summary Reports
+
+```go
 renderer := box.NewRenderer(os.Stdout)
 err := renderer.Render(&summaryReport)
 ```
 
-### Output Example
+#### Output Example
 
 ```
 ╔══════════════════════════════════════════════════════════════════════════╗

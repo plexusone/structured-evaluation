@@ -19,7 +19,7 @@ sevaluation render <file> [--format=<format>]
 | `terminal` | ANSI colors + UTF8 icons | Rubric |
 | `markdown` | Markdown output | Rubric |
 | `detailed` | Verbose terminal output | Rubric |
-| `box` | Box-drawing format | Summary |
+| `box` | ASCII box format (deterministic) | Both |
 | `json` | Pretty-printed JSON | Both |
 
 ### Examples
