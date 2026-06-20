@@ -7,6 +7,28 @@
   "commitConvention": "conventional",
   "releases": [
     {
+      "version": "v0.8.0",
+      "date": "2026-06-20",
+      "highlights": [
+        { "description": "Box format renderer now supports evaluation (rubric) reports" },
+        { "description": "Numeric score display (1-5 scale) in terminal and markdown renderers" }
+      ],
+      "added": [
+        { "description": "`box.NewEvaluationRenderer()` for rendering rubric reports in ASCII box format" },
+        { "description": "Numeric score display (e.g., `4/5 🟡`) in terminal and markdown renderers" },
+        { "description": "`formatScore()` helper in markdown renderer for dual-scale display" },
+        { "description": "`numericScoreColor()` and `numericScoreIcon()` helpers in terminal renderer" }
+      ],
+      "changed": [
+        { "description": "CLI `render` command now supports `box` format for evaluation reports" }
+      ],
+      "documentation": [
+        { "description": "Updated CLI commands documentation with box format for both report types", "commit": "d9b21a3" },
+        { "description": "Updated rendering documentation with evaluation report box examples", "commit": "d9b21a3" },
+        { "description": "Updated README package description for render/box", "commit": "d9b21a3" }
+      ]
+    },
+    {
       "version": "v0.7.0",
       "date": "2026-06-07",
       "highlights": [
