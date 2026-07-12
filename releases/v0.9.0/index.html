@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://plexusone.github.io/structured-evaluation/releases/v0.8.0/">
+        <link rel="canonical" href="https://plexusone.github.io/structured-evaluation/releases/v0.9.0/">
       
       
-        <link rel="prev" href="../v0.9.0/">
+        <link rel="prev" href="../changelog/">
       
       
-        <link rel="next" href="../v0.7.0/">
+        <link rel="next" href="../v0.8.0/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>v0.8.0 - Structured Evaluation</title>
+        <title>v0.9.0 - Structured Evaluation</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#v080" class="md-skip">
+        <a href="#v090" class="md-skip">
           Skip to content
         </a>
       
@@ -121,7 +121,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              v0.8.0
+              v0.9.0
             
           </span>
         </div>
@@ -1093,34 +1093,6 @@
                 
   
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../v0.9.0/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    v0.9.0
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
     
   
   
@@ -1140,7 +1112,7 @@
   <span class="md-ellipsis">
     
   
-    v0.8.0
+    v0.9.0
   
 
     
@@ -1158,7 +1130,7 @@
   <span class="md-ellipsis">
     
   
-    v0.8.0
+    v0.9.0
   
 
     
@@ -1218,10 +1190,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#box-format-for-evaluation-reports" class="md-nav__link">
+  <a href="#integerscore-type" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Box Format for Evaluation Reports
+        IntegerScore Type
       
     </span>
   </a>
@@ -1229,10 +1201,65 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#numeric-score-display" class="md-nav__link">
+  <a href="#reasoncode-system" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Numeric Score Display
+        ReasonCode System
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#coveragereport" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CoverageReport
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enhanced-categoryresult" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enhanced CategoryResult
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enhanced-finding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enhanced Finding
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extensions-field" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extensions Field
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#minintscore-pass-criteria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MinIntScore Pass Criteria
       
     </span>
   </a>
@@ -1257,10 +1284,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#deterministic-tui-output" class="md-nav__link">
+  <a href="#llm-as-judge-evaluations" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Deterministic TUI Output
+        LLM-as-Judge Evaluations
       
     </span>
   </a>
@@ -1268,10 +1295,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#human-comparison-studies" class="md-nav__link">
+  <a href="#automated-repair-workflows" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Human Comparison Studies
+        Automated Repair Workflows
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#human-review-routing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Human Review Routing
       
     </span>
   </a>
@@ -1300,6 +1338,17 @@
     <span class="md-ellipsis">
       
         Additive Changes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#schema-version" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Schema Version
       
     </span>
   </a>
@@ -1348,6 +1397,34 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../v0.8.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.8.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -1617,10 +1694,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#box-format-for-evaluation-reports" class="md-nav__link">
+  <a href="#integerscore-type" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Box Format for Evaluation Reports
+        IntegerScore Type
       
     </span>
   </a>
@@ -1628,10 +1705,65 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#numeric-score-display" class="md-nav__link">
+  <a href="#reasoncode-system" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Numeric Score Display
+        ReasonCode System
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#coveragereport" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CoverageReport
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enhanced-categoryresult" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enhanced CategoryResult
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enhanced-finding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enhanced Finding
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extensions-field" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extensions Field
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#minintscore-pass-criteria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MinIntScore Pass Criteria
       
     </span>
   </a>
@@ -1656,10 +1788,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#deterministic-tui-output" class="md-nav__link">
+  <a href="#llm-as-judge-evaluations" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Deterministic TUI Output
+        LLM-as-Judge Evaluations
       
     </span>
   </a>
@@ -1667,10 +1799,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#human-comparison-studies" class="md-nav__link">
+  <a href="#automated-repair-workflows" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Human Comparison Studies
+        Automated Repair Workflows
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#human-review-routing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Human Review Routing
       
     </span>
   </a>
@@ -1699,6 +1842,17 @@
     <span class="md-ellipsis">
       
         Additive Changes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#schema-version" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Schema Version
       
     </span>
   </a>
@@ -1763,112 +1917,160 @@
   
 
 
-<h1 id="v080">v0.8.0<a class="headerlink" href="#v080" title="Permanent link">&para;</a></h1>
-<p><strong>Release Date:</strong> 2026-06-20</p>
+<h1 id="v090">v0.9.0<a class="headerlink" href="#v090" title="Permanent link">&para;</a></h1>
+<p><strong>Release Date:</strong> 2026-07-12</p>
 <h2 id="highlights">Highlights<a class="headerlink" href="#highlights" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Box Format for Evaluation Reports</strong>: ASCII box renderer now supports rubric reports</li>
-<li><strong>Numeric Score Display</strong>: Renderers show 1-5 scale scores with color-coded icons</li>
+<li><strong>IntegerScore Type</strong>: 1-5 scale scoring optimized for LLM judges</li>
+<li><strong>ReasonCode System</strong>: Standardized finding codes for automated repair workflows</li>
+<li><strong>CoverageReport</strong>: Generic coverage tracking via Extensions</li>
+<li><strong>v2 Schema Fields</strong>: Confidence, blocking codes, and domain extensions</li>
 </ul>
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
-<p>v0.8.0 extends the box format renderer to support evaluation (rubric) reports, providing a deterministic ASCII output suitable for TUI applications. The release also adds numeric score display in terminal and markdown renderers, showing scores like <code>4/5</code> alongside categorical pass/partial/fail values.</p>
+<p>v0.9.0 introduces a comprehensive v2 schema for LLM-as-Judge evaluations. The new <code>IntegerScore</code> type provides a 1-5 scale that research shows LLMs are most reliable at. The <code>ReasonCode</code> system enables automated repair workflows by categorizing findings with machine-readable codes. Coverage tracking is now generic and stored via the new <code>Extensions</code> field.</p>
 <h2 id="new-features">New Features<a class="headerlink" href="#new-features" title="Permanent link">&para;</a></h2>
-<h3 id="box-format-for-evaluation-reports">Box Format for Evaluation Reports<a class="headerlink" href="#box-format-for-evaluation-reports" title="Permanent link">&para;</a></h3>
-<p>The box renderer now supports rubric reports with a clean ASCII layout:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="s">&quot;github.com/plexusone/structured-evaluation/render/box&quot;</span>
+<h3 id="integerscore-type">IntegerScore Type<a class="headerlink" href="#integerscore-type" title="Permanent link">&para;</a></h3>
+<p>A new 1-5 integer evaluation scale optimized for LLM judges:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="s">&quot;github.com/plexusone/structured-evaluation/rubric&quot;</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nx">renderer</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">box</span><span class="p">.</span><span class="nx">NewEvaluationRenderer</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">)</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">renderer</span><span class="p">.</span><span class="nx">Render</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">rubricReport</span><span class="p">)</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1">// Score constants</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="nx">rubric</span><span class="p">.</span><span class="nx">ScoreUnacceptable</span><span class="w">  </span><span class="c1">// 1</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nx">rubric</span><span class="p">.</span><span class="nx">ScoreMajorRevisions</span><span class="w"> </span><span class="c1">// 2</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="nx">rubric</span><span class="p">.</span><span class="nx">ScoreAcceptable</span><span class="w">    </span><span class="c1">// 3</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="nx">rubric</span><span class="p">.</span><span class="nx">ScoreGood</span><span class="w">          </span><span class="c1">// 4</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="nx">rubric</span><span class="p">.</span><span class="nx">ScoreExcellent</span><span class="w">     </span><span class="c1">// 5</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1">// Helper methods</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="nx">score</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">ScoreGood</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="nx">score</span><span class="p">.</span><span class="nx">String</span><span class="p">()</span><span class="w">        </span><span class="c1">// &quot;Good&quot;</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="nx">score</span><span class="p">.</span><span class="nx">ToCategorical</span><span class="p">()</span><span class="w"> </span><span class="c1">// ScorePass</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="nx">score</span><span class="p">.</span><span class="nx">IsValid</span><span class="p">()</span><span class="w">       </span><span class="c1">// true</span>
 </code></pre></div>
-<p>Output example:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>╔══════════════════════════════════════════════════════════════════════════╗
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>║                           EVALUATION REPORT                               ║
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>╠══════════════════════════════════════════════════════════════════════════╣
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>║                            ✅  PASS  ✅                                   ║
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>╠══════════════════════════════════════════════════════════════════════════╣
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>║ CATEGORY                   ST SCORE  DETAIL                               ║
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>╟──────────────────────────────────────────────────────────────────────────╢
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>║ problem_definition         🟢 pass   Clear problem statement              ║
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>║ user_stories               🟢 4/5    Good coverage of use cases           ║
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>║ success_metrics            🟡 partial Missing baseline metrics            ║
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>╠══════════════════════════════════════════════════════════════════════════╣
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>║ Categories: 2 pass, 1 partial, 0 fail                                     ║
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>║ Findings:   0 critical, 0 high, 1 medium, 0 low                           ║
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>╚══════════════════════════════════════════════════════════════════════════╝
+<h3 id="reasoncode-system">ReasonCode System<a class="headerlink" href="#reasoncode-system" title="Permanent link">&para;</a></h3>
+<p>Standardized finding identifiers for automated repair:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1">// Category prefixes</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nx">rubric</span><span class="p">.</span><span class="nx">CategoryREQ</span><span class="w">    </span><span class="c1">// Requirements</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nx">rubric</span><span class="p">.</span><span class="nx">CategorySEC</span><span class="w">    </span><span class="c1">// Security</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="nx">rubric</span><span class="p">.</span><span class="nx">CategoryARCH</span><span class="w">   </span><span class="c1">// Architecture</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="nx">rubric</span><span class="p">.</span><span class="nx">CategoryDOC</span><span class="w">    </span><span class="c1">// Documentation</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="c1">// Pre-defined codes</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="nx">rubric</span><span class="p">.</span><span class="nx">CodeREQAmbiguous</span><span class="w">      </span><span class="c1">// &quot;REQ-AMBIGUOUS&quot;</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="nx">rubric</span><span class="p">.</span><span class="nx">CodeSECMissingAuth</span><span class="w">    </span><span class="c1">// &quot;SEC-MISSING_AUTH&quot;</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="nx">rubric</span><span class="p">.</span><span class="nx">CodeMETRICNoBaseline</span><span class="w">  </span><span class="c1">// &quot;METRIC-NO_BASELINE&quot;</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="c1">// Get repair prompt for automated fixes</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="nx">finding</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewFindingWithCode</span><span class="p">(</span><span class="s">&quot;f1&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;requirements&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">CodeREQAmbiguous</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Ambiguous&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;...&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="nx">prompt</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">finding</span><span class="p">.</span><span class="nx">GetRepairPrompt</span><span class="p">()</span>
 </code></pre></div>
-<p>CLI usage:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Box format for evaluation reports</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>sevaluation<span class="w"> </span>render<span class="w"> </span>eval.json<span class="w"> </span>--format<span class="o">=</span>box
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1"># Also accepts &quot;ascii&quot; alias</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>sevaluation<span class="w"> </span>render<span class="w"> </span>eval.json<span class="w"> </span>--format<span class="o">=</span>ascii
+<h3 id="coveragereport">CoverageReport<a class="headerlink" href="#coveragereport" title="Permanent link">&para;</a></h3>
+<p>Generic coverage tracking for spec completeness:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nx">cr</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewCoverageReport</span><span class="p">()</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nx">cr</span><span class="p">.</span><span class="nx">SetSection</span><span class="p">(</span><span class="s">&quot;components&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;card&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;dialog&quot;</span><span class="p">})</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nx">cr</span><span class="p">.</span><span class="nx">SetSection</span><span class="p">(</span><span class="s">&quot;foundations&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span><span class="p">)</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nx">cr</span><span class="p">.</span><span class="nx">ComputeOverall</span><span class="p">()</span><span class="w"> </span><span class="c1">// Simple average</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="c1">// Weighted average</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="nx">weights</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">float64</span><span class="p">{</span><span class="s">&quot;components&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">2.0</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;foundations&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.0</span><span class="p">}</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="nx">cr</span><span class="p">.</span><span class="nx">ComputeOverallWeighted</span><span class="p">(</span><span class="nx">weights</span><span class="p">)</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="c1">// Store in rubric via Extensions</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="nx">r</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewRubric</span><span class="p">(</span><span class="s">&quot;dss-spec&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;material-v3&quot;</span><span class="p">)</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="nx">r</span><span class="p">.</span><span class="nx">SetCoverage</span><span class="p">(</span><span class="nx">cr</span><span class="p">)</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="c1">// Retrieve later</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="nx">coverage</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">r</span><span class="p">.</span><span class="nx">GetCoverage</span><span class="p">()</span>
 </code></pre></div>
-<h3 id="numeric-score-display">Numeric Score Display<a class="headerlink" href="#numeric-score-display" title="Permanent link">&para;</a></h3>
-<p>Renderers now display numeric scores (from Likert scales) with color-coded icons:</p>
-<table>
-<thead>
-<tr>
-<th>Score</th>
-<th>Display</th>
-<th>Icon</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>5</td>
-<td><code>5/5</code></td>
-<td>🟢</td>
-</tr>
-<tr>
-<td>3-4</td>
-<td><code>4/5</code></td>
-<td>🟡</td>
-</tr>
-<tr>
-<td>1-2</td>
-<td><code>2/5</code></td>
-<td>🔴</td>
-</tr>
-</tbody>
-</table>
-<p>When a category has both numeric and categorical scores, the numeric score is displayed:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nx">result</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewCategoryResultWithNumeric</span><span class="p">(</span><span class="s">&quot;quality&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">ScorePass</span><span class="p">,</span><span class="w"> </span><span class="mf">4.5</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Good quality&quot;</span><span class="p">)</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="c1">// Renders as: quality  🟡 4/5  Good quality</span>
+<h3 id="enhanced-categoryresult">Enhanced CategoryResult<a class="headerlink" href="#enhanced-categoryresult" title="Permanent link">&para;</a></h3>
+<p>Categories now support IntScore and Confidence:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nx">result</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewCategoryResult</span><span class="p">(</span><span class="s">&quot;quality&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">ScorePass</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Good quality&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nx">result</span><span class="p">.</span><span class="nx">SetIntScore</span><span class="p">(</span><span class="nx">rubric</span><span class="p">.</span><span class="nx">ScoreGood</span><span class="p">)</span><span class="w">     </span><span class="c1">// 1-5 scale</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nx">result</span><span class="p">.</span><span class="nx">SetConfidence</span><span class="p">(</span><span class="mf">0.85</span><span class="p">)</span><span class="w">               </span><span class="c1">// 0.0-1.0</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="nx">result</span><span class="p">.</span><span class="nx">AddReasonCode</span><span class="p">(</span><span class="nx">rubric</span><span class="p">.</span><span class="nx">CodeREQAmbiguous</span><span class="p">)</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="c1">// Check if human review needed</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="k">if</span><span class="w"> </span><span class="nx">result</span><span class="p">.</span><span class="nx">HasLowConfidence</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">    </span><span class="c1">// Route to human reviewer</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="p">}</span>
+</code></pre></div>
+<h3 id="enhanced-finding">Enhanced Finding<a class="headerlink" href="#enhanced-finding" title="Permanent link">&para;</a></h3>
+<p>Findings now support reason codes and locations:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nx">finding</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewFinding</span><span class="p">(</span><span class="s">&quot;f1&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;requirements&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">SeverityHigh</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Missing auth&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;No auth defined&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nx">finding</span><span class="p">.</span><span class="nx">SetCode</span><span class="p">(</span><span class="nx">rubric</span><span class="p">.</span><span class="nx">CodeSECMissingAuth</span><span class="p">)</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nx">finding</span><span class="p">.</span><span class="nx">SetLocation</span><span class="p">(</span><span class="s">&quot;Section 3.2&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="nx">finding</span><span class="p">.</span><span class="nx">SetRecommendation</span><span class="p">(</span><span class="s">&quot;Add OAuth2 authentication&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="c1">// Get automated repair prompt</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="nx">prompt</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">finding</span><span class="p">.</span><span class="nx">GetRepairPrompt</span><span class="p">()</span>
+</code></pre></div>
+<h3 id="extensions-field">Extensions Field<a class="headerlink" href="#extensions-field" title="Permanent link">&para;</a></h3>
+<p>Store domain-specific metadata without schema changes:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nx">r</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewRubric</span><span class="p">(</span><span class="s">&quot;custom&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;doc.md&quot;</span><span class="p">)</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nx">r</span><span class="p">.</span><span class="nx">SetExtension</span><span class="p">(</span><span class="s">&quot;coverage&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">coverageReport</span><span class="p">)</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="nx">r</span><span class="p">.</span><span class="nx">SetExtension</span><span class="p">(</span><span class="s">&quot;metrics&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">metricsData</span><span class="p">)</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="c1">// Retrieve</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="k">if</span><span class="w"> </span><span class="nx">r</span><span class="p">.</span><span class="nx">HasExtension</span><span class="p">(</span><span class="s">&quot;coverage&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">    </span><span class="nx">coverage</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">r</span><span class="p">.</span><span class="nx">GetCoverage</span><span class="p">()</span><span class="w"> </span><span class="c1">// Type-safe retrieval</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="p">}</span>
+</code></pre></div>
+<h3 id="minintscore-pass-criteria">MinIntScore Pass Criteria<a class="headerlink" href="#minintscore-pass-criteria" title="Permanent link">&para;</a></h3>
+<p>Require minimum integer scores for approval:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nx">r</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewRubric</span><span class="p">(</span><span class="s">&quot;eval&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;doc.md&quot;</span><span class="p">)</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nx">r</span><span class="p">.</span><span class="nx">PassCriteria</span><span class="p">.</span><span class="nx">MinIntScore</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">ScoreGood</span><span class="w"> </span><span class="c1">// Require 4+</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="nx">r</span><span class="p">.</span><span class="nx">Evaluate</span><span class="p">(</span><span class="kc">nil</span><span class="p">)</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="c1">// Decision will fail if computed IntScore &lt; 4</span>
 </code></pre></div>
 <h2 id="use-cases">Use Cases<a class="headerlink" href="#use-cases" title="Permanent link">&para;</a></h2>
-<h3 id="deterministic-tui-output">Deterministic TUI Output<a class="headerlink" href="#deterministic-tui-output" title="Permanent link">&para;</a></h3>
-<p>Use box format when you need consistent, color-free output for terminal UIs or log files:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Redirect to log file (no ANSI codes)</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>sevaluation<span class="w"> </span>render<span class="w"> </span>report.json<span class="w"> </span>--format<span class="o">=</span>box<span class="w"> </span>&gt;<span class="w"> </span>evaluation.log
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># Display in simple terminal</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>sevaluation<span class="w"> </span>render<span class="w"> </span>report.json<span class="w"> </span>--format<span class="o">=</span>box
+<h3 id="llm-as-judge-evaluations">LLM-as-Judge Evaluations<a class="headerlink" href="#llm-as-judge-evaluations" title="Permanent link">&para;</a></h3>
+<p>Use IntegerScore for more reliable LLM evaluations:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1">// LLMs are more reliable with 5-level scales</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="nx">result</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewCategoryResultWithIntScore</span><span class="p">(</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="s">&quot;completeness&quot;</span><span class="p">,</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">ScoreGood</span><span class="p">,</span><span class="w">     </span><span class="c1">// 4</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">    </span><span class="mf">0.9</span><span class="p">,</span><span class="w">                   </span><span class="c1">// High confidence</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">    </span><span class="s">&quot;Meets requirements&quot;</span><span class="p">,</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="p">)</span>
 </code></pre></div>
-<h3 id="human-comparison-studies">Human Comparison Studies<a class="headerlink" href="#human-comparison-studies" title="Permanent link">&para;</a></h3>
-<p>Display Likert scores for reports that use numeric scales:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1">// Create Likert-scale evaluation</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nx">cat</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewCategory</span><span class="p">(</span><span class="s">&quot;quality&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Quality&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">).</span><span class="nx">WithLikert5</span><span class="p">(</span><span class="nx">rubric</span><span class="p">.</span><span class="nx">StandardLikert5Anchors</span><span class="p">())</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="nx">result</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewCategoryResultFromLikert</span><span class="p">(</span><span class="s">&quot;quality&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nx">config</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Good&quot;</span><span class="p">)</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="c1">// Render shows &quot;4/5 🟡&quot; instead of just &quot;PASS&quot;</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="nx">renderer</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">terminal</span><span class="p">.</span><span class="nx">New</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">)</span>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="nx">renderer</span><span class="p">.</span><span class="nx">Render</span><span class="p">(</span><span class="nx">report</span><span class="p">)</span>
+<h3 id="automated-repair-workflows">Automated Repair Workflows<a class="headerlink" href="#automated-repair-workflows" title="Permanent link">&para;</a></h3>
+<p>Use ReasonCodes to drive automated fixes:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nx">findings</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">report</span><span class="p">.</span><span class="nx">Findings</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">f</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">findings</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">Code</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">        </span><span class="nx">prompt</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">GetRepairPrompt</span><span class="p">()</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">        </span><span class="c1">// Send to LLM for automated fix</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="p">}</span>
+</code></pre></div>
+<h3 id="human-review-routing">Human Review Routing<a class="headerlink" href="#human-review-routing" title="Permanent link">&para;</a></h3>
+<p>Route low-confidence evaluations to humans:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">if</span><span class="w"> </span><span class="nx">report</span><span class="p">.</span><span class="nx">NeedsHumanReview</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">    </span><span class="c1">// Send to human review queue</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="p">}</span>
 </code></pre></div>
 <h2 id="migration-guide">Migration Guide<a class="headerlink" href="#migration-guide" title="Permanent link">&para;</a></h2>
 <h3 id="additive-changes">Additive Changes<a class="headerlink" href="#additive-changes" title="Permanent link">&para;</a></h3>
-<p>All changes in v0.8.0 are additive:</p>
+<p>All changes in v0.9.0 are additive:</p>
 <ul>
-<li>New <code>box.NewEvaluationRenderer()</code> function</li>
-<li>CLI accepts <code>box</code> and <code>ascii</code> formats for evaluation reports</li>
-<li>Numeric score display is automatic when <code>NumericScore</code> is set</li>
+<li>New types: <code>IntegerScore</code>, <code>ReasonCode</code>, <code>CoverageSection</code>, <code>CoverageReport</code></li>
+<li>New fields: <code>IntScore</code>, <code>Confidence</code>, <code>ReasonCodes</code>, <code>Extensions</code>, <code>Blocking</code></li>
+<li>New methods: <code>SetCoverage()</code>, <code>GetCoverage()</code>, <code>SetExtension()</code>, <code>GetExtension()</code></li>
 </ul>
+<h3 id="schema-version">Schema Version<a class="headerlink" href="#schema-version" title="Permanent link">&para;</a></h3>
+<p>v0.9.0 introduces schema versioning:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nx">r</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewRubric</span><span class="p">(</span><span class="s">&quot;eval&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;doc.md&quot;</span><span class="p">)</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="nx">r</span><span class="p">.</span><span class="nx">SchemaVersion</span><span class="w"> </span><span class="c1">// &quot;v2&quot;</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="nx">r</span><span class="p">.</span><span class="nx">IsV2</span><span class="p">()</span><span class="w">        </span><span class="c1">// true</span>
+</code></pre></div>
 <h3 id="no-breaking-changes">No Breaking Changes<a class="headerlink" href="#no-breaking-changes" title="Permanent link">&para;</a></h3>
-<p>No breaking changes in this release.</p>
+<p>No breaking changes in this release. Existing code continues to work unchanged.</p>
 <h2 id="documentation">Documentation<a class="headerlink" href="#documentation" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Updated <a href="../../cli/commands/">CLI Commands</a> with box format for evaluation reports</li>
-<li>Updated <a href="../../features/rendering/">Rendering</a> with evaluation box examples</li>
-<li>Updated README package descriptions</li>
+<li>Added IntegerScore type with 1-5 scale scoring</li>
+<li>Added ReasonCode system for categorized findings</li>
+<li>Added CoverageReport for generic coverage tracking</li>
+<li>Updated validation for v2 schema fields</li>
 </ul>
 <h2 id="full-changelog">Full Changelog<a class="headerlink" href="#full-changelog" title="Permanent link">&para;</a></h2>
 <p>See <a href="../changelog/">CHANGELOG.md</a> for the complete list of changes.</p>
