@@ -6,10 +6,16 @@ Pass criteria define the thresholds for evaluation decisions. They control how f
 
 ```go
 type PassCriteria struct {
-    MaxCritical    int  `json:"max_critical"`     // Max critical findings allowed (-1 = unlimited)
-    MaxHigh        int  `json:"max_high"`         // Max high findings allowed (-1 = unlimited)
-    MaxMedium      int  `json:"max_medium"`       // Max medium findings allowed (-1 = unlimited)
-    RequireAllPass bool `json:"require_all_pass"` // Require all categories to pass
+    MinCategoriesPassing string        `json:"minCategoriesPassing"` // "all", "all_required", or number
+    MaxFindings          *FindingLimits `json:"maxFindingsSeverity"`  // Max findings by severity
+    MinIntScore          IntegerScore  `json:"minIntScore"`          // Minimum overall score (1-5)
+}
+
+type FindingLimits struct {
+    Critical int `json:"critical"` // Max critical findings (-1 = unlimited)
+    High     int `json:"high"`     // Max high findings (-1 = unlimited)
+    Medium   int `json:"medium"`   // Max medium findings (-1 = unlimited)
+    Low      int `json:"low"`      // Max low findings (-1 = unlimited)
 }
 ```
 
@@ -18,10 +24,13 @@ type PassCriteria struct {
 ```go
 func DefaultPassCriteria() PassCriteria {
     return PassCriteria{
-        MaxCritical:    0,  // No critical findings allowed
-        MaxHigh:        0,  // No high findings allowed
-        MaxMedium:      -1, // Unlimited medium findings
-        RequireAllPass: false,
+        MinCategoriesPassing: "all_required",
+        MaxFindings: &FindingLimits{
+            Critical: 0,  // No critical findings allowed
+            High:     0,  // No high findings allowed
+            Medium:   -1, // Unlimited medium findings
+            Low:      -1, // Unlimited low findings
+        },
     }
 }
 ```
@@ -31,7 +40,7 @@ With default criteria:
 - ❌ Any critical finding → Fail
 - ❌ Any high finding → Fail
 - ✅ Medium/low/info findings → Allowed
-- ✅ Partial categories → Allowed
+- ✅ Partial categories → Allowed (if not required)
 
 ## Strict Criteria
 
@@ -163,6 +172,55 @@ sevaluation check report.json
 # Exit codes:
 # 0 = pass
 # 1 = fail or conditional
+```
+
+## MinIntScore (v0.9.0)
+
+Require a minimum overall integer score (1-5) for approval:
+
+```go
+criteria := rubric.PassCriteria{
+    MinCategoriesPassing: "all_required",
+    MaxFindings: &rubric.FindingLimits{
+        Critical: 0,
+        High:     0,
+        Medium:   -1,
+        Low:      -1,
+    },
+    MinIntScore: rubric.ScoreGood,  // Require 4+ overall
+}
+
+report.SetPassCriteria(criteria)
+report.Evaluate(rubricSet)
+
+// If computed IntScore < 4, report.Pass = false
+```
+
+### Use Cases
+
+```go
+// Quality gate - require "Good" (4) or better
+criteria.MinIntScore = rubric.ScoreGood
+
+// Strict gate - require "Excellent" (5)
+criteria.MinIntScore = rubric.ScoreExcellent
+
+// Minimum viable - require "Acceptable" (3) or better
+criteria.MinIntScore = rubric.ScoreAcceptable
+```
+
+### Combined with Finding Limits
+
+MinIntScore is checked after IntScore is computed:
+
+```go
+// Both must pass:
+// 1. No critical/high findings
+// 2. Overall score >= 4
+criteria := rubric.PassCriteria{
+    MaxFindings: &rubric.FindingLimits{Critical: 0, High: 0, Medium: -1, Low: -1},
+    MinIntScore: rubric.ScoreGood,
+}
 ```
 
 ## Next Steps

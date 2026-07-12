@@ -195,6 +195,71 @@ Use the CLI for quick validation:
 sevaluation lint report.json --strict
 ```
 
+## Extensions (v0.9.0)
+
+Store domain-specific metadata without modifying the core schema:
+
+```go
+report := rubric.NewRubric("dss-spec", "material-v3")
+
+// Set custom extension data
+report.SetExtension("coverage", coverageReport)
+report.SetExtension("metrics", metricsData)
+report.SetExtension("customField", "value")
+
+// Check and retrieve
+if report.HasExtension("coverage") {
+    data := report.GetExtension("coverage")
+}
+```
+
+### Coverage Report
+
+A built-in extension type for tracking spec coverage:
+
+```go
+// Create coverage report
+cr := rubric.NewCoverageReport()
+cr.SetSection("components", 10, 8, []string{"card", "dialog"})  // 80%
+cr.SetSection("foundations", 4, 4, nil)                          // 100%
+cr.SetSection("patterns", 5, 3, []string{"form", "wizard"})     // 60%
+
+// Compute overall (simple average)
+cr.ComputeOverall()  // 80%
+
+// Or weighted average
+weights := map[string]float64{
+    "components":  2.0,  // More important
+    "foundations": 1.0,
+    "patterns":    1.0,
+}
+cr.ComputeOverallWeighted(weights)
+
+// Store in rubric
+report.SetCoverage(cr)
+
+// Retrieve later (type-safe)
+coverage := report.GetCoverage()
+coverage.Overall                        // 80
+coverage.GetSection("components").Total // 10
+```
+
+### Coverage Methods
+
+```go
+cr := rubric.NewCoverageReport()
+cr.SetSection("a", 10, 10, nil)  // 100%
+cr.SetSection("b", 10, 5, nil)   // 50%
+
+// Check thresholds
+cr.MeetsThreshold(80)           // false (overall < 80)
+cr.AllComplete()                // false (not all 100%)
+
+// Filter sections
+above := cr.SectionsAboveThreshold(80)  // ["a"]
+below := cr.SectionsBelowThreshold(80)  // ["b"]
+```
+
 ## Next Steps
 
 - [Multi-Judge Aggregation](multi-judge.md) - Combine evaluations

@@ -162,6 +162,105 @@ Finding{
 }
 ```
 
+## Reason Codes (v0.9.0)
+
+Reason codes provide standardized finding identifiers for automated repair workflows.
+
+### ReasonCode Format
+
+Codes use `{CATEGORY}-{ISSUE}` format:
+
+```go
+// Category prefixes
+CategoryREQ    = "REQ"    // Requirements
+CategorySEC    = "SEC"    // Security
+CategoryARCH   = "ARCH"   // Architecture
+CategoryDOC    = "DOC"    // Documentation
+CategoryMETRIC = "METRIC" // Metrics
+CategoryUSER   = "USER"   // User personas
+CategorySCALE  = "SCALE"  // Scalability
+CategoryINFRA  = "INFRA"  // Infrastructure
+CategorySCOPE  = "SCOPE"  // Scope
+CategoryUX     = "UX"     // UX/Accessibility
+```
+
+### Pre-defined Codes
+
+```go
+// Requirements
+CodeREQAmbiguous     // "REQ-AMBIGUOUS"
+CodeREQIncomplete    // "REQ-INCOMPLETE"
+CodeREQConflict      // "REQ-CONFLICT"
+
+// Security
+CodeSECMissingAuth   // "SEC-MISSING_AUTH"
+CodeSECNoValidation  // "SEC-NO_VALIDATION"
+
+// Metrics
+CodeMETRICNoBaseline // "METRIC-NO_BASELINE"
+CodeMETRICNoTarget   // "METRIC-NO_TARGET"
+```
+
+### Creating Findings with Codes
+
+```go
+// Using NewFindingWithCode (inherits severity from registry)
+finding := rubric.NewFindingWithCode(
+    "f1",
+    "requirements",
+    rubric.CodeREQAmbiguous,
+    "Ambiguous requirement",
+    "Requirement REQ-12 can be interpreted multiple ways",
+)
+
+// Or set code on existing finding
+finding := rubric.NewFinding("f2", "security", rubric.SeverityHigh, "Missing auth", "...")
+finding.SetCode(rubric.CodeSECMissingAuth)
+finding.SetLocation("Section 3.2")
+```
+
+### Automated Repair
+
+Each code has a repair prompt in the registry:
+
+```go
+// Get repair prompt for automated fixes
+prompt := finding.GetRepairPrompt()
+// Returns: "Rewrite this requirement to be specific and testable..."
+
+// Or access code info directly
+info := rubric.GetReasonCodeInfo(rubric.CodeREQAmbiguous)
+info.Category        // "REQ"
+info.DefaultSeverity // SeverityMedium
+info.RepairPrompt    // "Rewrite this requirement..."
+```
+
+### Aggregating by Code
+
+```go
+// Count findings by reason code
+counts := rubric.CountFindingsByCode(report.Findings)
+// map[ReasonCode]int{"REQ-AMBIGUOUS": 3, "SEC-MISSING_AUTH": 1}
+
+// Get blocking codes
+blocking := rubric.GetBlockingCodes(report.Findings)
+// []ReasonCode{"SEC-MISSING_AUTH"}
+```
+
+### Blocking Codes on Rubric
+
+The rubric tracks which codes caused failure:
+
+```go
+report.Evaluate(rubricSet)
+
+if !report.Pass {
+    for _, code := range report.Blocking {
+        fmt.Printf("Blocked by: %s\n", code)
+    }
+}
+```
+
 ## Next Steps
 
 - [Pass Criteria](pass-criteria.md) - Configure blocking thresholds

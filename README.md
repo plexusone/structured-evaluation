@@ -31,9 +31,10 @@ A reusable evaluation framework for LLM-as-Judge and multi-agent workflows.
 
 `structured-evaluation` provides standardized types for evaluation reports, enabling:
 
-- ⚖️ **LLM-as-Judge assessments** with categorical scoring and severity-based findings
-- 📊 **Dual-scale support** with Likert (1-5) scales for human comparison studies
-- 📈 **Inter-rater reliability** metrics for LLM calibration and quality assurance
+- ⚖️ **LLM-as-Judge assessments** with categorical and 1-5 integer scoring
+- 🔧 **Automated repair** via reason codes with repair prompts
+- 📊 **Coverage tracking** for spec completeness metrics
+- 📈 **Confidence & routing** for human review of low-confidence evaluations
 - ✅ **GO/NO-GO summary reports** for deterministic checks (CI, tests, validation)
 - 🔗 **Multi-agent coordination** with DAG-based report aggregation
 - 📋 **Claims validation** for factual claim extraction and source verification
@@ -102,18 +103,31 @@ For subjective quality assessments with detailed findings:
 import "github.com/plexusone/structured-evaluation/rubric"
 
 report := rubric.NewRubric("prd", "document.md")
-report.AddCategoryResult(rubric.CategoryResult{
-    Category:  "problem_definition",
-    Score:     rubric.ScorePass,
-    Reasoning: "Clear problem statement with measurable goals",
-})
-report.AddFinding(rubric.Finding{
-    Severity:       rubric.SeverityMedium,
-    Category:       "metrics",
-    Title:          "Missing baseline metrics",
-    Recommendation: "Add current baseline measurements",
-})
+
+// Add category with 1-5 integer score and confidence
+result := rubric.NewCategoryResultWithIntScore(
+    "problem_definition",
+    rubric.ScoreGood,  // 4/5
+    0.9,               // High confidence
+    "Clear problem statement with measurable goals",
+)
+report.AddCategoryResult(*result)
+
+// Add finding with reason code for automated repair
+finding := rubric.NewFindingWithCode(
+    "f1", "metrics",
+    rubric.CodeMETRICNoBaseline,
+    "Missing baseline metrics",
+    "No baseline measurements defined for success metrics",
+)
+finding.SetRecommendation("Add current baseline measurements")
+report.AddFinding(*finding)
+
+// Set minimum score threshold
+report.PassCriteria.MinIntScore = rubric.ScoreGood  // Require 4+
+
 report.Finalize(nil, "sevaluation check document.md")
+// report.IntScore, report.Confidence, report.Blocking are computed
 ```
 
 ### Summary Report (GO/NO-GO)

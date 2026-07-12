@@ -125,6 +125,98 @@ If migrating from v0.3.x or earlier:
 | `Justification string` | `Reasoning string` |
 | `WeightedScore float64` | (removed from report) |
 
+## Integer Scores (v0.9.0)
+
+For LLM-as-Judge evaluations, use the 1-5 integer scale. Research shows LLMs are most reliable at this granularity.
+
+### IntegerScore Type
+
+```go
+const (
+    ScoreUnacceptable  IntegerScore = 1  // Does not meet requirements
+    ScoreMajorRevisions IntegerScore = 2  // Significant work needed
+    ScoreAcceptable    IntegerScore = 3  // Minimum requirements met
+    ScoreGood          IntegerScore = 4  // Meets expectations well
+    ScoreExcellent     IntegerScore = 5  // Exceeds expectations
+)
+```
+
+### Using IntegerScore
+
+```go
+// Create category result with integer score
+result := rubric.NewCategoryResultWithIntScore(
+    "quality",
+    rubric.ScoreGood,  // 4
+    0.85,              // Confidence
+    "Meets quality standards with minor improvements possible",
+)
+
+// Or set on existing result
+result.SetIntScore(rubric.ScoreGood)
+result.SetConfidence(0.85)
+```
+
+### Conversion Methods
+
+```go
+score := rubric.ScoreGood
+
+score.String()        // "Good"
+score.ToCategorical() // ScorePass (4-5 = pass, 3 = partial, 1-2 = fail)
+score.IsValid()       // true
+
+// Parse from int
+score = rubric.ParseIntegerScore(4) // ScoreGood
+```
+
+### IntegerScore on Rubric
+
+The overall rubric also has an IntegerScore:
+
+```go
+report := rubric.NewRubric("eval", "doc.md")
+report.SetIntScore(rubric.ScoreGood)
+report.SetConfidence(0.9)
+
+// Or computed automatically from category scores
+report.Evaluate(rubricSet)
+// report.IntScore is now the weighted average of category IntScores
+```
+
+## Confidence (v0.9.0)
+
+Track evaluator confidence for human review routing:
+
+```go
+result.SetConfidence(0.85)  // 0.0-1.0
+
+// Check if human review needed
+if result.HasLowConfidence() {  // Default threshold: 0.7
+    // Route to human reviewer
+}
+
+// Custom threshold
+if result.HasLowConfidence(0.8) {
+    // Higher bar for confidence
+}
+```
+
+### Overall Confidence
+
+```go
+report.SetConfidence(0.9)
+
+// Or computed as minimum across categories
+report.Evaluate(rubricSet)
+// report.Confidence is the weakest category confidence
+
+// Check if any category needs human review
+if report.NeedsHumanReview() {
+    // Route entire report to human
+}
+```
+
 ## Next Steps
 
 - [Pass Criteria](pass-criteria.md) - Configure decision thresholds
