@@ -56,9 +56,9 @@ func TestCoverageReport(t *testing.T) {
 
 	t.Run("ComputeOverall", func(t *testing.T) {
 		cr := NewCoverageReport()
-		cr.SetSection("components", 10, 10, nil)  // 100%
-		cr.SetSection("foundations", 4, 2, nil)   // 50%
-		cr.SetSection("patterns", 5, 5, nil)      // 100%
+		cr.SetSection("components", 10, 10, nil) // 100%
+		cr.SetSection("foundations", 4, 2, nil)  // 50%
+		cr.SetSection("patterns", 5, 5, nil)     // 100%
 
 		overall := cr.ComputeOverall()
 		// (100 + 50 + 100) / 3 = 83
@@ -69,8 +69,8 @@ func TestCoverageReport(t *testing.T) {
 
 	t.Run("ComputeOverallWeighted", func(t *testing.T) {
 		cr := NewCoverageReport()
-		cr.SetSection("components", 10, 10, nil)  // 100%
-		cr.SetSection("foundations", 4, 2, nil)   // 50%
+		cr.SetSection("components", 10, 10, nil) // 100%
+		cr.SetSection("foundations", 4, 2, nil)  // 50%
 
 		weights := map[string]float64{
 			"components":  2.0,
@@ -115,8 +115,8 @@ func TestCoverageReport(t *testing.T) {
 
 	t.Run("SectionsAboveThreshold", func(t *testing.T) {
 		cr := NewCoverageReport()
-		cr.SetSection("high", 10, 9, nil)  // 90%
-		cr.SetSection("low", 10, 5, nil)   // 50%
+		cr.SetSection("high", 10, 9, nil) // 90%
+		cr.SetSection("low", 10, 5, nil)  // 50%
 
 		above := cr.SectionsAboveThreshold(80)
 		if len(above) != 1 || above[0] != "high" {

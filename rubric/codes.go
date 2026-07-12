@@ -74,7 +74,7 @@ const (
 	CodeSECPrivacy         ReasonCode = "SEC-PRIVACY"
 	CodeSECNoValidation    ReasonCode = "SEC-NO_VALIDATION"
 	CodeSECNoEncryption    ReasonCode = "SEC-NO_ENCRYPTION"
-	CodeSECHardcodedSecret ReasonCode = "SEC-HARDCODED_SECRET"
+	CodeSECHardcodedSecret ReasonCode = "SEC-HARDCODED_SECRET" //nolint:gosec // G101 false positive: this is a reason code identifier, not a credential
 	CodeSECInjectionRisk   ReasonCode = "SEC-INJECTION_RISK"
 )
 
