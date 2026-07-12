@@ -5,6 +5,9 @@
     "$schema": {
       "type": "string"
     },
+    "schemaVersion": {
+      "type": "string"
+    },
     "metadata": {
       "properties": {
         "document": {
@@ -181,6 +184,21 @@
       "additionalProperties": false,
       "type": "object"
     },
+    "intScore": {
+      "type": "integer"
+    },
+    "confidence": {
+      "type": "number"
+    },
+    "pass": {
+      "type": "boolean"
+    },
+    "blocking": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
     "categories": {
       "items": {
         "properties": {
@@ -196,8 +214,20 @@
             ],
             "description": "Category score: pass, partial, or fail"
           },
+          "intScore": {
+            "type": "integer"
+          },
           "numericScore": {
             "type": "number"
+          },
+          "confidence": {
+            "type": "number"
+          },
+          "reasonCodes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
           },
           "reasoning": {
             "type": "string"
@@ -215,6 +245,9 @@
                   "type": "string"
                 },
                 "category": {
+                  "type": "string"
+                },
+                "code": {
                   "type": "string"
                 },
                 "severity": {
@@ -235,6 +268,9 @@
                   "type": "string"
                 },
                 "recommendation": {
+                  "type": "string"
+                },
+                "location": {
                   "type": "string"
                 },
                 "evidence": {
@@ -297,6 +333,9 @@
           "category": {
             "type": "string"
           },
+          "code": {
+            "type": "string"
+          },
           "severity": {
             "type": "string",
             "enum": [
@@ -315,6 +354,9 @@
             "type": "string"
           },
           "recommendation": {
+            "type": "string"
+          },
+          "location": {
             "type": "string"
           },
           "evidence": {
