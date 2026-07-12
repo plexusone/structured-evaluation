@@ -47,10 +47,22 @@ type CategoryResult struct {
 	// This is the authoritative score for decision-making.
 	Score ScoreValue `json:"score"`
 
+	// IntScore is the 1-5 integer score.
+	// Preferred for LLM judges as they are unreliable at finer granularity.
+	IntScore IntegerScore `json:"intScore,omitempty"`
+
 	// NumericScore is an optional numeric score (e.g., 1-5 Likert).
 	// Used for human comparison, inter-rater reliability, and calibration.
 	// The categorical Score takes precedence for pass/fail decisions.
 	NumericScore *float64 `json:"numericScore,omitempty"`
+
+	// Confidence is the evaluator's confidence in this score (0.0-1.0).
+	// Low confidence scores may be routed to human review.
+	Confidence float64 `json:"confidence,omitempty"`
+
+	// ReasonCodes are standardized finding identifiers for this category.
+	// Enable automated repair workflows.
+	ReasonCodes []ReasonCode `json:"reasonCodes,omitempty"`
 
 	// Reasoning explains the score (chain-of-thought).
 	Reasoning string `json:"reasoning"`
@@ -159,6 +171,59 @@ func (cr *CategoryResult) SetChecklistResults(results *ChecklistResults) *Catego
 // IsPassing returns true if this category passed.
 func (cr *CategoryResult) IsPassing() bool {
 	return cr.Score.IsPassing()
+}
+
+// SetIntScore sets the integer score and derives the categorical score.
+func (cr *CategoryResult) SetIntScore(score IntegerScore) *CategoryResult {
+	cr.IntScore = score
+	cr.Score = score.ToCategorical()
+	return cr
+}
+
+// SetConfidence sets the confidence value.
+func (cr *CategoryResult) SetConfidence(confidence float64) *CategoryResult {
+	if confidence < 0 {
+		confidence = 0
+	}
+	if confidence > 1 {
+		confidence = 1
+	}
+	cr.Confidence = confidence
+	return cr
+}
+
+// AddReasonCode adds a reason code to this category result.
+func (cr *CategoryResult) AddReasonCode(code ReasonCode) *CategoryResult {
+	cr.ReasonCodes = append(cr.ReasonCodes, code)
+	return cr
+}
+
+// AddReasonCodes adds multiple reason codes to this category result.
+func (cr *CategoryResult) AddReasonCodes(codes ...ReasonCode) *CategoryResult {
+	cr.ReasonCodes = append(cr.ReasonCodes, codes...)
+	return cr
+}
+
+// HasLowConfidence returns true if confidence is below the threshold (default 0.7).
+func (cr *CategoryResult) HasLowConfidence(threshold ...float64) bool {
+	t := 0.7
+	if len(threshold) > 0 {
+		t = threshold[0]
+	}
+	return cr.Confidence > 0 && cr.Confidence < t
+}
+
+// NewCategoryResultWithIntScore creates a category result from an integer score.
+func NewCategoryResultWithIntScore(category string, intScore IntegerScore, confidence float64, reasoning string) *CategoryResult {
+	return &CategoryResult{
+		Category:   category,
+		IntScore:   intScore,
+		Score:      intScore.ToCategorical(),
+		Confidence: confidence,
+		Reasoning:  reasoning,
+		Evidence:   []string{},
+		Findings:   []Finding{},
+	}
 }
 
 // CountCategoryResults counts results by score value.
