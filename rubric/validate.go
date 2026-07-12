@@ -173,6 +173,34 @@ func ValidScaleTypeValues() []string {
 	}
 }
 
+// ValidIntegerScoreValues returns all valid integer score values (1-5).
+func ValidIntegerScoreValues() []int {
+	return []int{1, 2, 3, 4, 5}
+}
+
+// ValidReasonCodes returns all registered reason codes.
+func ValidReasonCodes() []string {
+	codes := make([]string, 0, len(ReasonCodeRegistry))
+	for code := range ReasonCodeRegistry {
+		codes = append(codes, string(code))
+	}
+	return codes
+}
+
+// isValidIntegerScore checks if an integer score is valid (1-5).
+func isValidIntegerScore(s IntegerScore) bool {
+	return s >= 1 && s <= 5
+}
+
+// isValidReasonCode checks if a reason code is registered.
+func isValidReasonCode(code ReasonCode) bool {
+	if code == "" {
+		return true // Empty is allowed
+	}
+	_, exists := ReasonCodeRegistry[code]
+	return exists
+}
+
 // isValidScore checks if a score value is valid.
 func isValidScore(s ScoreValue) bool {
 	switch s {
@@ -220,6 +248,22 @@ func ValidateReport(r *Rubric) *ValidationResult {
 		result.addError("reviewType", "REQUIRED_FIELD", "reviewType is required")
 	}
 
+	// Validate v2 fields
+	if r.IntScore != 0 && !isValidIntegerScore(r.IntScore) {
+		result.addError("intScore", "INVALID_INT_SCORE",
+			fmt.Sprintf("integer score must be 1-5, got %d", r.IntScore))
+	}
+	if r.Confidence < 0 || r.Confidence > 1 {
+		result.addError("confidence", "INVALID_CONFIDENCE",
+			fmt.Sprintf("confidence must be 0.0-1.0, got %.2f", r.Confidence))
+	}
+	for i, code := range r.Blocking {
+		if !isValidReasonCode(code) {
+			result.addWarning(fmt.Sprintf("blocking[%d]", i), "UNKNOWN_REASON_CODE",
+				fmt.Sprintf("unknown reason code %q", code))
+		}
+	}
+
 	// Validate categories
 	for i, cat := range r.Categories {
 		path := fmt.Sprintf("categories[%d]", i)
@@ -238,6 +282,22 @@ func ValidateReport(r *Rubric) *ValidationResult {
 		// Validate category ID
 		if cat.Category == "" {
 			result.addError(path+".category", "REQUIRED_FIELD", "category ID is required")
+		}
+
+		// Validate v2 fields
+		if cat.IntScore != 0 && !isValidIntegerScore(cat.IntScore) {
+			result.addError(path+".intScore", "INVALID_INT_SCORE",
+				fmt.Sprintf("integer score must be 1-5, got %d", cat.IntScore))
+		}
+		if cat.Confidence < 0 || cat.Confidence > 1 {
+			result.addError(path+".confidence", "INVALID_CONFIDENCE",
+				fmt.Sprintf("confidence must be 0.0-1.0, got %.2f", cat.Confidence))
+		}
+		for j, code := range cat.ReasonCodes {
+			if !isValidReasonCode(code) {
+				result.addWarning(fmt.Sprintf("%s.reasonCodes[%d]", path, j), "UNKNOWN_REASON_CODE",
+					fmt.Sprintf("unknown reason code %q", code))
+			}
 		}
 
 		// Validate findings within category
@@ -298,6 +358,12 @@ func validateFinding(f Finding, path string, result *ValidationResult) {
 	// Validate required fields
 	if f.Title == "" {
 		result.addError(path+".title", "REQUIRED_FIELD", "finding title is required")
+	}
+
+	// Validate reason code if present
+	if f.Code != "" && !isValidReasonCode(f.Code) {
+		result.addWarning(path+".code", "UNKNOWN_REASON_CODE",
+			fmt.Sprintf("unknown reason code %q", f.Code))
 	}
 }
 
