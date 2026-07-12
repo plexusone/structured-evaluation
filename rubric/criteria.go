@@ -10,6 +10,11 @@ type PassCriteria struct {
 	// MaxFindings limits findings by severity.
 	// Use -1 for unlimited.
 	MaxFindings *FindingLimits `json:"maxFindingsSeverity,omitempty"`
+
+	// MinIntScore is the minimum overall IntegerScore (1-5) required to pass.
+	// If set, the overall score must be >= this value.
+	// Use 0 to disable this check.
+	MinIntScore IntegerScore `json:"minIntScore,omitempty"`
 }
 
 // DefaultPassCriteria returns standard pass criteria.

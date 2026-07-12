@@ -10,6 +10,10 @@ type Rubric struct {
 	// Schema is the JSON Schema URL.
 	Schema string `json:"$schema,omitempty"`
 
+	// SchemaVersion is the evaluation schema version (e.g., "v2").
+	// Used for backwards compatibility.
+	SchemaVersion string `json:"schemaVersion,omitempty"`
+
 	// Metadata contains report identification and audit info.
 	Metadata ReportMetadata `json:"metadata"`
 
@@ -27,6 +31,22 @@ type Rubric struct {
 
 	// Reference contains gold/expected data for comparison.
 	Reference *ReferenceData `json:"reference,omitempty"`
+
+	// IntScore is the overall 1-5 integer score.
+	// Preferred for LLM judges as they are unreliable at finer granularity.
+	IntScore IntegerScore `json:"intScore,omitempty"`
+
+	// Confidence is the overall confidence in the evaluation (0.0-1.0).
+	// Low confidence evaluations may be routed to human review.
+	Confidence float64 `json:"confidence,omitempty"`
+
+	// Pass is an explicit pass/fail gate, orthogonal to score.
+	// A spec can have a high score but still fail due to blocking issues.
+	Pass bool `json:"pass"`
+
+	// Blocking contains reason codes that caused failure.
+	// Empty if Pass is true.
+	Blocking []ReasonCode `json:"blocking,omitempty"`
 
 	// Categories contains results for each evaluation dimension.
 	Categories []CategoryResult `json:"categories"`
@@ -48,6 +68,11 @@ type Rubric struct {
 
 	// Summary is the overall assessment.
 	Summary string `json:"summary"`
+
+	// Extensions contains domain-specific metadata.
+	// Use this to store custom data without modifying the core schema.
+	// Example: {"coverage": {...}, "metrics": {...}}
+	Extensions map[string]any `json:"extensions,omitempty"`
 }
 
 // ReportMetadata contains report identification.
@@ -104,9 +129,13 @@ type ActionItem struct {
 	Effort string `json:"effort,omitempty"`
 }
 
+// SchemaVersionV2 is the current schema version.
+const SchemaVersionV2 = "v2"
+
 // NewRubric creates a new rubric-based evaluation report.
 func NewRubric(reviewType, document string) *Rubric {
 	return &Rubric{
+		SchemaVersion: SchemaVersionV2,
 		Metadata: ReportMetadata{
 			Document:    document,
 			GeneratedAt: time.Now().UTC(),
@@ -117,6 +146,141 @@ func NewRubric(reviewType, document string) *Rubric {
 		Findings:     []Finding{},
 		PassCriteria: DefaultPassCriteria(),
 	}
+}
+
+// SetIntScore sets the overall integer score.
+func (r *Rubric) SetIntScore(score IntegerScore) *Rubric {
+	r.IntScore = score
+	return r
+}
+
+// SetConfidence sets the overall confidence value.
+func (r *Rubric) SetConfidence(confidence float64) *Rubric {
+	if confidence < 0 {
+		confidence = 0
+	}
+	if confidence > 1 {
+		confidence = 1
+	}
+	r.Confidence = confidence
+	return r
+}
+
+// SetPass sets the pass/fail status.
+func (r *Rubric) SetPass(pass bool) *Rubric {
+	r.Pass = pass
+	return r
+}
+
+// AddBlocking adds a blocking reason code.
+func (r *Rubric) AddBlocking(code ReasonCode) *Rubric {
+	r.Blocking = append(r.Blocking, code)
+	r.Pass = false
+	return r
+}
+
+// SetBlocking sets the blocking reason codes.
+func (r *Rubric) SetBlocking(codes []ReasonCode) *Rubric {
+	r.Blocking = codes
+	if len(codes) > 0 {
+		r.Pass = false
+	}
+	return r
+}
+
+// HasLowConfidence returns true if confidence is below the threshold (default 0.7).
+func (r *Rubric) HasLowConfidence(threshold ...float64) bool {
+	t := 0.7
+	if len(threshold) > 0 {
+		t = threshold[0]
+	}
+	return r.Confidence > 0 && r.Confidence < t
+}
+
+// NeedsHumanReview returns true if this evaluation should be reviewed by a human.
+func (r *Rubric) NeedsHumanReview(confidenceThreshold ...float64) bool {
+	// Low confidence overall
+	if r.HasLowConfidence(confidenceThreshold...) {
+		return true
+	}
+	// Any category with low confidence
+	for _, cat := range r.Categories {
+		if cat.HasLowConfidence(confidenceThreshold...) {
+			return true
+		}
+	}
+	// Decision status is human_review
+	if r.Decision.Status == DecisionHumanReview {
+		return true
+	}
+	return false
+}
+
+// ComputeOverallIntScore calculates the overall integer score from category scores.
+// Uses weighted average of category IntScores.
+func (r *Rubric) ComputeOverallIntScore(rubricSet *RubricSet) IntegerScore {
+	if len(r.Categories) == 0 {
+		return ScoreAcceptable // Default to middle
+	}
+
+	var totalWeight float64
+	var weightedSum float64
+
+	for _, cat := range r.Categories {
+		if cat.IntScore == 0 {
+			continue // Skip categories without integer scores
+		}
+		weight := 1.0
+		if rubricSet != nil {
+			if catDef := rubricSet.GetCategory(cat.Category); catDef != nil && catDef.Weight > 0 {
+				weight = catDef.Weight
+			}
+		}
+		totalWeight += weight
+		weightedSum += float64(cat.IntScore) * weight
+	}
+
+	if totalWeight == 0 {
+		return ScoreAcceptable
+	}
+
+	avg := weightedSum / totalWeight
+	return ParseIntegerScore(int(avg + 0.5)) // Round to nearest
+}
+
+// ComputeOverallConfidence calculates the overall confidence from category confidences.
+// Uses minimum confidence across all categories (weakest link).
+func (r *Rubric) ComputeOverallConfidence() float64 {
+	if len(r.Categories) == 0 {
+		return 0
+	}
+
+	minConfidence := 1.0
+	hasConfidence := false
+
+	for _, cat := range r.Categories {
+		if cat.Confidence > 0 {
+			hasConfidence = true
+			if cat.Confidence < minConfidence {
+				minConfidence = cat.Confidence
+			}
+		}
+	}
+
+	if !hasConfidence {
+		return 0
+	}
+	return minConfidence
+}
+
+// CollectBlockingCodes gathers all blocking reason codes from findings.
+func (r *Rubric) CollectBlockingCodes() []ReasonCode {
+	return GetBlockingCodes(r.Findings)
+}
+
+// IsV2 returns true if this is a v2 schema evaluation.
+func (r *Rubric) IsV2() bool {
+	return r.SchemaVersion == SchemaVersionV2
 }
 
 // AddCategoryResult adds a category result.
@@ -135,6 +299,30 @@ func (r *Rubric) AddFinding(f Finding) {
 func (r *Rubric) Evaluate(rubricSet *RubricSet) Decision {
 	r.Decision = EvaluateResults(r.Categories, r.Findings, r.PassCriteria, rubricSet)
 	r.OverallDecision = string(r.Decision.Status)
+
+	// Compute v2 fields
+	r.Pass = r.Decision.Passed
+	r.Blocking = r.CollectBlockingCodes()
+
+	// Compute overall integer score if not set
+	if r.IntScore == 0 {
+		r.IntScore = r.ComputeOverallIntScore(rubricSet)
+	}
+
+	// Compute overall confidence if not set
+	if r.Confidence == 0 {
+		r.Confidence = r.ComputeOverallConfidence()
+	}
+
+	// Check MinIntScore criteria (must be checked after IntScore is computed)
+	if r.PassCriteria.MinIntScore > 0 && r.IntScore < r.PassCriteria.MinIntScore {
+		r.Decision.Status = DecisionFail
+		r.Decision.Passed = false
+		r.Decision.Rationale = fmt.Sprintf("Score %d is below minimum required %d", r.IntScore, r.PassCriteria.MinIntScore)
+		r.OverallDecision = string(r.Decision.Status)
+		r.Pass = false
+	}
+
 	return r.Decision
 }
 
@@ -269,4 +457,30 @@ func (r *Rubric) GetCategoryResult(categoryID string) *CategoryResult {
 		}
 	}
 	return nil
+}
+
+// SetExtension sets a single extension value.
+func (r *Rubric) SetExtension(key string, value any) {
+	if r.Extensions == nil {
+		r.Extensions = make(map[string]any)
+	}
+	r.Extensions[key] = value
+}
+
+// GetExtension retrieves an extension value by key.
+// Returns nil if not found.
+func (r *Rubric) GetExtension(key string) any {
+	if r.Extensions == nil {
+		return nil
+	}
+	return r.Extensions[key]
+}
+
+// HasExtension checks if an extension exists.
+func (r *Rubric) HasExtension(key string) bool {
+	if r.Extensions == nil {
+		return false
+	}
+	_, ok := r.Extensions[key]
+	return ok
 }
