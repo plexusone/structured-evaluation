@@ -7,6 +7,52 @@
   "commitConvention": "conventional",
   "releases": [
     {
+      "version": "v0.9.0",
+      "date": "2026-07-12",
+      "highlights": [
+        { "description": "IntegerScore type for 1-5 scale scoring optimized for LLM judges" },
+        { "description": "ReasonCode system for standardized finding codes and automated repair" },
+        { "description": "CoverageReport for generic coverage tracking via Extensions" },
+        { "description": "v2 schema fields: Confidence, blocking codes, and domain extensions" }
+      ],
+      "added": [
+        { "description": "`IntegerScore` type with 1-5 scale constants (Unacceptable through Excellent)", "commit": "57fe0e6" },
+        { "description": "`String()`, `ToCategorical()`, `IsValid()`, `ParseIntegerScore()` helpers for IntegerScore", "commit": "57fe0e6" },
+        { "description": "`ReasonCode` type with category prefixes (REQ, SEC, ARCH, DOC, etc.)", "commit": "29606df" },
+        { "description": "`ReasonCodeRegistry` with metadata and repair prompts for each code", "commit": "29606df" },
+        { "description": "Pre-defined codes: REQ-AMBIGUOUS, SEC-MISSING_AUTH, METRIC-NO_BASELINE, etc.", "commit": "29606df" },
+        { "description": "`CoverageSection` and `CoverageReport` types for generic coverage tracking", "commit": "456bd01" },
+        { "description": "`SetSection()`, `GetSection()`, `ComputeOverall()`, `ComputeOverallWeighted()` methods", "commit": "456bd01" },
+        { "description": "`SetCoverage()` and `GetCoverage()` convenience methods on Rubric", "commit": "456bd01" },
+        { "description": "`IntScore` and `Confidence` fields on CategoryResult", "commit": "fae0a2b" },
+        { "description": "`SetIntScore()`, `SetConfidence()`, `HasLowConfidence()` methods on CategoryResult", "commit": "fae0a2b" },
+        { "description": "`ReasonCodes` field and `AddReasonCode()` method on CategoryResult", "commit": "fae0a2b" },
+        { "description": "`NewCategoryResultWithIntScore()` factory function", "commit": "fae0a2b" },
+        { "description": "`Code` and `Location` fields on Finding", "commit": "1dbe78a" },
+        { "description": "`NewFinding()` and `NewFindingWithCode()` constructors", "commit": "1dbe78a" },
+        { "description": "`SetCode()`, `SetLocation()`, `GetRepairPrompt()` methods on Finding", "commit": "1dbe78a" },
+        { "description": "`CountFindingsByCode()` and `GetBlockingCodes()` utilities", "commit": "1dbe78a" },
+        { "description": "`Extensions` field on Rubric for domain-specific metadata", "commit": "c455da4" },
+        { "description": "`SetExtension()`, `GetExtension()`, `HasExtension()` methods on Rubric", "commit": "c455da4" },
+        { "description": "`IntScore`, `Confidence`, `Pass`, `Blocking` fields on Rubric", "commit": "c455da4" },
+        { "description": "`SchemaVersion` field and `IsV2()` method for version tracking", "commit": "c455da4" },
+        { "description": "`ComputeOverallIntScore()`, `ComputeOverallConfidence()`, `NeedsHumanReview()` methods", "commit": "c455da4" },
+        { "description": "`MinIntScore` field in PassCriteria for minimum score thresholds", "commit": "c455da4" },
+        { "description": "Validation for IntScore (1-5 range), Confidence (0.0-1.0), and ReasonCodes", "commit": "7c288b5" },
+        { "description": "`ValidIntegerScoreValues()` and `ValidReasonCodes()` helper functions", "commit": "7c288b5" }
+      ],
+      "changed": [
+        { "description": "`Evaluate()` now computes v2 fields (IntScore, Confidence, Blocking) and checks MinIntScore", "commit": "c455da4" },
+        { "description": "`rubric.schema.json` updated with v2 schema definitions", "commit": "9ed823a" }
+      ],
+      "dependencies": [
+        { "description": "Bump go.yaml.in/yaml/v4 from rc.4 to rc.6", "commit": "741e2b3" }
+      ],
+      "documentation": [
+        { "description": "Remove Go Report Card badge from README", "commit": "0c4c125" }
+      ]
+    },
+    {
       "version": "v0.8.0",
       "date": "2026-06-20",
       "highlights": [
