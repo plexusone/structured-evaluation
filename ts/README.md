@@ -65,5 +65,5 @@ regression-guard test for what's covered today.
 ## Versioning
 
 This package's version tracks the Go module's version. If you're on
-`structured-evaluation` v0.10.0 in Go, use `@plexusone/structured-evaluation`
-v0.10.0 here.
+`structured-evaluation` v0.11.0 in Go, use `@plexusone/structured-evaluation`
+v0.11.0 here.

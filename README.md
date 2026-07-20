@@ -38,6 +38,7 @@ A reusable evaluation framework for LLM-as-Judge and multi-agent workflows.
 - ✅ **GO/NO-GO summary reports** for deterministic checks (CI, tests, validation)
 - 🔗 **Multi-agent coordination** with DAG-based report aggregation
 - 📋 **Claims validation** for factual claim extraction and source verification
+- 🟦 **TypeScript / Zod bindings** generated from the same Go structs, never hand-maintained
 
 ## Architecture
 
@@ -190,6 +191,12 @@ Following InfoSec conventions:
 | Low | 🟢 | No | Nice to fix |
 | Info | ⚪ | No | Informational only |
 
+`CategoryResult.Severity` (v0.11.0) is the worst severity among a category's
+findings, computed automatically — never set independently by the judge, so
+it can't drift from `Findings`. Useful for sorting or highlighting which
+categories to fix first, distinct from `Score`/`IntScore` (which measure
+quality, not urgency).
+
 ## Pass Criteria
 
 Default criteria (zero blocking findings, all categories passing):
@@ -277,6 +284,30 @@ rubricSchema := schema.RubricSchemaJSON
 claimsSchema := schema.ClaimsSchemaJSON
 summarySchema := schema.SummarySchemaJSON
 ```
+
+## TypeScript / Zod (v0.11.0)
+
+For consumers that read reports in TypeScript, `@plexusone/structured-evaluation`
+provides Zod schemas and TS types (`Rubric`, `RubricSet`, `ClaimsReport`,
+`SummaryReport`) generated from the same JSON Schema above — downstream of
+the Go structs, never hand-maintained:
+
+```bash
+npm install @plexusone/structured-evaluation
+```
+
+```ts
+import { RubricSchema, type Rubric } from '@plexusone/structured-evaluation'
+
+const report: Rubric = RubricSchema.parse(JSON.parse(rawJson))
+console.log(report.intScore) // the 1-5 score, correctly typed
+console.log(report.categories[0].severity) // "critical" | "high" | "medium" | "low" | "info" | undefined
+```
+
+Every schema is `.strict()` — an unrecognized key (a stale consumer still
+expecting a field that was renamed upstream) fails parsing loudly instead of
+silently reading `undefined`. See [ts/README.md](ts/README.md) for
+regeneration instructions and known limitations.
 
 ## RubricSet (v0.4.0)
 

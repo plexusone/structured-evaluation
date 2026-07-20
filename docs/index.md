@@ -14,6 +14,7 @@ Structured Evaluation provides standardized Go types for evaluation reports, ena
 - 🔄 **Pairwise Comparison** - Compare outputs instead of absolute scoring
 - 👥 **Multi-Judge Aggregation** - Combine evaluations from multiple judges with agreement metrics
 - 🔍 **Report Validation** - Validate reports for enum correctness, counts, and consistency
+- 🟦 **TypeScript / Zod Bindings** - Generated Zod schemas and TS types, downstream of the same Go structs
 
 ## Architecture
 
@@ -111,6 +112,23 @@ Following InfoSec conventions:
 | Medium | 🟡 | No | Should fix, tracked |
 | Low | 🟢 | No | Nice to fix |
 | Info | ⚪ | No | Informational only |
+
+## TypeScript / JavaScript
+
+Consumers that read reports in TypeScript (a UI, a dashboard, a Node service)
+don't need to hand-maintain a parallel type — `@plexusone/structured-evaluation`
+generates Zod schemas and TS types from the same JSON Schema the Go library
+embeds:
+
+```ts
+import { RubricSchema, type Rubric } from '@plexusone/structured-evaluation'
+
+const report: Rubric = RubricSchema.parse(JSON.parse(rawJson))
+```
+
+See [Installation](getting-started/installation.md#typescript--javascript) for
+setup and the [package README](https://github.com/plexusone/structured-evaluation/tree/main/ts)
+for details.
 
 ## Next Steps
 

@@ -27,6 +27,56 @@ type Finding struct {
 | `Low` | 🟢 | No | Nice to fix; minor improvements |
 | `Info` | ⚪ | No | Informational; observations, suggestions |
 
+## Category Severity Rollup (v0.11.0)
+
+`CategoryResult` carries a `Severity` field — the highest-severity finding in
+that category, or empty if it has none. It's computed automatically from the
+category's `Findings` via `WorstSeverity()`, never set independently by the
+judge, so it can't drift out of sync with what was actually found:
+
+```go
+type CategoryResult struct {
+    Category string     `json:"category"`
+    Score    ScoreValue `json:"score"`
+    Severity Severity   `json:"severity,omitempty"`
+    Findings []Finding  `json:"findings,omitempty"`
+    // ...
+}
+```
+
+It's computed in two places, so every path is covered:
+
+```go
+// AddFinding recomputes Severity on every call.
+cat := rubric.CategoryResult{Category: "security"}
+cat.AddFinding(rubric.Finding{Severity: rubric.SeverityHigh, Title: "..."})
+cat.Severity // SeverityHigh
+
+// AddCategoryResult and Evaluate compute it as a safety net for categories
+// built via struct literal or appended directly to Rubric.Categories.
+report.AddCategoryResult(rubric.CategoryResult{
+    Category: "security",
+    Findings: []rubric.Finding{{Severity: rubric.SeverityCritical}},
+})
+// report.Categories[len(report.Categories)-1].Severity == SeverityCritical
+```
+
+An explicitly set `Severity` is never overwritten — the compute-if-unset
+behavior only fills it in when it's still the zero value, matching the same
+convention already used for `Rubric.IntScore` and `Rubric.Confidence`.
+
+This is distinct from `Score`/`IntScore`, which measure quality. `Severity`
+exists specifically to answer "which categories should I fix first?" —
+useful for sorting or highlighting categories in a UI independent of their
+pass/partial/fail status.
+
+```go
+// Sort categories by severity for a "fix these first" view
+sort.Slice(report.Categories, func(i, j int) bool {
+    return report.Categories[i].Severity.Weight() > report.Categories[j].Severity.Weight()
+})
+```
+
 ## Creating Findings
 
 ```go

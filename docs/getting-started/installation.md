@@ -22,6 +22,29 @@ Verify installation:
 sevaluation version
 ```
 
+## TypeScript / JavaScript
+
+For consumers that read reports in TypeScript, `@plexusone/structured-evaluation`
+provides generated Zod schemas and TS types (`Rubric`, `RubricSet`,
+`ClaimsReport`, `SummaryReport`) — downstream of the same Go structs, never
+hand-maintained:
+
+```bash
+npm install @plexusone/structured-evaluation
+```
+
+```ts
+import { RubricSchema, type Rubric } from '@plexusone/structured-evaluation'
+
+const report: Rubric = RubricSchema.parse(JSON.parse(rawJson))
+console.log(report.intScore) // the 1-5 score, correctly typed
+```
+
+Every schema is `.strict()` — an unrecognized key fails parsing loudly
+instead of silently reading `undefined`. See the
+[package README](https://github.com/plexusone/structured-evaluation/tree/main/ts)
+for regeneration instructions and known limitations.
+
 ## Requirements
 
 - Go 1.21 or later
