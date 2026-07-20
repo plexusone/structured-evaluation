@@ -126,7 +126,7 @@ import { RubricSchema, type Rubric } from '@plexusone/structured-evaluation'
 const report: Rubric = RubricSchema.parse(JSON.parse(rawJson))
 ```
 
-See [Installation](getting-started/installation.md#typescript--javascript) for
+See [Installation](getting-started/installation.md#typescript-javascript) for
 setup and the [package README](https://github.com/plexusone/structured-evaluation/tree/main/ts)
 for details.
 

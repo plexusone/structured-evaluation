@@ -7,6 +7,27 @@
   "commitConvention": "conventional",
   "releases": [
     {
+      "version": "v0.11.0",
+      "date": "2026-07-20",
+      "highlights": [
+        { "description": "Category severity rollup: CategoryResult.Severity computed automatically from findings, never independently set by the judge" },
+        { "description": "@plexusone/structured-evaluation: Zod schemas and TypeScript types generated from the same Go structs' JSON Schema" }
+      ],
+      "added": [
+        { "description": "`CategoryResult.Severity` field — the highest-severity finding in the category, or empty if there are none", "commit": "9f008ef" },
+        { "description": "`WorstSeverity(findings []Finding) Severity` helper for rolling findings up into a single severity", "commit": "9f008ef" },
+        { "description": "`AddFinding` recomputes `CategoryResult.Severity` on every call; `AddCategoryResult`/`Evaluate` compute it as a safety net for categories built via struct literal or appended directly to `Rubric.Categories`", "commit": "9f008ef" },
+        { "description": "`@plexusone/structured-evaluation` npm package: generated Zod schemas and TS types for `Rubric`, `RubricSet`, `ClaimsReport`, `SummaryReport`, downstream of the Go structs' JSON Schema", "commit": "9f8da9f" }
+      ],
+      "tests": [
+        { "description": "`WorstSeverity` and `CategoryResult.Severity` computation: empty, single, ties, order-independence, `AddCategoryResult`/`Evaluate` safety net, explicit-severity-preserved", "commit": "4a87481" }
+      ],
+      "documentation": [
+        { "description": "Document `CategoryResult.Severity` rollup in docs/concepts/findings.md and README.md", "commit": "560d045" },
+        { "description": "Document the `@plexusone/structured-evaluation` npm package in docs/index.md, docs/getting-started/installation.md, and README.md", "commit": "560d045" }
+      ]
+    },
+    {
       "version": "v0.10.0",
       "date": "2026-07-20",
       "highlights": [
