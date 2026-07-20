@@ -290,9 +290,17 @@ cat := rubric.NewCategory("quality", "Output Quality", "Overall quality assessme
         []string{"Missing key requirements or major issues"},
     )
 
-// Use default PRD rubric
-rubricSet := rubric.DefaultPRDRubricSet()
+rubricSet := rubric.NewRubricSet("output-review", "Output Review", "1.0").
+    AddCategory(*cat)
 ```
+
+### Rich Weighted Criteria (v0.10.0)
+
+Categories can decompose into weighted sub-criteria, each with pass/partial/fail
+bands carrying a description and concrete indicators, scored by numeric
+`scoreThresholds`. Rubric definitions also carry `yaml` tags, so they can be
+authored as YAML and parsed directly into a `RubricSet`. See
+[docs/features/rubrics.md](docs/features/rubrics.md).
 
 ## Judge Metadata (v0.2.0)
 

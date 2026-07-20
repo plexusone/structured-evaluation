@@ -4,47 +4,94 @@ Rubrics define explicit evaluation criteria for consistent assessments across ev
 
 ## Overview
 
-A rubric category provides structured guidance for evaluating each category:
+A category defines how one dimension of a document is scored. It can be scored two ways:
+
+- **Flat** — a categorical scale (pass / partial / fail) with criteria per band.
+- **Rich** — weighted sub-criteria, each with its own pass/partial/fail bands and concrete indicators (added in v0.10.0).
 
 ```go
 type Category struct {
-    ID          string `json:"id"`
-    Name        string `json:"name"`
-    Description string `json:"description"`
-    Criteria    struct {
-        Pass    string `json:"pass"`
-        Partial string `json:"partial"`
-        Fail    string `json:"fail"`
-    } `json:"criteria"`
-    Examples    []Example `json:"examples,omitempty"`
+    ID          string            `json:"id" yaml:"id"`
+    Name        string            `json:"name" yaml:"name"`
+    Description string            `json:"description" yaml:"description"`
+    Weight      float64           `json:"weight,omitempty" yaml:"weight,omitempty"`
+    Required    bool              `json:"required,omitempty" yaml:"required,omitempty"`
+    Scale       Scale             `json:"scale" yaml:"scale"`                             // flat scoring
+    Criteria    []Criterion       `json:"criteria,omitempty" yaml:"criteria,omitempty"`   // rich scoring
+    Examples    *CategoryExamples `json:"examples,omitempty" yaml:"examples,omitempty"`
 }
 ```
 
-## Creating Rubric Categories
+Use `cat.IsComposite()` to tell them apart — it returns true when the category
+carries weighted `Criteria`.
+
+## Flat Categories
+
+A categorical scale with pass/partial/fail criteria (2-3 options is recommended
+for LLM-as-Judge):
 
 ```go
-cat := rubric.NewCategory("problem_definition", "Problem Definition", "").
-    WithDescription("Evaluates clarity and completeness of the problem statement").
-    WithPassCriteria("Problem is clearly stated with measurable business impact and affected users identified").
-    WithPartialCriteria("Problem is stated but lacks specificity or measurable impact").
-    WithFailCriteria("Problem is vague, missing, or not actionable")
+cat := rubric.NewCategory("problem_definition", "Problem Definition",
+    "Clarity and completeness of the problem statement").
+    SetWeight(0.2).
+    SetRequired(true).
+    WithPassPartialFail(
+        []string{"Problem is clearly stated with measurable business impact and affected users identified"},
+        []string{"Problem is stated but lacks specificity or measurable impact"},
+        []string{"Problem is vague, missing, or not actionable"},
+    )
 ```
+
+Other scale shapes: `WithBinary(pass, fail)`, `WithChecklist(required, optional, threshold)`, `WithLikert(config)`.
+
+## Rich Weighted Criteria (v0.10.0)
+
+When a dimension decomposes into independently scored parts, give the category
+`Criteria` instead of a flat scale. Each criterion carries a weight and
+pass/partial/fail bands, each with a description and concrete indicators an
+evaluator can look for:
+
+```go
+cat := rubric.Category{
+    ID:     "assumption_coverage",
+    Name:   "Assumption Coverage",
+    Weight: 25,
+    Criteria: []rubric.Criterion{
+        {
+            ID:     "desirability",
+            Name:   "Desirability",
+            Weight: 25,
+            Pass: rubric.CriterionLevel{
+                Description: "Desirability assumptions are identified",
+                Indicators:  []string{"customer demand cited", "willingness-to-pay evidence"},
+            },
+            Fail: rubric.CriterionLevel{
+                Description: "No desirability assumptions surfaced",
+            },
+        },
+    },
+}
+```
+
+Rich categories pair with numeric `scoreThresholds` on the rubric's pass
+criteria (weighted roll-up to a 0-100 score) — see
+[Pass Criteria](../concepts/pass-criteria.md).
 
 ## Adding Examples
 
-Examples help evaluators understand the criteria:
+Few-shot examples calibrate an evaluator; including the reasoning improves LLM
+alignment (chain-of-thought). Attach one per scoring band:
 
 ```go
-cat.AddExample(rubric.Example{
-    Score:   rubric.ScorePass,
-    Text:    "Users spend 3+ hours/week manually reconciling invoices, costing $50k/year in labor",
-    Reason:  "Quantifies impact, identifies users, and is actionable",
-})
-
-cat.AddExample(rubric.Example{
-    Score:   rubric.ScoreFail,
-    Text:    "We need to improve the system",
-    Reason:  "Vague, no measurable impact, not actionable",
+cat.SetExamples(&rubric.CategoryExamples{
+    Pass: &rubric.Example{
+        Excerpt:   "Users spend 3+ hours/week manually reconciling invoices, costing $50k/year",
+        Reasoning: "Quantifies impact, identifies users, and is actionable",
+    },
+    Fail: &rubric.Example{
+        Excerpt:   "We need to improve the system",
+        Reasoning: "Vague, no measurable impact, not actionable",
+    },
 })
 ```
 
@@ -72,19 +119,48 @@ rubricSet := rubric.NewRubricSet("prd-review", "PRD Review", "1.0.0").
     AddCategory(acceptanceCriteriaCategory)
 ```
 
-## Default PRD RubricSet
+## Authoring Rubrics in YAML (v0.10.0)
 
-```go
-rubricSet := rubric.DefaultPRDRubricSet()
+Rubric definitions carry `yaml` tags mirroring their `json` tags, so a rubric
+can be authored as a YAML file and parsed directly into a `RubricSet`:
+
+```yaml
+id: prd-rubric
+name: PRD Review
+version: "1.0"
+passCriteria:
+  minCategoriesPassing: all_required
+  maxFindingsSeverity: {critical: 0, high: 0, medium: -1, low: -1}
+categories:
+  - id: problem_definition
+    name: Problem Definition
+    weight: 0.2
+    required: true
+    scale:
+      type: categorical
+      options:
+        - {value: pass, criteria: ["Problem is clear, measurable, and tied to users"]}
+        - {value: partial, criteria: ["Problem is stated but lacks specificity"]}
+        - {value: fail, criteria: ["Problem is vague or missing"]}
 ```
 
-Includes rubrics for:
+```go
+var rs rubric.RubricSet
+_ = yaml.Unmarshal(data, &rs)
+```
 
-- **problem_definition** - Clarity of the problem statement
-- **user_stories** - Completeness of user stories
-- **success_metrics** - Quantitative success criteria
-- **acceptance_criteria** - Testable acceptance criteria
-- **scope_definition** - Clear scope boundaries
+### Definition Schema
+
+The generated `RubricSet` definition schema is embedded for downstream tooling:
+
+```go
+import "github.com/plexusone/structured-evaluation/schema"
+
+data := schema.RubricSetSchemaJSON // rubricset.schema.json
+```
+
+This is the **definition** schema (how a rubric is authored); `rubric.schema.json`
+remains the **report** schema (an evaluation result).
 
 ## Using Rubrics with Reports
 
@@ -93,8 +169,9 @@ Includes rubrics for:
 report := rubric.NewRubric("prd-review", "requirements.md")
 report.RubricID = "prd-review-v1"
 
-// Load rubric for evaluation guidance
-rubricSet := rubric.DefaultPRDRubricSet()
+// Load a rubric definition for evaluation guidance
+var rubricSet rubric.RubricSet
+_ = yaml.Unmarshal(prdRubricYAML, &rubricSet)
 
 // Evaluate each category using rubric criteria
 for _, cat := range rubricSet.Categories {
@@ -105,29 +182,22 @@ for _, cat := range rubricSet.Categories {
 
 ## Rubric-Guided LLM Evaluation
 
-When using LLM-as-Judge, include rubric criteria in the prompt:
+When using LLM-as-Judge, include each scale option's criteria in the prompt:
 
 ```go
-func buildPrompt(document string, cat Category) string {
-    return fmt.Sprintf(`Evaluate the following document for %s.
-
-Criteria:
-- PASS: %s
-- PARTIAL: %s
-- FAIL: %s
-
-Document:
-%s
-
-Respond with: score (pass/partial/fail) and reasoning.`,
-        cat.Name,
-        cat.Criteria.Pass,
-        cat.Criteria.Partial,
-        cat.Criteria.Fail,
-        document,
-    )
+func buildPrompt(document string, cat rubric.Category) string {
+    var b strings.Builder
+    fmt.Fprintf(&b, "Evaluate the following document for %s.\n\nCriteria:\n", cat.Name)
+    for _, opt := range cat.Scale.Options {
+        fmt.Fprintf(&b, "- %s: %s\n", strings.ToUpper(opt.Value), strings.Join(opt.Criteria, "; "))
+    }
+    fmt.Fprintf(&b, "\nDocument:\n%s\n\nRespond with: score (pass/partial/fail) and reasoning.", document)
+    return b.String()
 }
 ```
+
+For a rich category, iterate `cat.Criteria` and render each criterion's
+`Pass.Description` and `Pass.Indicators` instead.
 
 ## Benefits
 
@@ -146,10 +216,14 @@ Respond with: score (pass/partial/fail) and reasoning.`,
 
 ```go
 // ✅ Good criteria
-WithPassCriteria("All user stories follow Given/When/Then format with acceptance criteria")
+WithPassPartialFail(
+    []string{"All user stories follow Given/When/Then format with acceptance criteria"},
+    []string{"Most stories follow the format; some lack acceptance criteria"},
+    []string{"Stories are missing or lack testable acceptance criteria"},
+)
 
 // ❌ Vague criteria
-WithPassCriteria("User stories are good")
+WithPassPartialFail([]string{"User stories are good"}, nil, []string{"User stories are bad"})
 ```
 
 ### Providing Examples

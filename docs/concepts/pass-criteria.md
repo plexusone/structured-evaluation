@@ -223,6 +223,39 @@ criteria := rubric.PassCriteria{
 }
 ```
 
+## Definition Pass Criteria vs. Report Pass Criteria
+
+There are two related types:
+
+- **`PassCriteria`** (above) lives on an evaluation **report** (`Rubric`) and drives its pass/fail outcome.
+- **`RubricPassCriteria`** lives on a rubric **definition** (`RubricSet`) and is authored alongside the categories.
+
+```go
+type RubricPassCriteria struct {
+    MinCategoriesPassing string           `json:"minCategoriesPassing,omitempty"`
+    MaxFindings          *FindingLimits   `json:"maxFindingsSeverity,omitempty"`
+    ScoreThresholds      *ScoreThresholds `json:"scoreThresholds,omitempty"`
+}
+```
+
+### Score Thresholds (v0.10.0)
+
+For **rich** rubrics — where categories and criteria carry weights and the
+overall score is a weighted roll-up (0-100) — `ScoreThresholds` sets the numeric
+pass/partial cutoffs:
+
+```go
+type ScoreThresholds struct {
+    Pass    int `json:"pass"`    // e.g. 80 — score >= 80 passes
+    Partial int `json:"partial"` // e.g. 60 — score >= 60 is partial
+}
+```
+
+```yaml
+passCriteria:
+  scoreThresholds: {pass: 80, partial: 60}
+```
+
 ## Next Steps
 
 - [Findings & Severity](findings.md) - Understanding severity levels
