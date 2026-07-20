@@ -37,106 +37,106 @@ const (
 // Follows Go-first principles: Go types are source of truth, JSON Schema generated from them.
 type RubricSet struct {
 	// ID uniquely identifies this rubric set.
-	ID string `json:"id"`
+	ID string `json:"id" yaml:"id"`
 
 	// Name is the human-readable name.
-	Name string `json:"name"`
+	Name string `json:"name" yaml:"name"`
 
 	// Version is the semantic version of this rubric.
-	Version string `json:"version"`
+	Version string `json:"version" yaml:"version"`
 
 	// Description explains what this rubric set evaluates.
-	Description string `json:"description,omitempty"`
+	Description string `json:"description,omitempty" yaml:"description,omitempty"`
 
 	// EvaluationType is "analytic" (per-category) or "holistic" (single score).
 	// Analytic is recommended for LLM-as-Judge.
-	EvaluationType EvaluationType `json:"evaluationType,omitempty"`
+	EvaluationType EvaluationType `json:"evaluationType,omitempty" yaml:"evaluationType,omitempty"`
 
 	// PassCriteria defines requirements for overall pass/fail.
-	PassCriteria RubricPassCriteria `json:"passCriteria"`
+	PassCriteria RubricPassCriteria `json:"passCriteria" yaml:"passCriteria"`
 
 	// Categories are the evaluation dimensions.
-	Categories []Category `json:"categories"`
+	Categories []Category `json:"categories" yaml:"categories"`
 
 	// JudgePromptTemplate is the prompt template for LLM evaluation.
 	// Supports placeholders: {content}, {categories}, etc.
-	JudgePromptTemplate string `json:"judgePromptTemplate,omitempty"`
+	JudgePromptTemplate string `json:"judgePromptTemplate,omitempty" yaml:"judgePromptTemplate,omitempty"`
 
 	// Metadata contains additional information about the rubric.
-	Metadata *RubricMetadata `json:"metadata,omitempty"`
+	Metadata *RubricMetadata `json:"metadata,omitempty" yaml:"metadata,omitempty"`
 }
 
 // RubricPassCriteria defines requirements for overall pass/fail determination.
 type RubricPassCriteria struct {
 	// MinCategoriesPassing is "all", "all_required", or a number.
-	MinCategoriesPassing string `json:"minCategoriesPassing,omitempty"`
+	MinCategoriesPassing string `json:"minCategoriesPassing,omitempty" yaml:"minCategoriesPassing,omitempty"`
 
 	// MaxFindings limits findings by severity.
-	MaxFindings *FindingLimits `json:"maxFindingsSeverity,omitempty"`
+	MaxFindings *FindingLimits `json:"maxFindingsSeverity,omitempty" yaml:"maxFindingsSeverity,omitempty"`
 
 	// ScoreThresholds optionally sets numeric pass/partial cutoffs (0-100) for
 	// weighted-score rubrics (the rich form, where categories and criteria carry
 	// weights and the overall score is a weighted roll-up).
-	ScoreThresholds *ScoreThresholds `json:"scoreThresholds,omitempty"`
+	ScoreThresholds *ScoreThresholds `json:"scoreThresholds,omitempty" yaml:"scoreThresholds,omitempty"`
 }
 
 // ScoreThresholds are numeric pass/partial cutoffs (0-100) for weighted-score
 // rubrics. A score at or above Pass passes; at or above Partial is partial;
 // below Partial fails.
 type ScoreThresholds struct {
-	Pass    int `json:"pass"`
-	Partial int `json:"partial"`
+	Pass    int `json:"pass" yaml:"pass"`
+	Partial int `json:"partial" yaml:"partial"`
 }
 
 // FindingLimits sets maximum allowed findings per severity.
 // Use -1 for unlimited.
 type FindingLimits struct {
-	Critical int `json:"critical"`
-	High     int `json:"high"`
-	Medium   int `json:"medium"`
-	Low      int `json:"low,omitempty"`
+	Critical int `json:"critical" yaml:"critical"`
+	High     int `json:"high" yaml:"high"`
+	Medium   int `json:"medium" yaml:"medium"`
+	Low      int `json:"low,omitempty" yaml:"low,omitempty"`
 }
 
 // RubricMetadata contains additional rubric information.
 type RubricMetadata struct {
-	CreatedAt string   `json:"createdAt,omitempty"`
-	Author    string   `json:"author,omitempty"`
-	BasedOn   []string `json:"basedOn,omitempty"`
+	CreatedAt string   `json:"createdAt,omitempty" yaml:"createdAt,omitempty"`
+	Author    string   `json:"author,omitempty" yaml:"author,omitempty"`
+	BasedOn   []string `json:"basedOn,omitempty" yaml:"basedOn,omitempty"`
 }
 
 // Category is a single evaluation dimension.
 type Category struct {
 	// ID uniquely identifies this category within the rubric.
-	ID string `json:"id"`
+	ID string `json:"id" yaml:"id"`
 
 	// Name is the human-readable category name.
-	Name string `json:"name"`
+	Name string `json:"name" yaml:"name"`
 
 	// Description explains what this category measures.
-	Description string `json:"description"`
+	Description string `json:"description" yaml:"description"`
 
 	// Weight is the relative importance (default 1.0).
-	Weight float64 `json:"weight,omitempty"`
+	Weight float64 `json:"weight,omitempty" yaml:"weight,omitempty"`
 
 	// Required indicates if this category must pass for overall pass.
-	Required bool `json:"required,omitempty"`
+	Required bool `json:"required,omitempty" yaml:"required,omitempty"`
 
 	// Scale defines how this category is scored.
-	Scale Scale `json:"scale"`
+	Scale Scale `json:"scale" yaml:"scale"`
 
 	// EvaluationPrompt is a specific prompt for evaluating this category.
-	EvaluationPrompt string `json:"evaluationPrompt,omitempty"`
+	EvaluationPrompt string `json:"evaluationPrompt,omitempty" yaml:"evaluationPrompt,omitempty"`
 
 	// Examples provides few-shot examples for LLM evaluation.
 	// Research shows 1 example per level improves LLM alignment.
-	Examples *CategoryExamples `json:"examples,omitempty"`
+	Examples *CategoryExamples `json:"examples,omitempty" yaml:"examples,omitempty"`
 
 	// Criteria optionally decomposes this category into weighted sub-criteria,
 	// each scored independently at pass/partial/fail with concrete indicators.
 	// When present, the category is "composite" (the rich-rubric form) and its
 	// score aggregates its criteria by weight. Simple categories omit this and
 	// are scored directly via Scale.
-	Criteria []Criterion `json:"criteria,omitempty"`
+	Criteria []Criterion `json:"criteria,omitempty" yaml:"criteria,omitempty"`
 }
 
 // IsComposite reports whether the category decomposes into weighted criteria
@@ -150,28 +150,28 @@ func (c *Category) IsComposite() bool {
 // the category and each criterion carry a weight.
 type Criterion struct {
 	// ID uniquely identifies this criterion within its category.
-	ID string `json:"id,omitempty"`
+	ID string `json:"id,omitempty" yaml:"id,omitempty"`
 
 	// Name is the human-readable criterion name.
-	Name string `json:"name"`
+	Name string `json:"name" yaml:"name"`
 
 	// Weight is the relative importance within the category (default 1.0).
-	Weight float64 `json:"weight,omitempty"`
+	Weight float64 `json:"weight,omitempty" yaml:"weight,omitempty"`
 
 	// Pass, Partial, and Fail describe the scoring bands for this criterion.
-	Pass    CriterionLevel `json:"pass"`
-	Partial CriterionLevel `json:"partial,omitempty"`
-	Fail    CriterionLevel `json:"fail"`
+	Pass    CriterionLevel `json:"pass" yaml:"pass"`
+	Partial CriterionLevel `json:"partial,omitempty" yaml:"partial,omitempty"`
+	Fail    CriterionLevel `json:"fail" yaml:"fail"`
 }
 
 // CriterionLevel is one scoring band for a criterion: what it means and the
 // concrete indicators an evaluator looks for.
 type CriterionLevel struct {
 	// Description explains what this score band means.
-	Description string `json:"description,omitempty"`
+	Description string `json:"description,omitempty" yaml:"description,omitempty"`
 
 	// Indicators are concrete signals an evaluator looks for at this band.
-	Indicators []string `json:"indicators,omitempty"`
+	Indicators []string `json:"indicators,omitempty" yaml:"indicators,omitempty"`
 }
 
 // Scale defines the scoring mechanism for a category.
@@ -179,93 +179,93 @@ type Scale struct {
 	// Type is "categorical", "checklist", "binary", or "likert".
 	// Categorical with 2-3 options is recommended for LLM-as-Judge.
 	// Likert is better for human comparison studies.
-	Type ScaleType `json:"type"`
+	Type ScaleType `json:"type" yaml:"type"`
 
 	// Options are the scoring options (for categorical scales).
-	Options []ScaleOption `json:"options,omitempty"`
+	Options []ScaleOption `json:"options,omitempty" yaml:"options,omitempty"`
 
 	// RequiredItems are items that must be present (for checklist scales).
-	RequiredItems []string `json:"requiredItems,omitempty"`
+	RequiredItems []string `json:"requiredItems,omitempty" yaml:"requiredItems,omitempty"`
 
 	// OptionalItems are items that add value (for checklist scales).
-	OptionalItems []string `json:"optionalItems,omitempty"`
+	OptionalItems []string `json:"optionalItems,omitempty" yaml:"optionalItems,omitempty"`
 
 	// PassingThreshold defines pass criteria (for checklist scales).
-	PassingThreshold *ChecklistThreshold `json:"passingThreshold,omitempty"`
+	PassingThreshold *ChecklistThreshold `json:"passingThreshold,omitempty" yaml:"passingThreshold,omitempty"`
 
 	// LikertConfig defines the likert scale (for likert scales).
-	LikertConfig *LikertConfig `json:"likertConfig,omitempty"`
+	LikertConfig *LikertConfig `json:"likertConfig,omitempty" yaml:"likertConfig,omitempty"`
 }
 
 // LikertConfig defines a Likert scale configuration.
 type LikertConfig struct {
 	// Min is the minimum score value (usually 1 or 0).
-	Min int `json:"min"`
+	Min int `json:"min" yaml:"min"`
 
 	// Max is the maximum score value (usually 5).
-	Max int `json:"max"`
+	Max int `json:"max" yaml:"max"`
 
 	// Anchors describe what each score level means.
-	Anchors []LikertAnchor `json:"anchors,omitempty"`
+	Anchors []LikertAnchor `json:"anchors,omitempty" yaml:"anchors,omitempty"`
 
 	// PassThreshold is the minimum score for "pass" (default: top 40%).
 	// For 1-5 scale, default is 4.
-	PassThreshold *int `json:"passThreshold,omitempty"`
+	PassThreshold *int `json:"passThreshold,omitempty" yaml:"passThreshold,omitempty"`
 
 	// PartialThreshold is the minimum score for "partial" (default: middle).
 	// For 1-5 scale, default is 3.
-	PartialThreshold *int `json:"partialThreshold,omitempty"`
+	PartialThreshold *int `json:"partialThreshold,omitempty" yaml:"partialThreshold,omitempty"`
 }
 
 // LikertAnchor describes what a specific score level means.
 type LikertAnchor struct {
 	// Value is the numeric score.
-	Value int `json:"value"`
+	Value int `json:"value" yaml:"value"`
 
 	// Label is the short label (e.g., "Excellent", "Good").
-	Label string `json:"label"`
+	Label string `json:"label" yaml:"label"`
 
 	// Description explains what this score means.
-	Description string `json:"description,omitempty"`
+	Description string `json:"description,omitempty" yaml:"description,omitempty"`
 }
 
 // ScaleOption is a single option in a categorical scale.
 type ScaleOption struct {
 	// Value is the machine-readable value (e.g., "pass", "partial", "fail").
-	Value string `json:"value"`
+	Value string `json:"value" yaml:"value"`
 
 	// Label is the human-readable label.
-	Label string `json:"label"`
+	Label string `json:"label" yaml:"label"`
 
 	// Criteria are specific requirements for this score level.
-	Criteria []string `json:"criteria"`
+	Criteria []string `json:"criteria" yaml:"criteria"`
 }
 
 // ChecklistThreshold defines pass criteria for checklist scales.
 type ChecklistThreshold struct {
 	// Required is "all" or a number of required items that must be present.
-	Required string `json:"required,omitempty"`
+	Required string `json:"required,omitempty" yaml:"required,omitempty"`
 
 	// Optional is the minimum number of optional items needed.
-	Optional int `json:"optional,omitempty"`
+	Optional int `json:"optional,omitempty" yaml:"optional,omitempty"`
 }
 
 // CategoryExamples provides few-shot examples for a category.
 // Research shows 1 example per level improves LLM alignment.
 type CategoryExamples struct {
-	Pass    *Example `json:"pass,omitempty"`
-	Partial *Example `json:"partial,omitempty"`
-	Fail    *Example `json:"fail,omitempty"`
+	Pass    *Example `json:"pass,omitempty" yaml:"pass,omitempty"`
+	Partial *Example `json:"partial,omitempty" yaml:"partial,omitempty"`
+	Fail    *Example `json:"fail,omitempty" yaml:"fail,omitempty"`
 }
 
 // Example is a few-shot example for LLM evaluation.
 type Example struct {
 	// Excerpt is example content from a document.
-	Excerpt string `json:"excerpt"`
+	Excerpt string `json:"excerpt" yaml:"excerpt"`
 
 	// Reasoning explains why this gets this score.
 	// Including reasoning improves LLM alignment (chain-of-thought).
-	Reasoning string `json:"reasoning"`
+	Reasoning string `json:"reasoning" yaml:"reasoning"`
 }
 
 // NewRubricSet creates a new rubric set with required fields.
