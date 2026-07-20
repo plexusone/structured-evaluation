@@ -189,3 +189,16 @@ func GetBlockingCodes(findings []Finding) []ReasonCode {
 	}
 	return codes
 }
+
+// WorstSeverity returns the highest-weight severity among findings, or the
+// zero value if findings is empty. Used to roll a category's findings up
+// into a single severity for prioritization (e.g. CategoryResult.Severity).
+func WorstSeverity(findings []Finding) Severity {
+	var worst Severity
+	for _, f := range findings {
+		if worst == "" || f.Severity.Weight() > worst.Weight() {
+			worst = f.Severity
+		}
+	}
+	return worst
+}

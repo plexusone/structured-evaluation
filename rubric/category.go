@@ -60,6 +60,14 @@ type CategoryResult struct {
 	// Low confidence scores may be routed to human review.
 	Confidence float64 `json:"confidence,omitempty"`
 
+	// Severity is the highest-severity finding in this category (empty if
+	// there are none). Computed automatically — via AddCategoryResult, or
+	// as a safety net in Evaluate for categories appended directly to
+	// Rubric.Categories — so it can't drift from Findings; it is not an
+	// independent judgment. Exists for prioritizing which categories to
+	// fix first, distinct from Score/IntScore, which measure quality.
+	Severity Severity `json:"severity,omitempty"`
+
 	// ReasonCodes are standardized finding identifiers for this category.
 	// Enable automated repair workflows.
 	ReasonCodes []ReasonCode `json:"reasonCodes,omitempty"`
@@ -156,9 +164,12 @@ func (cr *CategoryResult) AddEvidence(evidence ...string) *CategoryResult {
 	return cr
 }
 
-// AddFinding adds a finding to the result.
+// AddFinding adds a finding to the result and recomputes Severity from the
+// updated Findings, so it never drifts out of sync with what's actually
+// been added.
 func (cr *CategoryResult) AddFinding(f Finding) *CategoryResult {
 	cr.Findings = append(cr.Findings, f)
+	cr.Severity = WorstSeverity(cr.Findings)
 	return cr
 }
 

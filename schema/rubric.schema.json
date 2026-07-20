@@ -223,6 +223,17 @@
           "confidence": {
             "type": "number"
           },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "critical",
+              "high",
+              "medium",
+              "low",
+              "info"
+            ],
+            "description": "Finding severity: critical, high, medium, low, or info"
+          },
           "reasonCodes": {
             "items": {
               "type": "string"

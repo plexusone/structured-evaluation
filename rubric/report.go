@@ -285,6 +285,9 @@ func (r *Rubric) IsV2() bool {
 
 // AddCategoryResult adds a category result.
 func (r *Rubric) AddCategoryResult(cr CategoryResult) {
+	if cr.Severity == "" {
+		cr.Severity = WorstSeverity(cr.Findings)
+	}
 	r.Categories = append(r.Categories, cr)
 	// Also collect findings from the category
 	r.Findings = append(r.Findings, cr.Findings...)
@@ -297,6 +300,15 @@ func (r *Rubric) AddFinding(f Finding) {
 
 // Evaluate computes the decision based on findings and category results.
 func (r *Rubric) Evaluate(rubricSet *RubricSet) Decision {
+	// Compute category severities if not already set — a safety net for
+	// categories appended directly to r.Categories, bypassing
+	// AddCategoryResult/AddFinding.
+	for i := range r.Categories {
+		if r.Categories[i].Severity == "" {
+			r.Categories[i].Severity = WorstSeverity(r.Categories[i].Findings)
+		}
+	}
+
 	r.Decision = EvaluateResults(r.Categories, r.Findings, r.PassCriteria, rubricSet)
 	r.OverallDecision = string(r.Decision.Status)
 
