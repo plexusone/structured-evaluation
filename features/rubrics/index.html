@@ -710,10 +710,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#creating-rubric-categories" class="md-nav__link">
+  <a href="#flat-categories" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Creating Rubric Categories
+        Flat Categories
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rich-weighted-criteria-v0100" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rich Weighted Criteria (v0.10.0)
       
     </span>
   </a>
@@ -760,13 +771,30 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#default-prd-rubricset" class="md-nav__link">
+  <a href="#authoring-rubrics-in-yaml-v0100" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Default PRD RubricSet
+        Authoring Rubrics in YAML (v0.10.0)
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Authoring Rubrics in YAML (v0.10.0)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#definition-schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Definition Schema
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1649,10 +1677,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#creating-rubric-categories" class="md-nav__link">
+  <a href="#flat-categories" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Creating Rubric Categories
+        Flat Categories
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rich-weighted-criteria-v0100" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rich Weighted Criteria (v0.10.0)
       
     </span>
   </a>
@@ -1699,13 +1738,30 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#default-prd-rubricset" class="md-nav__link">
+  <a href="#authoring-rubrics-in-yaml-v0100" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Default PRD RubricSet
+        Authoring Rubrics in YAML (v0.10.0)
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Authoring Rubrics in YAML (v0.10.0)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#definition-schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Definition Schema
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1876,104 +1932,157 @@
 <h1 id="rubrics">Rubrics<a class="headerlink" href="#rubrics" title="Permanent link">&para;</a></h1>
 <p>Rubrics define explicit evaluation criteria for consistent assessments across evaluators (human or LLM).</p>
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
-<p>A rubric category provides structured guidance for evaluating each category:</p>
+<p>A category defines how one dimension of a document is scored. It can be scored two ways:</p>
+<ul>
+<li><strong>Flat</strong> — a categorical scale (pass / partial / fail) with criteria per band.</li>
+<li><strong>Rich</strong> — weighted sub-criteria, each with its own pass/partial/fail bands and concrete indicators (added in v0.10.0).</li>
+</ul>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kd">type</span><span class="w"> </span><span class="nx">Category</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="nx">ID</span><span class="w">          </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;id&quot;`</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="nx">Name</span><span class="w">        </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;name&quot;`</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="nx">Description</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;description&quot;`</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="nx">Criteria</span><span class="w">    </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">        </span><span class="nx">Pass</span><span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;pass&quot;`</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">        </span><span class="nx">Partial</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;partial&quot;`</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">        </span><span class="nx">Fail</span><span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;fail&quot;`</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="s">`json:&quot;criteria&quot;`</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="nx">Examples</span><span class="w">    </span><span class="p">[]</span><span class="nx">Example</span><span class="w"> </span><span class="s">`json:&quot;examples,omitempty&quot;`</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="p">}</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="nx">ID</span><span class="w">          </span><span class="kt">string</span><span class="w">            </span><span class="s">`json:&quot;id&quot; yaml:&quot;id&quot;`</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="nx">Name</span><span class="w">        </span><span class="kt">string</span><span class="w">            </span><span class="s">`json:&quot;name&quot; yaml:&quot;name&quot;`</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="nx">Description</span><span class="w"> </span><span class="kt">string</span><span class="w">            </span><span class="s">`json:&quot;description&quot; yaml:&quot;description&quot;`</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="nx">Weight</span><span class="w">      </span><span class="kt">float64</span><span class="w">           </span><span class="s">`json:&quot;weight,omitempty&quot; yaml:&quot;weight,omitempty&quot;`</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="nx">Required</span><span class="w">    </span><span class="kt">bool</span><span class="w">              </span><span class="s">`json:&quot;required,omitempty&quot; yaml:&quot;required,omitempty&quot;`</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="nx">Scale</span><span class="w">       </span><span class="nx">Scale</span><span class="w">             </span><span class="s">`json:&quot;scale&quot; yaml:&quot;scale&quot;`</span><span class="w">                             </span><span class="c1">// flat scoring</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="nx">Criteria</span><span class="w">    </span><span class="p">[]</span><span class="nx">Criterion</span><span class="w">       </span><span class="s">`json:&quot;criteria,omitempty&quot; yaml:&quot;criteria,omitempty&quot;`</span><span class="w">   </span><span class="c1">// rich scoring</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="nx">Examples</span><span class="w">    </span><span class="o">*</span><span class="nx">CategoryExamples</span><span class="w"> </span><span class="s">`json:&quot;examples,omitempty&quot; yaml:&quot;examples,omitempty&quot;`</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="p">}</span>
 </code></pre></div>
-<h2 id="creating-rubric-categories">Creating Rubric Categories<a class="headerlink" href="#creating-rubric-categories" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nx">cat</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewCategory</span><span class="p">(</span><span class="s">&quot;problem_definition&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Problem Definition&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">).</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="nx">WithDescription</span><span class="p">(</span><span class="s">&quot;Evaluates clarity and completeness of the problem statement&quot;</span><span class="p">).</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nx">WithPassCriteria</span><span class="p">(</span><span class="s">&quot;Problem is clearly stated with measurable business impact and affected users identified&quot;</span><span class="p">).</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="nx">WithPartialCriteria</span><span class="p">(</span><span class="s">&quot;Problem is stated but lacks specificity or measurable impact&quot;</span><span class="p">).</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="nx">WithFailCriteria</span><span class="p">(</span><span class="s">&quot;Problem is vague, missing, or not actionable&quot;</span><span class="p">)</span>
+<p>Use <code>cat.IsComposite()</code> to tell them apart — it returns true when the category
+carries weighted <code>Criteria</code>.</p>
+<h2 id="flat-categories">Flat Categories<a class="headerlink" href="#flat-categories" title="Permanent link">&para;</a></h2>
+<p>A categorical scale with pass/partial/fail criteria (2-3 options is recommended
+for LLM-as-Judge):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nx">cat</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewCategory</span><span class="p">(</span><span class="s">&quot;problem_definition&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Problem Definition&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="s">&quot;Clarity and completeness of the problem statement&quot;</span><span class="p">).</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nx">SetWeight</span><span class="p">(</span><span class="mf">0.2</span><span class="p">).</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="nx">SetRequired</span><span class="p">(</span><span class="kc">true</span><span class="p">).</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="nx">WithPassPartialFail</span><span class="p">(</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">        </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;Problem is clearly stated with measurable business impact and affected users identified&quot;</span><span class="p">},</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">        </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;Problem is stated but lacks specificity or measurable impact&quot;</span><span class="p">},</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">        </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;Problem is vague, missing, or not actionable&quot;</span><span class="p">},</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="p">)</span>
 </code></pre></div>
+<p>Other scale shapes: <code>WithBinary(pass, fail)</code>, <code>WithChecklist(required, optional, threshold)</code>, <code>WithLikert(config)</code>.</p>
+<h2 id="rich-weighted-criteria-v0100">Rich Weighted Criteria (v0.10.0)<a class="headerlink" href="#rich-weighted-criteria-v0100" title="Permanent link">&para;</a></h2>
+<p>When a dimension decomposes into independently scored parts, give the category
+<code>Criteria</code> instead of a flat scale. Each criterion carries a weight and
+pass/partial/fail bands, each with a description and concrete indicators an
+evaluator can look for:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nx">cat</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">Category</span><span class="p">{</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="nx">ID</span><span class="p">:</span><span class="w">     </span><span class="s">&quot;assumption_coverage&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nx">Name</span><span class="p">:</span><span class="w">   </span><span class="s">&quot;Assumption Coverage&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="nx">Weight</span><span class="p">:</span><span class="w"> </span><span class="mi">25</span><span class="p">,</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="nx">Criteria</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="nx">rubric</span><span class="p">.</span><span class="nx">Criterion</span><span class="p">{</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">        </span><span class="p">{</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">            </span><span class="nx">ID</span><span class="p">:</span><span class="w">     </span><span class="s">&quot;desirability&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">            </span><span class="nx">Name</span><span class="p">:</span><span class="w">   </span><span class="s">&quot;Desirability&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">            </span><span class="nx">Weight</span><span class="p">:</span><span class="w"> </span><span class="mi">25</span><span class="p">,</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">            </span><span class="nx">Pass</span><span class="p">:</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">CriterionLevel</span><span class="p">{</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">                </span><span class="nx">Description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Desirability assumptions are identified&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">                </span><span class="nx">Indicators</span><span class="p">:</span><span class="w">  </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;customer demand cited&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;willingness-to-pay evidence&quot;</span><span class="p">},</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">            </span><span class="p">},</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">            </span><span class="nx">Fail</span><span class="p">:</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">CriterionLevel</span><span class="p">{</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">                </span><span class="nx">Description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;No desirability assumptions surfaced&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">            </span><span class="p">},</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">        </span><span class="p">},</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">    </span><span class="p">},</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="p">}</span>
+</code></pre></div>
+<p>Rich categories pair with numeric <code>scoreThresholds</code> on the rubric's pass
+criteria (weighted roll-up to a 0-100 score) — see
+<a href="../../concepts/pass-criteria/">Pass Criteria</a>.</p>
 <h2 id="adding-examples">Adding Examples<a class="headerlink" href="#adding-examples" title="Permanent link">&para;</a></h2>
-<p>Examples help evaluators understand the criteria:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nx">cat</span><span class="p">.</span><span class="nx">AddExample</span><span class="p">(</span><span class="nx">rubric</span><span class="p">.</span><span class="nx">Example</span><span class="p">{</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="nx">Score</span><span class="p">:</span><span class="w">   </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">ScorePass</span><span class="p">,</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nx">Text</span><span class="p">:</span><span class="w">    </span><span class="s">&quot;Users spend 3+ hours/week manually reconciling invoices, costing $50k/year in labor&quot;</span><span class="p">,</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="nx">Reason</span><span class="p">:</span><span class="w">  </span><span class="s">&quot;Quantifies impact, identifies users, and is actionable&quot;</span><span class="p">,</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="p">})</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="nx">cat</span><span class="p">.</span><span class="nx">AddExample</span><span class="p">(</span><span class="nx">rubric</span><span class="p">.</span><span class="nx">Example</span><span class="p">{</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="nx">Score</span><span class="p">:</span><span class="w">   </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">ScoreFail</span><span class="p">,</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">    </span><span class="nx">Text</span><span class="p">:</span><span class="w">    </span><span class="s">&quot;We need to improve the system&quot;</span><span class="p">,</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">    </span><span class="nx">Reason</span><span class="p">:</span><span class="w">  </span><span class="s">&quot;Vague, no measurable impact, not actionable&quot;</span><span class="p">,</span>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="p">})</span>
+<p>Few-shot examples calibrate an evaluator; including the reasoning improves LLM
+alignment (chain-of-thought). Attach one per scoring band:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nx">cat</span><span class="p">.</span><span class="nx">SetExamples</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">rubric</span><span class="p">.</span><span class="nx">CategoryExamples</span><span class="p">{</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="nx">Pass</span><span class="p">:</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">rubric</span><span class="p">.</span><span class="nx">Example</span><span class="p">{</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">        </span><span class="nx">Excerpt</span><span class="p">:</span><span class="w">   </span><span class="s">&quot;Users spend 3+ hours/week manually reconciling invoices, costing $50k/year&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">        </span><span class="nx">Reasoning</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Quantifies impact, identifies users, and is actionable&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="p">},</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">    </span><span class="nx">Fail</span><span class="p">:</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">rubric</span><span class="p">.</span><span class="nx">Example</span><span class="p">{</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">        </span><span class="nx">Excerpt</span><span class="p">:</span><span class="w">   </span><span class="s">&quot;We need to improve the system&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">        </span><span class="nx">Reasoning</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Vague, no measurable impact, not actionable&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">    </span><span class="p">},</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="p">})</span>
 </code></pre></div>
 <h2 id="rubricset">RubricSet<a class="headerlink" href="#rubricset" title="Permanent link">&para;</a></h2>
 <p>Group rubric categories for a specific review type:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kd">type</span><span class="w"> </span><span class="nx">RubricSet</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="nx">ID</span><span class="w">          </span><span class="kt">string</span><span class="w">     </span><span class="s">`json:&quot;id&quot;`</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="nx">Name</span><span class="w">        </span><span class="kt">string</span><span class="w">     </span><span class="s">`json:&quot;name&quot;`</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="nx">Description</span><span class="w"> </span><span class="kt">string</span><span class="w">     </span><span class="s">`json:&quot;description&quot;`</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="nx">Categories</span><span class="w">  </span><span class="p">[]</span><span class="nx">Category</span><span class="w"> </span><span class="s">`json:&quot;categories&quot;`</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kd">type</span><span class="w"> </span><span class="nx">RubricSet</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="nx">ID</span><span class="w">          </span><span class="kt">string</span><span class="w">     </span><span class="s">`json:&quot;id&quot;`</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="nx">Name</span><span class="w">        </span><span class="kt">string</span><span class="w">     </span><span class="s">`json:&quot;name&quot;`</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="nx">Description</span><span class="w"> </span><span class="kt">string</span><span class="w">     </span><span class="s">`json:&quot;description&quot;`</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="nx">Categories</span><span class="w">  </span><span class="p">[]</span><span class="nx">Category</span><span class="w"> </span><span class="s">`json:&quot;categories&quot;`</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="p">}</span>
 </code></pre></div>
 <h3 id="creating-a-rubricset">Creating a RubricSet<a class="headerlink" href="#creating-a-rubricset" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nx">rubricSet</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewRubricSet</span><span class="p">(</span><span class="s">&quot;prd-review&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;PRD Review&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;1.0.0&quot;</span><span class="p">).</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="nx">WithDescription</span><span class="p">(</span><span class="s">&quot;Evaluates Product Requirements Documents&quot;</span><span class="p">).</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="nx">AddCategory</span><span class="p">(</span><span class="nx">problemDefinitionCategory</span><span class="p">).</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="nx">AddCategory</span><span class="p">(</span><span class="nx">userStoriesCategory</span><span class="p">).</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="nx">AddCategory</span><span class="p">(</span><span class="nx">successMetricsCategory</span><span class="p">).</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="nx">AddCategory</span><span class="p">(</span><span class="nx">acceptanceCriteriaCategory</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nx">rubricSet</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewRubricSet</span><span class="p">(</span><span class="s">&quot;prd-review&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;PRD Review&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;1.0.0&quot;</span><span class="p">).</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="nx">WithDescription</span><span class="p">(</span><span class="s">&quot;Evaluates Product Requirements Documents&quot;</span><span class="p">).</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="nx">AddCategory</span><span class="p">(</span><span class="nx">problemDefinitionCategory</span><span class="p">).</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="nx">AddCategory</span><span class="p">(</span><span class="nx">userStoriesCategory</span><span class="p">).</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="nx">AddCategory</span><span class="p">(</span><span class="nx">successMetricsCategory</span><span class="p">).</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">    </span><span class="nx">AddCategory</span><span class="p">(</span><span class="nx">acceptanceCriteriaCategory</span><span class="p">)</span>
 </code></pre></div>
-<h2 id="default-prd-rubricset">Default PRD RubricSet<a class="headerlink" href="#default-prd-rubricset" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nx">rubricSet</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">DefaultPRDRubricSet</span><span class="p">()</span>
+<h2 id="authoring-rubrics-in-yaml-v0100">Authoring Rubrics in YAML (v0.10.0)<a class="headerlink" href="#authoring-rubrics-in-yaml-v0100" title="Permanent link">&para;</a></h2>
+<p>Rubric definitions carry <code>yaml</code> tags mirroring their <code>json</code> tags, so a rubric
+can be authored as a YAML file and parsed directly into a <code>RubricSet</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prd-rubric</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PRD Review</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1.0&quot;</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="nt">passCriteria</span><span class="p">:</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">  </span><span class="nt">minCategoriesPassing</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">all_required</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">  </span><span class="nt">maxFindingsSeverity</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">critical</span><span class="p">:</span><span class="w"> </span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="nt"> high</span><span class="p">:</span><span class="w"> </span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="nt"> medium</span><span class="p">:</span><span class="w"> </span><span class="nv">-1</span><span class="p p-Indicator">,</span><span class="nt"> low</span><span class="p">:</span><span class="w"> </span><span class="nv">-1</span><span class="p p-Indicator">}</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="nt">categories</span><span class="p">:</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">problem_definition</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Problem Definition</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">    </span><span class="nt">weight</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.2</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">    </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="w">    </span><span class="nt">scale</span><span class="p">:</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">categorical</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="w">      </span><span class="nt">options</span><span class="p">:</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="nv">pass</span><span class="p p-Indicator">,</span><span class="nt"> criteria</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;Problem</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">clear,</span><span class="nv"> </span><span class="s">measurable,</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">tied</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">users&quot;</span><span class="p p-Indicator">]}</span>
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="nv">partial</span><span class="p p-Indicator">,</span><span class="nt"> criteria</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;Problem</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">stated</span><span class="nv"> </span><span class="s">but</span><span class="nv"> </span><span class="s">lacks</span><span class="nv"> </span><span class="s">specificity&quot;</span><span class="p p-Indicator">]}</span>
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="nv">fail</span><span class="p p-Indicator">,</span><span class="nt"> criteria</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;Problem</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">vague</span><span class="nv"> </span><span class="s">or</span><span class="nv"> </span><span class="s">missing&quot;</span><span class="p p-Indicator">]}</span>
 </code></pre></div>
-<p>Includes rubrics for:</p>
-<ul>
-<li><strong>problem_definition</strong> - Clarity of the problem statement</li>
-<li><strong>user_stories</strong> - Completeness of user stories</li>
-<li><strong>success_metrics</strong> - Quantitative success criteria</li>
-<li><strong>acceptance_criteria</strong> - Testable acceptance criteria</li>
-<li><strong>scope_definition</strong> - Clear scope boundaries</li>
-</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">rs</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">RubricSet</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="nx">_</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">yaml</span><span class="p">.</span><span class="nx">Unmarshal</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">rs</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="definition-schema">Definition Schema<a class="headerlink" href="#definition-schema" title="Permanent link">&para;</a></h3>
+<p>The generated <code>RubricSet</code> definition schema is embedded for downstream tooling:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">import</span><span class="w"> </span><span class="s">&quot;github.com/plexusone/structured-evaluation/schema&quot;</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="nx">data</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">schema</span><span class="p">.</span><span class="nx">RubricSetSchemaJSON</span><span class="w"> </span><span class="c1">// rubricset.schema.json</span>
+</code></pre></div>
+<p>This is the <strong>definition</strong> schema (how a rubric is authored); <code>rubric.schema.json</code>
+remains the <strong>report</strong> schema (an evaluation result).</p>
 <h2 id="using-rubrics-with-reports">Using Rubrics with Reports<a class="headerlink" href="#using-rubrics-with-reports" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1">// Create report with rubric reference</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nx">report</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewRubric</span><span class="p">(</span><span class="s">&quot;prd-review&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;requirements.md&quot;</span><span class="p">)</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="nx">report</span><span class="p">.</span><span class="nx">RubricID</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;prd-review-v1&quot;</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="c1">// Load rubric for evaluation guidance</span>
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="nx">rubricSet</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">DefaultPRDRubricSet</span><span class="p">()</span>
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>
-<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="c1">// Evaluate each category using rubric criteria</span>
-<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">cat</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">rubricSet</span><span class="p">.</span><span class="nx">Categories</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">    </span><span class="nx">result</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">evaluateCategory</span><span class="p">(</span><span class="nx">document</span><span class="p">,</span><span class="w"> </span><span class="nx">cat</span><span class="p">)</span>
-<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">    </span><span class="nx">report</span><span class="p">.</span><span class="nx">AddCategoryResult</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span>
-<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1">// Create report with rubric reference</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nx">report</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewRubric</span><span class="p">(</span><span class="s">&quot;prd-review&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;requirements.md&quot;</span><span class="p">)</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="nx">report</span><span class="p">.</span><span class="nx">RubricID</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;prd-review-v1&quot;</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="c1">// Load rubric for evaluation guidance</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="nx">rubricSet</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">DefaultPRDRubricSet</span><span class="p">()</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="c1">// Evaluate each category using rubric criteria</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">cat</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">rubricSet</span><span class="p">.</span><span class="nx">Categories</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="w">    </span><span class="nx">result</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">evaluateCategory</span><span class="p">(</span><span class="nx">document</span><span class="p">,</span><span class="w"> </span><span class="nx">cat</span><span class="p">)</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="w">    </span><span class="nx">report</span><span class="p">.</span><span class="nx">AddCategoryResult</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span>
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="p">}</span>
 </code></pre></div>
 <h2 id="rubric-guided-llm-evaluation">Rubric-Guided LLM Evaluation<a class="headerlink" href="#rubric-guided-llm-evaluation" title="Permanent link">&para;</a></h2>
-<p>When using LLM-as-Judge, include rubric criteria in the prompt:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kd">func</span><span class="w"> </span><span class="nx">buildPrompt</span><span class="p">(</span><span class="nx">document</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">cat</span><span class="w"> </span><span class="nx">Category</span><span class="p">)</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Sprintf</span><span class="p">(</span><span class="s">`Evaluate the following document for %s.</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="s">Criteria:</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="s">- PASS: %s</span>
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="s">- PARTIAL: %s</span>
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="s">- FAIL: %s</span>
-<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>
-<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="s">Document:</span>
-<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="s">%s</span>
-<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>
-<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="s">Respond with: score (pass/partial/fail) and reasoning.`</span><span class="p">,</span>
-<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="w">        </span><span class="nx">cat</span><span class="p">.</span><span class="nx">Name</span><span class="p">,</span>
-<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="w">        </span><span class="nx">cat</span><span class="p">.</span><span class="nx">Criteria</span><span class="p">.</span><span class="nx">Pass</span><span class="p">,</span>
-<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="w">        </span><span class="nx">cat</span><span class="p">.</span><span class="nx">Criteria</span><span class="p">.</span><span class="nx">Partial</span><span class="p">,</span>
-<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="w">        </span><span class="nx">cat</span><span class="p">.</span><span class="nx">Criteria</span><span class="p">.</span><span class="nx">Fail</span><span class="p">,</span>
-<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a><span class="w">        </span><span class="nx">document</span><span class="p">,</span>
-<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a><span class="w">    </span><span class="p">)</span>
-<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a><span class="p">}</span>
+<p>When using LLM-as-Judge, include each scale option's criteria in the prompt:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kd">func</span><span class="w"> </span><span class="nx">buildPrompt</span><span class="p">(</span><span class="nx">document</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">cat</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">Category</span><span class="p">)</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">b</span><span class="w"> </span><span class="nx">strings</span><span class="p">.</span><span class="nx">Builder</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Fprintf</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">b</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Evaluate the following document for %s.\n\nCriteria:\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">cat</span><span class="p">.</span><span class="nx">Name</span><span class="p">)</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">opt</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">cat</span><span class="p">.</span><span class="nx">Scale</span><span class="p">.</span><span class="nx">Options</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Fprintf</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">b</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;- %s: %s\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">strings</span><span class="p">.</span><span class="nx">ToUpper</span><span class="p">(</span><span class="nx">opt</span><span class="p">.</span><span class="nx">Value</span><span class="p">),</span><span class="w"> </span><span class="nx">strings</span><span class="p">.</span><span class="nx">Join</span><span class="p">(</span><span class="nx">opt</span><span class="p">.</span><span class="nx">Criteria</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;; &quot;</span><span class="p">))</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Fprintf</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">b</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;\nDocument:\n%s\n\nRespond with: score (pass/partial/fail) and reasoning.&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">document</span><span class="p">)</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">b</span><span class="p">.</span><span class="nx">String</span><span class="p">()</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="p">}</span>
 </code></pre></div>
+<p>For a rich category, iterate <code>cat.Criteria</code> and render each criterion's
+<code>Pass.Description</code> and <code>Pass.Indicators</code> instead.</p>
 <h2 id="benefits">Benefits<a class="headerlink" href="#benefits" title="Permanent link">&para;</a></h2>
 <ol>
 <li><strong>Consistency</strong> - Same criteria across evaluators</li>
@@ -1988,11 +2097,11 @@
 <li>Use measurable language when possible</li>
 <li>Avoid subjective terms like "good" or "well-written"</li>
 </ul>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1">// ✅ Good criteria</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nx">WithPassCriteria</span><span class="p">(</span><span class="s">&quot;All user stories follow Given/When/Then format with acceptance criteria&quot;</span><span class="p">)</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1">// ❌ Vague criteria</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="nx">WithPassCriteria</span><span class="p">(</span><span class="s">&quot;User stories are good&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1">// ✅ Good criteria</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="nx">WithPassCriteria</span><span class="p">(</span><span class="s">&quot;All user stories follow Given/When/Then format with acceptance criteria&quot;</span><span class="p">)</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="c1">// ❌ Vague criteria</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="nx">WithPassCriteria</span><span class="p">(</span><span class="s">&quot;User stories are good&quot;</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="providing-examples">Providing Examples<a class="headerlink" href="#providing-examples" title="Permanent link">&para;</a></h3>
 <ul>
@@ -2002,18 +2111,18 @@
 </ul>
 <h3 id="versioning">Versioning<a class="headerlink" href="#versioning" title="Permanent link">&para;</a></h3>
 <p>Track rubric versions for reproducibility:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nx">rubricSet</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewRubricSet</span><span class="p">(</span><span class="s">&quot;prd-review-v2&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;PRD Review v2&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2.0.0&quot;</span><span class="p">)</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nx">report</span><span class="p">.</span><span class="nx">RubricID</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;prd-review-v2&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nx">rubricSet</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewRubricSet</span><span class="p">(</span><span class="s">&quot;prd-review-v2&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;PRD Review v2&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2.0.0&quot;</span><span class="p">)</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="nx">report</span><span class="p">.</span><span class="nx">RubricID</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;prd-review-v2&quot;</span>
 </code></pre></div>
 <h2 id="report-validation">Report Validation<a class="headerlink" href="#report-validation" title="Permanent link">&para;</a></h2>
 <p>Validate rubric reports for correctness before processing (v0.7.0):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nx">result</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">ValidateReport</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">report</span><span class="p">)</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="k">if</span><span class="w"> </span><span class="p">!</span><span class="nx">result</span><span class="p">.</span><span class="nx">Valid</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">issue</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">result</span><span class="p">.</span><span class="nx">Issues</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;[%s] %s: %s\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">issue</span><span class="p">.</span><span class="nx">Severity</span><span class="p">,</span><span class="w"> </span><span class="nx">issue</span><span class="p">.</span><span class="nx">Path</span><span class="p">,</span><span class="w"> </span><span class="nx">issue</span><span class="p">.</span><span class="nx">Message</span><span class="p">)</span>
-<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="nx">result</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">ValidateReport</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">report</span><span class="p">)</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="k">if</span><span class="w"> </span><span class="p">!</span><span class="nx">result</span><span class="p">.</span><span class="nx">Valid</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">issue</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">result</span><span class="p">.</span><span class="nx">Issues</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;[%s] %s: %s\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">issue</span><span class="p">.</span><span class="nx">Severity</span><span class="p">,</span><span class="w"> </span><span class="nx">issue</span><span class="p">.</span><span class="nx">Path</span><span class="p">,</span><span class="w"> </span><span class="nx">issue</span><span class="p">.</span><span class="nx">Message</span><span class="p">)</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="p">}</span>
 </code></pre></div>
 <p>Validation checks include:</p>
 <ul>
@@ -2024,61 +2133,61 @@
 <li><strong>Decision consistency</strong> - Decision should align with blocking findings</li>
 </ul>
 <p>Use the CLI for quick validation:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>sevaluation<span class="w"> </span>lint<span class="w"> </span>report.json<span class="w"> </span>--strict
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>sevaluation<span class="w"> </span>lint<span class="w"> </span>report.json<span class="w"> </span>--strict
 </code></pre></div>
 <h2 id="extensions-v090">Extensions (v0.9.0)<a class="headerlink" href="#extensions-v090" title="Permanent link">&para;</a></h2>
 <p>Store domain-specific metadata without modifying the core schema:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nx">report</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewRubric</span><span class="p">(</span><span class="s">&quot;dss-spec&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;material-v3&quot;</span><span class="p">)</span>
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>
-<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="c1">// Set custom extension data</span>
-<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="nx">report</span><span class="p">.</span><span class="nx">SetExtension</span><span class="p">(</span><span class="s">&quot;coverage&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">coverageReport</span><span class="p">)</span>
-<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="nx">report</span><span class="p">.</span><span class="nx">SetExtension</span><span class="p">(</span><span class="s">&quot;metrics&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">metricsData</span><span class="p">)</span>
-<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="nx">report</span><span class="p">.</span><span class="nx">SetExtension</span><span class="p">(</span><span class="s">&quot;customField&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;value&quot;</span><span class="p">)</span>
-<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>
-<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="c1">// Check and retrieve</span>
-<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="k">if</span><span class="w"> </span><span class="nx">report</span><span class="p">.</span><span class="nx">HasExtension</span><span class="p">(</span><span class="s">&quot;coverage&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="w">    </span><span class="nx">data</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">report</span><span class="p">.</span><span class="nx">GetExtension</span><span class="p">(</span><span class="s">&quot;coverage&quot;</span><span class="p">)</span>
-<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="nx">report</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewRubric</span><span class="p">(</span><span class="s">&quot;dss-spec&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;material-v3&quot;</span><span class="p">)</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="c1">// Set custom extension data</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="nx">report</span><span class="p">.</span><span class="nx">SetExtension</span><span class="p">(</span><span class="s">&quot;coverage&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">coverageReport</span><span class="p">)</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="nx">report</span><span class="p">.</span><span class="nx">SetExtension</span><span class="p">(</span><span class="s">&quot;metrics&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">metricsData</span><span class="p">)</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="nx">report</span><span class="p">.</span><span class="nx">SetExtension</span><span class="p">(</span><span class="s">&quot;customField&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;value&quot;</span><span class="p">)</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="c1">// Check and retrieve</span>
+<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="k">if</span><span class="w"> </span><span class="nx">report</span><span class="p">.</span><span class="nx">HasExtension</span><span class="p">(</span><span class="s">&quot;coverage&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="w">    </span><span class="nx">data</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">report</span><span class="p">.</span><span class="nx">GetExtension</span><span class="p">(</span><span class="s">&quot;coverage&quot;</span><span class="p">)</span>
+<a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a><span class="p">}</span>
 </code></pre></div>
 <h3 id="coverage-report">Coverage Report<a class="headerlink" href="#coverage-report" title="Permanent link">&para;</a></h3>
 <p>A built-in extension type for tracking spec coverage:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1">// Create coverage report</span>
-<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="nx">cr</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewCoverageReport</span><span class="p">()</span>
-<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="nx">cr</span><span class="p">.</span><span class="nx">SetSection</span><span class="p">(</span><span class="s">&quot;components&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;card&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;dialog&quot;</span><span class="p">})</span><span class="w">  </span><span class="c1">// 80%</span>
-<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="nx">cr</span><span class="p">.</span><span class="nx">SetSection</span><span class="p">(</span><span class="s">&quot;foundations&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span><span class="p">)</span><span class="w">                          </span><span class="c1">// 100%</span>
-<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="nx">cr</span><span class="p">.</span><span class="nx">SetSection</span><span class="p">(</span><span class="s">&quot;patterns&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;form&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;wizard&quot;</span><span class="p">})</span><span class="w">     </span><span class="c1">// 60%</span>
-<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>
-<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="c1">// Compute overall (simple average)</span>
-<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="nx">cr</span><span class="p">.</span><span class="nx">ComputeOverall</span><span class="p">()</span><span class="w">  </span><span class="c1">// 80%</span>
-<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>
-<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="c1">// Or weighted average</span>
-<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="nx">weights</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">float64</span><span class="p">{</span>
-<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a><span class="w">    </span><span class="s">&quot;components&quot;</span><span class="p">:</span><span class="w">  </span><span class="mf">2.0</span><span class="p">,</span><span class="w">  </span><span class="c1">// More important</span>
-<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a><span class="w">    </span><span class="s">&quot;foundations&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span>
-<a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a><span class="w">    </span><span class="s">&quot;patterns&quot;</span><span class="p">:</span><span class="w">    </span><span class="mf">1.0</span><span class="p">,</span>
-<a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a><span class="p">}</span>
-<a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a><span class="nx">cr</span><span class="p">.</span><span class="nx">ComputeOverallWeighted</span><span class="p">(</span><span class="nx">weights</span><span class="p">)</span>
-<a id="__codelineno-13-17" name="__codelineno-13-17" href="#__codelineno-13-17"></a>
-<a id="__codelineno-13-18" name="__codelineno-13-18" href="#__codelineno-13-18"></a><span class="c1">// Store in rubric</span>
-<a id="__codelineno-13-19" name="__codelineno-13-19" href="#__codelineno-13-19"></a><span class="nx">report</span><span class="p">.</span><span class="nx">SetCoverage</span><span class="p">(</span><span class="nx">cr</span><span class="p">)</span>
-<a id="__codelineno-13-20" name="__codelineno-13-20" href="#__codelineno-13-20"></a>
-<a id="__codelineno-13-21" name="__codelineno-13-21" href="#__codelineno-13-21"></a><span class="c1">// Retrieve later (type-safe)</span>
-<a id="__codelineno-13-22" name="__codelineno-13-22" href="#__codelineno-13-22"></a><span class="nx">coverage</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">report</span><span class="p">.</span><span class="nx">GetCoverage</span><span class="p">()</span>
-<a id="__codelineno-13-23" name="__codelineno-13-23" href="#__codelineno-13-23"></a><span class="nx">coverage</span><span class="p">.</span><span class="nx">Overall</span><span class="w">                        </span><span class="c1">// 80</span>
-<a id="__codelineno-13-24" name="__codelineno-13-24" href="#__codelineno-13-24"></a><span class="nx">coverage</span><span class="p">.</span><span class="nx">GetSection</span><span class="p">(</span><span class="s">&quot;components&quot;</span><span class="p">).</span><span class="nx">Total</span><span class="w"> </span><span class="c1">// 10</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1">// Create coverage report</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="nx">cr</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewCoverageReport</span><span class="p">()</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="nx">cr</span><span class="p">.</span><span class="nx">SetSection</span><span class="p">(</span><span class="s">&quot;components&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;card&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;dialog&quot;</span><span class="p">})</span><span class="w">  </span><span class="c1">// 80%</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="nx">cr</span><span class="p">.</span><span class="nx">SetSection</span><span class="p">(</span><span class="s">&quot;foundations&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span><span class="p">)</span><span class="w">                          </span><span class="c1">// 100%</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="nx">cr</span><span class="p">.</span><span class="nx">SetSection</span><span class="p">(</span><span class="s">&quot;patterns&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;form&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;wizard&quot;</span><span class="p">})</span><span class="w">     </span><span class="c1">// 60%</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="c1">// Compute overall (simple average)</span>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="nx">cr</span><span class="p">.</span><span class="nx">ComputeOverall</span><span class="p">()</span><span class="w">  </span><span class="c1">// 80%</span>
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a>
+<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a><span class="c1">// Or weighted average</span>
+<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a><span class="nx">weights</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">float64</span><span class="p">{</span>
+<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a><span class="w">    </span><span class="s">&quot;components&quot;</span><span class="p">:</span><span class="w">  </span><span class="mf">2.0</span><span class="p">,</span><span class="w">  </span><span class="c1">// More important</span>
+<a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a><span class="w">    </span><span class="s">&quot;foundations&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span>
+<a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a><span class="w">    </span><span class="s">&quot;patterns&quot;</span><span class="p">:</span><span class="w">    </span><span class="mf">1.0</span><span class="p">,</span>
+<a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a><span class="p">}</span>
+<a id="__codelineno-16-16" name="__codelineno-16-16" href="#__codelineno-16-16"></a><span class="nx">cr</span><span class="p">.</span><span class="nx">ComputeOverallWeighted</span><span class="p">(</span><span class="nx">weights</span><span class="p">)</span>
+<a id="__codelineno-16-17" name="__codelineno-16-17" href="#__codelineno-16-17"></a>
+<a id="__codelineno-16-18" name="__codelineno-16-18" href="#__codelineno-16-18"></a><span class="c1">// Store in rubric</span>
+<a id="__codelineno-16-19" name="__codelineno-16-19" href="#__codelineno-16-19"></a><span class="nx">report</span><span class="p">.</span><span class="nx">SetCoverage</span><span class="p">(</span><span class="nx">cr</span><span class="p">)</span>
+<a id="__codelineno-16-20" name="__codelineno-16-20" href="#__codelineno-16-20"></a>
+<a id="__codelineno-16-21" name="__codelineno-16-21" href="#__codelineno-16-21"></a><span class="c1">// Retrieve later (type-safe)</span>
+<a id="__codelineno-16-22" name="__codelineno-16-22" href="#__codelineno-16-22"></a><span class="nx">coverage</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">report</span><span class="p">.</span><span class="nx">GetCoverage</span><span class="p">()</span>
+<a id="__codelineno-16-23" name="__codelineno-16-23" href="#__codelineno-16-23"></a><span class="nx">coverage</span><span class="p">.</span><span class="nx">Overall</span><span class="w">                        </span><span class="c1">// 80</span>
+<a id="__codelineno-16-24" name="__codelineno-16-24" href="#__codelineno-16-24"></a><span class="nx">coverage</span><span class="p">.</span><span class="nx">GetSection</span><span class="p">(</span><span class="s">&quot;components&quot;</span><span class="p">).</span><span class="nx">Total</span><span class="w"> </span><span class="c1">// 10</span>
 </code></pre></div>
 <h3 id="coverage-methods">Coverage Methods<a class="headerlink" href="#coverage-methods" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="nx">cr</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewCoverageReport</span><span class="p">()</span>
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="nx">cr</span><span class="p">.</span><span class="nx">SetSection</span><span class="p">(</span><span class="s">&quot;a&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span><span class="p">)</span><span class="w">  </span><span class="c1">// 100%</span>
-<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="nx">cr</span><span class="p">.</span><span class="nx">SetSection</span><span class="p">(</span><span class="s">&quot;b&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span><span class="p">)</span><span class="w">   </span><span class="c1">// 50%</span>
-<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>
-<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="c1">// Check thresholds</span>
-<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="nx">cr</span><span class="p">.</span><span class="nx">MeetsThreshold</span><span class="p">(</span><span class="mi">80</span><span class="p">)</span><span class="w">           </span><span class="c1">// false (overall &lt; 80)</span>
-<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="nx">cr</span><span class="p">.</span><span class="nx">AllComplete</span><span class="p">()</span><span class="w">                </span><span class="c1">// false (not all 100%)</span>
-<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>
-<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="c1">// Filter sections</span>
-<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="nx">above</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">cr</span><span class="p">.</span><span class="nx">SectionsAboveThreshold</span><span class="p">(</span><span class="mi">80</span><span class="p">)</span><span class="w">  </span><span class="c1">// [&quot;a&quot;]</span>
-<a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a><span class="nx">below</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">cr</span><span class="p">.</span><span class="nx">SectionsBelowThreshold</span><span class="p">(</span><span class="mi">80</span><span class="p">)</span><span class="w">  </span><span class="c1">// [&quot;b&quot;]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="nx">cr</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewCoverageReport</span><span class="p">()</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="nx">cr</span><span class="p">.</span><span class="nx">SetSection</span><span class="p">(</span><span class="s">&quot;a&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span><span class="p">)</span><span class="w">  </span><span class="c1">// 100%</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="nx">cr</span><span class="p">.</span><span class="nx">SetSection</span><span class="p">(</span><span class="s">&quot;b&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span><span class="p">)</span><span class="w">   </span><span class="c1">// 50%</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="c1">// Check thresholds</span>
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="nx">cr</span><span class="p">.</span><span class="nx">MeetsThreshold</span><span class="p">(</span><span class="mi">80</span><span class="p">)</span><span class="w">           </span><span class="c1">// false (overall &lt; 80)</span>
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="nx">cr</span><span class="p">.</span><span class="nx">AllComplete</span><span class="p">()</span><span class="w">                </span><span class="c1">// false (not all 100%)</span>
+<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>
+<a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a><span class="c1">// Filter sections</span>
+<a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a><span class="nx">above</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">cr</span><span class="p">.</span><span class="nx">SectionsAboveThreshold</span><span class="p">(</span><span class="mi">80</span><span class="p">)</span><span class="w">  </span><span class="c1">// [&quot;a&quot;]</span>
+<a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a><span class="nx">below</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">cr</span><span class="p">.</span><span class="nx">SectionsBelowThreshold</span><span class="p">(</span><span class="mi">80</span><span class="p">)</span><span class="w">  </span><span class="c1">// [&quot;b&quot;]</span>
 </code></pre></div>
 <h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
 <ul>

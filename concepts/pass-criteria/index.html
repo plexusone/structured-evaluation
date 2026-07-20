@@ -776,6 +776,34 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#definition-pass-criteria-vs-report-pass-criteria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Definition Pass Criteria vs. Report Pass Criteria
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Definition Pass Criteria vs. Report Pass Criteria">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#score-thresholds-v0100" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Score Thresholds (v0.10.0)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#next-steps" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1765,6 +1793,34 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#definition-pass-criteria-vs-report-pass-criteria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Definition Pass Criteria vs. Report Pass Criteria
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Definition Pass Criteria vs. Report Pass Criteria">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#score-thresholds-v0100" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Score Thresholds (v0.10.0)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#next-steps" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1974,6 +2030,30 @@
 <a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">    </span><span class="nx">MaxFindings</span><span class="p">:</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">rubric</span><span class="p">.</span><span class="nx">FindingLimits</span><span class="p">{</span><span class="nx">Critical</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nx">High</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nx">Medium</span><span class="p">:</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nx">Low</span><span class="p">:</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">},</span>
 <a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="w">    </span><span class="nx">MinIntScore</span><span class="p">:</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">ScoreGood</span><span class="p">,</span>
 <a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="p">}</span>
+</code></pre></div>
+<h2 id="definition-pass-criteria-vs-report-pass-criteria">Definition Pass Criteria vs. Report Pass Criteria<a class="headerlink" href="#definition-pass-criteria-vs-report-pass-criteria" title="Permanent link">&para;</a></h2>
+<p>There are two related types:</p>
+<ul>
+<li><strong><code>PassCriteria</code></strong> (above) lives on an evaluation <strong>report</strong> (<code>Rubric</code>) and drives its pass/fail outcome.</li>
+<li><strong><code>RubricPassCriteria</code></strong> lives on a rubric <strong>definition</strong> (<code>RubricSet</code>) and is authored alongside the categories.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="kd">type</span><span class="w"> </span><span class="nx">RubricPassCriteria</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">    </span><span class="nx">MinCategoriesPassing</span><span class="w"> </span><span class="kt">string</span><span class="w">           </span><span class="s">`json:&quot;minCategoriesPassing,omitempty&quot;`</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">    </span><span class="nx">MaxFindings</span><span class="w">          </span><span class="o">*</span><span class="nx">FindingLimits</span><span class="w">   </span><span class="s">`json:&quot;maxFindingsSeverity,omitempty&quot;`</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">    </span><span class="nx">ScoreThresholds</span><span class="w">      </span><span class="o">*</span><span class="nx">ScoreThresholds</span><span class="w"> </span><span class="s">`json:&quot;scoreThresholds,omitempty&quot;`</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="p">}</span>
+</code></pre></div>
+<h3 id="score-thresholds-v0100">Score Thresholds (v0.10.0)<a class="headerlink" href="#score-thresholds-v0100" title="Permanent link">&para;</a></h3>
+<p>For <strong>rich</strong> rubrics — where categories and criteria carry weights and the
+overall score is a weighted roll-up (0-100) — <code>ScoreThresholds</code> sets the numeric
+pass/partial cutoffs:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="kd">type</span><span class="w"> </span><span class="nx">ScoreThresholds</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">    </span><span class="nx">Pass</span><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="s">`json:&quot;pass&quot;`</span><span class="w">    </span><span class="c1">// e.g. 80 — score &gt;= 80 passes</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">    </span><span class="nx">Partial</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="s">`json:&quot;partial&quot;`</span><span class="w"> </span><span class="c1">// e.g. 60 — score &gt;= 60 is partial</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="p">}</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="nt">passCriteria</span><span class="p">:</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">  </span><span class="nt">scoreThresholds</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">pass</span><span class="p">:</span><span class="w"> </span><span class="nv">80</span><span class="p p-Indicator">,</span><span class="nt"> partial</span><span class="p">:</span><span class="w"> </span><span class="nv">60</span><span class="p p-Indicator">}</span>
 </code></pre></div>
 <h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
 <ul>
