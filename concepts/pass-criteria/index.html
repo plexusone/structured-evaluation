@@ -737,6 +737,45 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#minintscore-v090" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MinIntScore (v0.9.0)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="MinIntScore (v0.9.0)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#use-cases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Use Cases
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#combined-with-finding-limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Combined with Finding Limits
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#next-steps" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1687,6 +1726,45 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#minintscore-v090" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MinIntScore (v0.9.0)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="MinIntScore (v0.9.0)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#use-cases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Use Cases
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#combined-with-finding-limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Combined with Finding Limits
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#next-steps" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1721,28 +1799,37 @@
 <p>Pass criteria define the thresholds for evaluation decisions. They control how findings and category results translate to pass/fail outcomes.</p>
 <h2 id="passcriteria-structure">PassCriteria Structure<a class="headerlink" href="#passcriteria-structure" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kd">type</span><span class="w"> </span><span class="nx">PassCriteria</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="nx">MaxCritical</span><span class="w">    </span><span class="kt">int</span><span class="w">  </span><span class="s">`json:&quot;max_critical&quot;`</span><span class="w">     </span><span class="c1">// Max critical findings allowed (-1 = unlimited)</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="nx">MaxHigh</span><span class="w">        </span><span class="kt">int</span><span class="w">  </span><span class="s">`json:&quot;max_high&quot;`</span><span class="w">         </span><span class="c1">// Max high findings allowed (-1 = unlimited)</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="nx">MaxMedium</span><span class="w">      </span><span class="kt">int</span><span class="w">  </span><span class="s">`json:&quot;max_medium&quot;`</span><span class="w">       </span><span class="c1">// Max medium findings allowed (-1 = unlimited)</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="nx">RequireAllPass</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="s">`json:&quot;require_all_pass&quot;`</span><span class="w"> </span><span class="c1">// Require all categories to pass</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">}</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="nx">MinCategoriesPassing</span><span class="w"> </span><span class="kt">string</span><span class="w">        </span><span class="s">`json:&quot;minCategoriesPassing&quot;`</span><span class="w"> </span><span class="c1">// &quot;all&quot;, &quot;all_required&quot;, or number</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="nx">MaxFindings</span><span class="w">          </span><span class="o">*</span><span class="nx">FindingLimits</span><span class="w"> </span><span class="s">`json:&quot;maxFindingsSeverity&quot;`</span><span class="w">  </span><span class="c1">// Max findings by severity</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="nx">MinIntScore</span><span class="w">          </span><span class="nx">IntegerScore</span><span class="w">  </span><span class="s">`json:&quot;minIntScore&quot;`</span><span class="w">          </span><span class="c1">// Minimum overall score (1-5)</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="p">}</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="kd">type</span><span class="w"> </span><span class="nx">FindingLimits</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="nx">Critical</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="s">`json:&quot;critical&quot;`</span><span class="w"> </span><span class="c1">// Max critical findings (-1 = unlimited)</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="nx">High</span><span class="w">     </span><span class="kt">int</span><span class="w"> </span><span class="s">`json:&quot;high&quot;`</span><span class="w">     </span><span class="c1">// Max high findings (-1 = unlimited)</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="nx">Medium</span><span class="w">   </span><span class="kt">int</span><span class="w"> </span><span class="s">`json:&quot;medium&quot;`</span><span class="w">   </span><span class="c1">// Max medium findings (-1 = unlimited)</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">    </span><span class="nx">Low</span><span class="w">      </span><span class="kt">int</span><span class="w"> </span><span class="s">`json:&quot;low&quot;`</span><span class="w">      </span><span class="c1">// Max low findings (-1 = unlimited)</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="p">}</span>
 </code></pre></div>
 <h2 id="default-criteria">Default Criteria<a class="headerlink" href="#default-criteria" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kd">func</span><span class="w"> </span><span class="nx">DefaultPassCriteria</span><span class="p">()</span><span class="w"> </span><span class="nx">PassCriteria</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">PassCriteria</span><span class="p">{</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">        </span><span class="nx">MaxCritical</span><span class="p">:</span><span class="w">    </span><span class="mi">0</span><span class="p">,</span><span class="w">  </span><span class="c1">// No critical findings allowed</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">        </span><span class="nx">MaxHigh</span><span class="p">:</span><span class="w">        </span><span class="mi">0</span><span class="p">,</span><span class="w">  </span><span class="c1">// No high findings allowed</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">        </span><span class="nx">MaxMedium</span><span class="p">:</span><span class="w">      </span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="c1">// Unlimited medium findings</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">        </span><span class="nx">RequireAllPass</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="p">}</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">        </span><span class="nx">MinCategoriesPassing</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;all_required&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">        </span><span class="nx">MaxFindings</span><span class="p">:</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">FindingLimits</span><span class="p">{</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">            </span><span class="nx">Critical</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">  </span><span class="c1">// No critical findings allowed</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">            </span><span class="nx">High</span><span class="p">:</span><span class="w">     </span><span class="mi">0</span><span class="p">,</span><span class="w">  </span><span class="c1">// No high findings allowed</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">            </span><span class="nx">Medium</span><span class="p">:</span><span class="w">   </span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="c1">// Unlimited medium findings</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">            </span><span class="nx">Low</span><span class="p">:</span><span class="w">      </span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="c1">// Unlimited low findings</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">        </span><span class="p">},</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="p">}</span>
 </code></pre></div>
 <p>With default criteria:</p>
 <ul>
 <li>❌ Any critical finding → Fail</li>
 <li>❌ Any high finding → Fail</li>
 <li>✅ Medium/low/info findings → Allowed</li>
-<li>✅ Partial categories → Allowed</li>
+<li>✅ Partial categories → Allowed (if not required)</li>
 </ul>
 <h2 id="strict-criteria">Strict Criteria<a class="headerlink" href="#strict-criteria" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kd">func</span><span class="w"> </span><span class="nx">StrictPassCriteria</span><span class="p">()</span><span class="w"> </span><span class="nx">PassCriteria</span><span class="w"> </span><span class="p">{</span>
@@ -1849,6 +1936,44 @@
 <a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="c1"># Exit codes:</span>
 <a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="c1"># 0 = pass</span>
 <a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="c1"># 1 = fail or conditional</span>
+</code></pre></div>
+<h2 id="minintscore-v090">MinIntScore (v0.9.0)<a class="headerlink" href="#minintscore-v090" title="Permanent link">&para;</a></h2>
+<p>Require a minimum overall integer score (1-5) for approval:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nx">criteria</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">PassCriteria</span><span class="p">{</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">    </span><span class="nx">MinCategoriesPassing</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;all_required&quot;</span><span class="p">,</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">    </span><span class="nx">MaxFindings</span><span class="p">:</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">rubric</span><span class="p">.</span><span class="nx">FindingLimits</span><span class="p">{</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">        </span><span class="nx">Critical</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">        </span><span class="nx">High</span><span class="p">:</span><span class="w">     </span><span class="mi">0</span><span class="p">,</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">        </span><span class="nx">Medium</span><span class="p">:</span><span class="w">   </span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">        </span><span class="nx">Low</span><span class="p">:</span><span class="w">      </span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">    </span><span class="p">},</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="w">    </span><span class="nx">MinIntScore</span><span class="p">:</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">ScoreGood</span><span class="p">,</span><span class="w">  </span><span class="c1">// Require 4+ overall</span>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="p">}</span>
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="nx">report</span><span class="p">.</span><span class="nx">SetPassCriteria</span><span class="p">(</span><span class="nx">criteria</span><span class="p">)</span>
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a><span class="nx">report</span><span class="p">.</span><span class="nx">Evaluate</span><span class="p">(</span><span class="nx">rubricSet</span><span class="p">)</span>
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a><span class="c1">// If computed IntScore &lt; 4, report.Pass = false</span>
+</code></pre></div>
+<h3 id="use-cases">Use Cases<a class="headerlink" href="#use-cases" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1">// Quality gate - require &quot;Good&quot; (4) or better</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="nx">criteria</span><span class="p">.</span><span class="nx">MinIntScore</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">ScoreGood</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="c1">// Strict gate - require &quot;Excellent&quot; (5)</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="nx">criteria</span><span class="p">.</span><span class="nx">MinIntScore</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">ScoreExcellent</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="c1">// Minimum viable - require &quot;Acceptable&quot; (3) or better</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="nx">criteria</span><span class="p">.</span><span class="nx">MinIntScore</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">ScoreAcceptable</span>
+</code></pre></div>
+<h3 id="combined-with-finding-limits">Combined with Finding Limits<a class="headerlink" href="#combined-with-finding-limits" title="Permanent link">&para;</a></h3>
+<p>MinIntScore is checked after IntScore is computed:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1">// Both must pass:</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="c1">// 1. No critical/high findings</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="c1">// 2. Overall score &gt;= 4</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="nx">criteria</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">PassCriteria</span><span class="p">{</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">    </span><span class="nx">MaxFindings</span><span class="p">:</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">rubric</span><span class="p">.</span><span class="nx">FindingLimits</span><span class="p">{</span><span class="nx">Critical</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nx">High</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nx">Medium</span><span class="p">:</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nx">Low</span><span class="p">:</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">},</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="w">    </span><span class="nx">MinIntScore</span><span class="p">:</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">ScoreGood</span><span class="p">,</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="p">}</span>
 </code></pre></div>
 <h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
 <ul>

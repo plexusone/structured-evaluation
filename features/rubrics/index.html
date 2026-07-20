@@ -865,6 +865,45 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#extensions-v090" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extensions (v0.9.0)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Extensions (v0.9.0)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#coverage-report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coverage Report
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#coverage-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coverage Methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#next-steps" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1765,6 +1804,45 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#extensions-v090" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extensions (v0.9.0)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Extensions (v0.9.0)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#coverage-report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coverage Report
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#coverage-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coverage Methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#next-steps" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1947,6 +2025,60 @@
 </ul>
 <p>Use the CLI for quick validation:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>sevaluation<span class="w"> </span>lint<span class="w"> </span>report.json<span class="w"> </span>--strict
+</code></pre></div>
+<h2 id="extensions-v090">Extensions (v0.9.0)<a class="headerlink" href="#extensions-v090" title="Permanent link">&para;</a></h2>
+<p>Store domain-specific metadata without modifying the core schema:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nx">report</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewRubric</span><span class="p">(</span><span class="s">&quot;dss-spec&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;material-v3&quot;</span><span class="p">)</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="c1">// Set custom extension data</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="nx">report</span><span class="p">.</span><span class="nx">SetExtension</span><span class="p">(</span><span class="s">&quot;coverage&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">coverageReport</span><span class="p">)</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="nx">report</span><span class="p">.</span><span class="nx">SetExtension</span><span class="p">(</span><span class="s">&quot;metrics&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">metricsData</span><span class="p">)</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="nx">report</span><span class="p">.</span><span class="nx">SetExtension</span><span class="p">(</span><span class="s">&quot;customField&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;value&quot;</span><span class="p">)</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="c1">// Check and retrieve</span>
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="k">if</span><span class="w"> </span><span class="nx">report</span><span class="p">.</span><span class="nx">HasExtension</span><span class="p">(</span><span class="s">&quot;coverage&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="w">    </span><span class="nx">data</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">report</span><span class="p">.</span><span class="nx">GetExtension</span><span class="p">(</span><span class="s">&quot;coverage&quot;</span><span class="p">)</span>
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="p">}</span>
+</code></pre></div>
+<h3 id="coverage-report">Coverage Report<a class="headerlink" href="#coverage-report" title="Permanent link">&para;</a></h3>
+<p>A built-in extension type for tracking spec coverage:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1">// Create coverage report</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="nx">cr</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewCoverageReport</span><span class="p">()</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="nx">cr</span><span class="p">.</span><span class="nx">SetSection</span><span class="p">(</span><span class="s">&quot;components&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;card&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;dialog&quot;</span><span class="p">})</span><span class="w">  </span><span class="c1">// 80%</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="nx">cr</span><span class="p">.</span><span class="nx">SetSection</span><span class="p">(</span><span class="s">&quot;foundations&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span><span class="p">)</span><span class="w">                          </span><span class="c1">// 100%</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="nx">cr</span><span class="p">.</span><span class="nx">SetSection</span><span class="p">(</span><span class="s">&quot;patterns&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;form&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;wizard&quot;</span><span class="p">})</span><span class="w">     </span><span class="c1">// 60%</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="c1">// Compute overall (simple average)</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="nx">cr</span><span class="p">.</span><span class="nx">ComputeOverall</span><span class="p">()</span><span class="w">  </span><span class="c1">// 80%</span>
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="c1">// Or weighted average</span>
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="nx">weights</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">float64</span><span class="p">{</span>
+<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a><span class="w">    </span><span class="s">&quot;components&quot;</span><span class="p">:</span><span class="w">  </span><span class="mf">2.0</span><span class="p">,</span><span class="w">  </span><span class="c1">// More important</span>
+<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a><span class="w">    </span><span class="s">&quot;foundations&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span>
+<a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a><span class="w">    </span><span class="s">&quot;patterns&quot;</span><span class="p">:</span><span class="w">    </span><span class="mf">1.0</span><span class="p">,</span>
+<a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a><span class="p">}</span>
+<a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a><span class="nx">cr</span><span class="p">.</span><span class="nx">ComputeOverallWeighted</span><span class="p">(</span><span class="nx">weights</span><span class="p">)</span>
+<a id="__codelineno-13-17" name="__codelineno-13-17" href="#__codelineno-13-17"></a>
+<a id="__codelineno-13-18" name="__codelineno-13-18" href="#__codelineno-13-18"></a><span class="c1">// Store in rubric</span>
+<a id="__codelineno-13-19" name="__codelineno-13-19" href="#__codelineno-13-19"></a><span class="nx">report</span><span class="p">.</span><span class="nx">SetCoverage</span><span class="p">(</span><span class="nx">cr</span><span class="p">)</span>
+<a id="__codelineno-13-20" name="__codelineno-13-20" href="#__codelineno-13-20"></a>
+<a id="__codelineno-13-21" name="__codelineno-13-21" href="#__codelineno-13-21"></a><span class="c1">// Retrieve later (type-safe)</span>
+<a id="__codelineno-13-22" name="__codelineno-13-22" href="#__codelineno-13-22"></a><span class="nx">coverage</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">report</span><span class="p">.</span><span class="nx">GetCoverage</span><span class="p">()</span>
+<a id="__codelineno-13-23" name="__codelineno-13-23" href="#__codelineno-13-23"></a><span class="nx">coverage</span><span class="p">.</span><span class="nx">Overall</span><span class="w">                        </span><span class="c1">// 80</span>
+<a id="__codelineno-13-24" name="__codelineno-13-24" href="#__codelineno-13-24"></a><span class="nx">coverage</span><span class="p">.</span><span class="nx">GetSection</span><span class="p">(</span><span class="s">&quot;components&quot;</span><span class="p">).</span><span class="nx">Total</span><span class="w"> </span><span class="c1">// 10</span>
+</code></pre></div>
+<h3 id="coverage-methods">Coverage Methods<a class="headerlink" href="#coverage-methods" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="nx">cr</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewCoverageReport</span><span class="p">()</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="nx">cr</span><span class="p">.</span><span class="nx">SetSection</span><span class="p">(</span><span class="s">&quot;a&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span><span class="p">)</span><span class="w">  </span><span class="c1">// 100%</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="nx">cr</span><span class="p">.</span><span class="nx">SetSection</span><span class="p">(</span><span class="s">&quot;b&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span><span class="p">)</span><span class="w">   </span><span class="c1">// 50%</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="c1">// Check thresholds</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="nx">cr</span><span class="p">.</span><span class="nx">MeetsThreshold</span><span class="p">(</span><span class="mi">80</span><span class="p">)</span><span class="w">           </span><span class="c1">// false (overall &lt; 80)</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="nx">cr</span><span class="p">.</span><span class="nx">AllComplete</span><span class="p">()</span><span class="w">                </span><span class="c1">// false (not all 100%)</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="c1">// Filter sections</span>
+<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="nx">above</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">cr</span><span class="p">.</span><span class="nx">SectionsAboveThreshold</span><span class="p">(</span><span class="mi">80</span><span class="p">)</span><span class="w">  </span><span class="c1">// [&quot;a&quot;]</span>
+<a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a><span class="nx">below</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">cr</span><span class="p">.</span><span class="nx">SectionsBelowThreshold</span><span class="p">(</span><span class="mi">80</span><span class="p">)</span><span class="w">  </span><span class="c1">// [&quot;b&quot;]</span>
 </code></pre></div>
 <h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
 <ul>
