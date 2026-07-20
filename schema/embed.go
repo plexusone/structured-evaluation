@@ -16,3 +16,9 @@ var SummarySchemaJSON []byte
 //
 //go:embed claims.schema.json
 var ClaimsSchemaJSON []byte
+
+// RubricSetSchemaJSON is the embedded JSON Schema for RubricSet — the rubric
+// definition, including the rich weighted-criteria form.
+//
+//go:embed rubricset.schema.json
+var RubricSetSchemaJSON []byte

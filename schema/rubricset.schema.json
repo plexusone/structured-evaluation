@@ -1,0 +1,319 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/plexusone/structured-evaluation/schema/rubricset.schema.json",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "evaluationType": {
+      "type": "string",
+      "enum": [
+        "analytic",
+        "holistic"
+      ],
+      "description": "Evaluation type: analytic or holistic"
+    },
+    "passCriteria": {
+      "properties": {
+        "minCategoriesPassing": {
+          "type": "string"
+        },
+        "maxFindingsSeverity": {
+          "properties": {
+            "critical": {
+              "type": "integer"
+            },
+            "high": {
+              "type": "integer"
+            },
+            "medium": {
+              "type": "integer"
+            },
+            "low": {
+              "type": "integer"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
+        },
+        "scoreThresholds": {
+          "properties": {
+            "pass": {
+              "type": "integer"
+            },
+            "partial": {
+              "type": "integer"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "categories": {
+      "items": {
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "weight": {
+            "type": "number"
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "scale": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "categorical",
+                  "checklist",
+                  "binary",
+                  "likert"
+                ],
+                "description": "Scale type: categorical, checklist, binary, or likert"
+              },
+              "options": {
+                "items": {
+                  "properties": {
+                    "value": {
+                      "type": "string"
+                    },
+                    "label": {
+                      "type": "string"
+                    },
+                    "criteria": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "requiredItems": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "optionalItems": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "passingThreshold": {
+                "properties": {
+                  "required": {
+                    "type": "string"
+                  },
+                  "optional": {
+                    "type": "integer"
+                  }
+                },
+                "additionalProperties": false,
+                "type": "object"
+              },
+              "likertConfig": {
+                "properties": {
+                  "min": {
+                    "type": "integer"
+                  },
+                  "max": {
+                    "type": "integer"
+                  },
+                  "anchors": {
+                    "items": {
+                      "properties": {
+                        "value": {
+                          "type": "integer"
+                        },
+                        "label": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        }
+                      },
+                      "additionalProperties": false,
+                      "type": "object"
+                    },
+                    "type": "array"
+                  },
+                  "passThreshold": {
+                    "type": "integer"
+                  },
+                  "partialThreshold": {
+                    "type": "integer"
+                  }
+                },
+                "additionalProperties": false,
+                "type": "object"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "evaluationPrompt": {
+            "type": "string"
+          },
+          "examples": {
+            "properties": {
+              "pass": {
+                "properties": {
+                  "excerpt": {
+                    "type": "string"
+                  },
+                  "reasoning": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "type": "object"
+              },
+              "partial": {
+                "properties": {
+                  "excerpt": {
+                    "type": "string"
+                  },
+                  "reasoning": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "type": "object"
+              },
+              "fail": {
+                "properties": {
+                  "excerpt": {
+                    "type": "string"
+                  },
+                  "reasoning": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "type": "object"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "criteria": {
+            "items": {
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "weight": {
+                  "type": "number"
+                },
+                "pass": {
+                  "properties": {
+                    "description": {
+                      "type": "string"
+                    },
+                    "indicators": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "type": "object"
+                },
+                "partial": {
+                  "properties": {
+                    "description": {
+                      "type": "string"
+                    },
+                    "indicators": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "type": "object"
+                },
+                "fail": {
+                  "properties": {
+                    "description": {
+                      "type": "string"
+                    },
+                    "indicators": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "judgePromptTemplate": {
+      "type": "string"
+    },
+    "metadata": {
+      "properties": {
+        "createdAt": {
+          "type": "string"
+        },
+        "author": {
+          "type": "string"
+        },
+        "basedOn": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "type": "object",
+  "title": "Rubric Definition",
+  "description": "Schema for rubric definitions (RubricSet), including the rich weighted-criteria form with per-level indicators"
+}

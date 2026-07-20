@@ -396,6 +396,9 @@
           },
           "additionalProperties": false,
           "type": "object"
+        },
+        "minIntScore": {
+          "type": "integer"
         }
       },
       "additionalProperties": false,
@@ -550,6 +553,9 @@
     },
     "summary": {
       "type": "string"
+    },
+    "extensions": {
+      "type": "object"
     }
   },
   "additionalProperties": false,

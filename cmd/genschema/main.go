@@ -29,6 +29,18 @@ func main() {
 	}
 	fmt.Println("Generated rubric.schema.json")
 
+	// Generate rubric definition (RubricSet) schema
+	rubricSetData, err := schema.GenerateRubricSetSchema()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error generating rubricset schema: %v\n", err)
+		os.Exit(1)
+	}
+	if err := os.WriteFile(filepath.Join(schemaDir, "rubricset.schema.json"), rubricSetData, 0600); err != nil {
+		fmt.Fprintf(os.Stderr, "Error writing rubricset schema: %v\n", err)
+		os.Exit(1)
+	}
+	fmt.Println("Generated rubricset.schema.json")
+
 	// Generate summary schema
 	summaryData, err := schema.GenerateSummarySchema()
 	if err != nil {

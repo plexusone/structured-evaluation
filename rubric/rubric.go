@@ -73,6 +73,19 @@ type RubricPassCriteria struct {
 
 	// MaxFindings limits findings by severity.
 	MaxFindings *FindingLimits `json:"maxFindingsSeverity,omitempty"`
+
+	// ScoreThresholds optionally sets numeric pass/partial cutoffs (0-100) for
+	// weighted-score rubrics (the rich form, where categories and criteria carry
+	// weights and the overall score is a weighted roll-up).
+	ScoreThresholds *ScoreThresholds `json:"scoreThresholds,omitempty"`
+}
+
+// ScoreThresholds are numeric pass/partial cutoffs (0-100) for weighted-score
+// rubrics. A score at or above Pass passes; at or above Partial is partial;
+// below Partial fails.
+type ScoreThresholds struct {
+	Pass    int `json:"pass"`
+	Partial int `json:"partial"`
 }
 
 // FindingLimits sets maximum allowed findings per severity.
@@ -117,6 +130,48 @@ type Category struct {
 	// Examples provides few-shot examples for LLM evaluation.
 	// Research shows 1 example per level improves LLM alignment.
 	Examples *CategoryExamples `json:"examples,omitempty"`
+
+	// Criteria optionally decomposes this category into weighted sub-criteria,
+	// each scored independently at pass/partial/fail with concrete indicators.
+	// When present, the category is "composite" (the rich-rubric form) and its
+	// score aggregates its criteria by weight. Simple categories omit this and
+	// are scored directly via Scale.
+	Criteria []Criterion `json:"criteria,omitempty"`
+}
+
+// IsComposite reports whether the category decomposes into weighted criteria
+// (the rich-rubric form) rather than being scored directly via its Scale.
+func (c *Category) IsComposite() bool {
+	return len(c.Criteria) > 0
+}
+
+// Criterion is a weighted, independently scored check within a composite
+// category. Rich rubrics group related criteria under a category so that both
+// the category and each criterion carry a weight.
+type Criterion struct {
+	// ID uniquely identifies this criterion within its category.
+	ID string `json:"id,omitempty"`
+
+	// Name is the human-readable criterion name.
+	Name string `json:"name"`
+
+	// Weight is the relative importance within the category (default 1.0).
+	Weight float64 `json:"weight,omitempty"`
+
+	// Pass, Partial, and Fail describe the scoring bands for this criterion.
+	Pass    CriterionLevel `json:"pass"`
+	Partial CriterionLevel `json:"partial,omitempty"`
+	Fail    CriterionLevel `json:"fail"`
+}
+
+// CriterionLevel is one scoring band for a criterion: what it means and the
+// concrete indicators an evaluator looks for.
+type CriterionLevel struct {
+	// Description explains what this score band means.
+	Description string `json:"description,omitempty"`
+
+	// Indicators are concrete signals an evaluator looks for at this band.
+	Indicators []string `json:"indicators,omitempty"`
 }
 
 // Scale defines the scoring mechanism for a category.

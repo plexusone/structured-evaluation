@@ -41,6 +41,26 @@ func GenerateRubricSchema() ([]byte, error) {
 	return json.MarshalIndent(schema, "", "  ")
 }
 
+// GenerateRubricSetSchema generates JSON Schema for RubricSet — the rubric
+// definition, including the rich weighted-criteria form. This is the canonical
+// spec downstream tools author rubrics against.
+func GenerateRubricSetSchema() ([]byte, error) {
+	reflector := &jsonschema.Reflector{
+		DoNotReference:             true,
+		ExpandedStruct:             true,
+		RequiredFromJSONSchemaTags: true,
+	}
+
+	schema := reflector.Reflect(&rubric.RubricSet{})
+	schema.ID = "https://github.com/plexusone/structured-evaluation/schema/rubricset.schema.json"
+	schema.Title = "Rubric Definition"
+	schema.Description = "Schema for rubric definitions (RubricSet), including the rich weighted-criteria form with per-level indicators"
+
+	addEnumConstraints(schema)
+
+	return json.MarshalIndent(schema, "", "  ")
+}
+
 // addEnumConstraints walks the schema and adds enum constraints for known types.
 func addEnumConstraints(schema *jsonschema.Schema) {
 	if schema == nil {
