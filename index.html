@@ -381,6 +381,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#typescript-javascript" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TypeScript / JavaScript
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#next-steps" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1207,6 +1218,34 @@
   
   
     <li class="md-nav__item">
+      <a href="releases/v0.11.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.11.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="releases/v0.10/" class="md-nav__link">
         
   
@@ -1569,6 +1608,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#typescript-javascript" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TypeScript / JavaScript
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#next-steps" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1612,6 +1662,7 @@
 <li>🔄 <strong>Pairwise Comparison</strong> - Compare outputs instead of absolute scoring</li>
 <li>👥 <strong>Multi-Judge Aggregation</strong> - Combine evaluations from multiple judges with agreement metrics</li>
 <li>🔍 <strong>Report Validation</strong> - Validate reports for enum correctness, counts, and consistency</li>
+<li>🟦 <strong>TypeScript / Zod Bindings</strong> - Generated Zod schemas and TS types, downstream of the same Go structs</li>
 </ul>
 <h2 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>┌───────────────────────────────────────────────────────────┐
@@ -1774,6 +1825,18 @@
 </tr>
 </tbody>
 </table>
+<h2 id="typescript-javascript">TypeScript / JavaScript<a class="headerlink" href="#typescript-javascript" title="Permanent link">&para;</a></h2>
+<p>Consumers that read reports in TypeScript (a UI, a dashboard, a Node service)
+don't need to hand-maintain a parallel type — <code>@plexusone/structured-evaluation</code>
+generates Zod schemas and TS types from the same JSON Schema the Go library
+embeds:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">RubricSchema</span><span class="p">,</span><span class="w"> </span><span class="kr">type</span><span class="w"> </span><span class="nx">Rubric</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;@plexusone/structured-evaluation&#39;</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="kd">const</span><span class="w"> </span><span class="nx">report</span><span class="o">:</span><span class="w"> </span><span class="kt">Rubric</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">RubricSchema</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nb">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">rawJson</span><span class="p">))</span>
+</code></pre></div>
+<p>See <a href="getting-started/installation/#typescript-javascript">Installation</a> for
+setup and the <a href="https://github.com/plexusone/structured-evaluation/tree/main/ts">package README</a>
+for details.</p>
 <h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="getting-started/installation/">Installation</a> - Get started with structured-evaluation</li>

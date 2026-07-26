@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://plexusone.github.io/structured-evaluation/releases/v0.10/">
+        <link rel="canonical" href="https://plexusone.github.io/structured-evaluation/releases/v0.11.0/">
       
       
-        <link rel="prev" href="../v0.11.0/">
+        <link rel="prev" href="../changelog/">
       
       
-        <link rel="next" href="../v0.9.0/">
+        <link rel="next" href="../v0.10/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>v0.10.0 - Structured Evaluation</title>
+        <title>v0.11.0 - Structured Evaluation</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#v0100" class="md-skip">
+        <a href="#v0110" class="md-skip">
           Skip to content
         </a>
       
@@ -121,7 +121,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              v0.10.0
+              v0.11.0
             
           </span>
         </div>
@@ -1093,34 +1093,6 @@
                 
   
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../v0.11.0/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    v0.11.0
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
     
   
   
@@ -1140,7 +1112,7 @@
   <span class="md-ellipsis">
     
   
-    v0.10.0
+    v0.11.0
   
 
     
@@ -1158,7 +1130,7 @@
   <span class="md-ellipsis">
     
   
-    v0.10.0
+    v0.11.0
   
 
     
@@ -1218,10 +1190,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#rich-weighted-criteria" class="md-nav__link">
+  <a href="#category-severity-rollup" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Rich Weighted Criteria
+        Category Severity Rollup
       
     </span>
   </a>
@@ -1229,32 +1201,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#score-thresholds" class="md-nav__link">
+  <a href="#typescript-zod-bindings" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Score Thresholds
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#yaml-authoring" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        YAML Authoring
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#rubricset-definition-schema" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        RubricSet Definition Schema
+        TypeScript / Zod Bindings
       
     </span>
   </a>
@@ -1292,6 +1242,34 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../v0.10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.10.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -1617,10 +1595,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#rich-weighted-criteria" class="md-nav__link">
+  <a href="#category-severity-rollup" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Rich Weighted Criteria
+        Category Severity Rollup
       
     </span>
   </a>
@@ -1628,32 +1606,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#score-thresholds" class="md-nav__link">
+  <a href="#typescript-zod-bindings" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Score Thresholds
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#yaml-authoring" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        YAML Authoring
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#rubricset-definition-schema" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        RubricSet Definition Schema
+        TypeScript / Zod Bindings
       
     </span>
   </a>
@@ -1707,83 +1663,46 @@
   
 
 
-<h1 id="v0100">v0.10.0<a class="headerlink" href="#v0100" title="Permanent link">&para;</a></h1>
+<h1 id="v0110">v0.11.0<a class="headerlink" href="#v0110" title="Permanent link">&para;</a></h1>
 <p><strong>Release Date:</strong> 2026-07-20</p>
 <h2 id="highlights">Highlights<a class="headerlink" href="#highlights" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Rich Weighted Criteria</strong>: categories can decompose into independently weighted sub-criteria with pass/partial/fail bands and concrete indicators</li>
-<li><strong>Score Thresholds</strong>: numeric pass/partial cutoffs (0-100) for weighted-score rubrics</li>
-<li><strong>YAML Authoring</strong>: rubric definitions carry <code>yaml</code> tags and parse directly into a <code>RubricSet</code></li>
-<li><strong>RubricSet Definition Schema</strong>: <code>rubricset.schema.json</code> is generated and embedded for downstream tooling</li>
+<li><strong>Category Severity Rollup</strong>: <code>CategoryResult.Severity</code> is computed automatically from a category's findings, never set independently by the judge</li>
+<li><strong>TypeScript / Zod Bindings</strong>: <code>@plexusone/structured-evaluation</code> npm package generates Zod schemas and TS types from the same Go structs' JSON Schema</li>
 </ul>
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
-<p>v0.10.0 extends the rubric <strong>definition</strong> with a rich, weighted-criteria form so
-one category can be decomposed into independently scored parts, and makes rubric
-definitions first-class YAML documents against a single canonical schema. Every
-addition is optional and backward-compatible: categories scored via the existing
-<code>Scale</code> are unchanged.</p>
-<p>This is the shared rubric spec consumed across the ecosystem (prism-roadmap,
-visionspec, pdlc), so downstream tools author and evaluate against one format.</p>
+<p>v0.11.0 adds a small, additive field to the rubric <strong>report</strong> type — <code>CategoryResult.Severity</code> — and ships the first release of a new downstream package: generated TypeScript types and Zod schemas, so TS/JS consumers stop hand-maintaining a parallel type that can silently drift from the real report shape.</p>
 <h2 id="new-features">New Features<a class="headerlink" href="#new-features" title="Permanent link">&para;</a></h2>
-<h3 id="rich-weighted-criteria">Rich Weighted Criteria<a class="headerlink" href="#rich-weighted-criteria" title="Permanent link">&para;</a></h3>
-<p>A category can now carry <code>Criteria</code> — a list of weighted sub-criteria — instead
-of (or alongside) a flat <code>Scale</code>. Each criterion has pass/partial/fail bands,
-each with a description and concrete indicators:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nx">cat</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">Category</span><span class="p">{</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="nx">ID</span><span class="p">:</span><span class="w">     </span><span class="s">&quot;assumption_coverage&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="nx">Name</span><span class="p">:</span><span class="w">   </span><span class="s">&quot;Assumption Coverage&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="nx">Weight</span><span class="p">:</span><span class="w"> </span><span class="mi">25</span><span class="p">,</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="nx">Criteria</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="nx">rubric</span><span class="p">.</span><span class="nx">Criterion</span><span class="p">{</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">        </span><span class="p">{</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">            </span><span class="nx">ID</span><span class="p">:</span><span class="w">     </span><span class="s">&quot;desirability&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">            </span><span class="nx">Name</span><span class="p">:</span><span class="w">   </span><span class="s">&quot;Desirability&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">            </span><span class="nx">Weight</span><span class="p">:</span><span class="w"> </span><span class="mi">25</span><span class="p">,</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">            </span><span class="nx">Pass</span><span class="p">:</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">CriterionLevel</span><span class="p">{</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">                </span><span class="nx">Description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Desirability assumptions are identified&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">                </span><span class="nx">Indicators</span><span class="p">:</span><span class="w">  </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;customer demand cited&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;willingness-to-pay evidence&quot;</span><span class="p">},</span>
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">            </span><span class="p">},</span>
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">        </span><span class="p">},</span>
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">    </span><span class="p">},</span>
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="p">}</span>
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="nx">cat</span><span class="p">.</span><span class="nx">IsComposite</span><span class="p">()</span><span class="w"> </span><span class="c1">// true when a category has weighted Criteria</span>
+<h3 id="category-severity-rollup">Category Severity Rollup<a class="headerlink" href="#category-severity-rollup" title="Permanent link">&para;</a></h3>
+<p><code>CategoryResult</code> now carries a <code>Severity</code> field: the highest-severity finding in that category, or empty if it has none. It exists to answer "which categories should I fix first?" — distinct from <code>Score</code>/<code>IntScore</code>, which measure quality, not urgency.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nx">cat</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">CategoryResult</span><span class="p">{</span><span class="nx">Category</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;security&quot;</span><span class="p">}</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nx">cat</span><span class="p">.</span><span class="nx">AddFinding</span><span class="p">(</span><span class="nx">rubric</span><span class="p">.</span><span class="nx">Finding</span><span class="p">{</span><span class="nx">Severity</span><span class="p">:</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">SeverityHigh</span><span class="p">,</span><span class="w"> </span><span class="nx">Title</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;...&quot;</span><span class="p">})</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nx">cat</span><span class="p">.</span><span class="nx">Severity</span><span class="w"> </span><span class="c1">// SeverityHigh</span>
 </code></pre></div>
-<p>New types: <code>Criterion</code> (<code>ID</code>, <code>Name</code>, <code>Weight</code>, <code>Pass</code>/<code>Partial</code>/<code>Fail</code>) and
-<code>CriterionLevel</code> (<code>Description</code>, <code>Indicators</code>). New helper: <code>Category.IsComposite()</code>.</p>
-<h3 id="score-thresholds">Score Thresholds<a class="headerlink" href="#score-thresholds" title="Permanent link">&para;</a></h3>
-<p>Weighted-score rubrics roll up to a 0-100 score; <code>ScoreThresholds</code> sets the
-numeric cutoffs on the rubric definition's pass criteria:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kd">type</span><span class="w"> </span><span class="nx">ScoreThresholds</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="nx">Pass</span><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="s">`json:&quot;pass&quot;`</span><span class="w">    </span><span class="c1">// score &gt;= Pass passes</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nx">Partial</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="s">`json:&quot;partial&quot;`</span><span class="w"> </span><span class="c1">// score &gt;= Partial is partial</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="p">}</span>
+<p>It's computed in two places so it can't go stale: <code>AddFinding</code> recomputes it on every call (the common builder-pattern path), and <code>AddCategoryResult</code>/<code>Evaluate</code> compute it as a safety net for categories built via struct literal or appended directly to <code>Rubric.Categories</code>. An explicitly set <code>Severity</code> is never overwritten, matching the existing compute-if-unset convention already used for <code>Rubric.IntScore</code> and <code>Rubric.Confidence</code>.</p>
+<p>New helper:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kd">func</span><span class="w"> </span><span class="nx">WorstSeverity</span><span class="p">(</span><span class="nx">findings</span><span class="w"> </span><span class="p">[]</span><span class="nx">Finding</span><span class="p">)</span><span class="w"> </span><span class="nx">Severity</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">passCriteria</span><span class="p">:</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">scoreThresholds</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">pass</span><span class="p">:</span><span class="w"> </span><span class="nv">80</span><span class="p p-Indicator">,</span><span class="nt"> partial</span><span class="p">:</span><span class="w"> </span><span class="nv">60</span><span class="p p-Indicator">}</span>
+<p>See <a href="../../concepts/findings/#category-severity-rollup-v0110">Findings &amp; Severity</a> for details.</p>
+<h3 id="typescript-zod-bindings">TypeScript / Zod Bindings<a class="headerlink" href="#typescript-zod-bindings" title="Permanent link">&para;</a></h3>
+<p><code>@plexusone/structured-evaluation</code> is a new npm package providing Zod schemas and TypeScript types — <code>Rubric</code>, <code>RubricSet</code>, <code>ClaimsReport</code>, <code>SummaryReport</code> — generated from the same JSON Schema the Go library embeds. The Go structs remain the single source of truth end to end: Go struct → JSON Schema (<code>cmd/genschema</code>) → Zod schema (<code>npm run generate</code>) → TS types (<code>z.infer</code>).</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>npm<span class="w"> </span>install<span class="w"> </span>@plexusone/structured-evaluation
 </code></pre></div>
-<h3 id="yaml-authoring">YAML Authoring<a class="headerlink" href="#yaml-authoring" title="Permanent link">&para;</a></h3>
-<p>Rubric definition types now carry <code>yaml</code> struct tags mirroring their <code>json</code>
-tags, so a rubric authored as YAML parses directly into a <code>RubricSet</code> with the
-correct field names:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">rs</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">RubricSet</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nx">_</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">yaml</span><span class="p">.</span><span class="nx">Unmarshal</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">rs</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">RubricSchema</span><span class="p">,</span><span class="w"> </span><span class="kr">type</span><span class="w"> </span><span class="nx">Rubric</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;@plexusone/structured-evaluation&#39;</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="kd">const</span><span class="w"> </span><span class="nx">report</span><span class="o">:</span><span class="w"> </span><span class="kt">Rubric</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">RubricSchema</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nb">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">rawJson</span><span class="p">))</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">report</span><span class="p">.</span><span class="nx">intScore</span><span class="p">)</span><span class="w"> </span><span class="c1">// the 1-5 score, correctly typed</span>
 </code></pre></div>
-<h3 id="rubricset-definition-schema">RubricSet Definition Schema<a class="headerlink" href="#rubricset-definition-schema" title="Permanent link">&para;</a></h3>
-<p>The generated <code>RubricSet</code> definition schema is embedded for downstream tooling:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">import</span><span class="w"> </span><span class="s">&quot;github.com/plexusone/structured-evaluation/schema&quot;</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nx">data</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">schema</span><span class="p">.</span><span class="nx">RubricSetSchemaJSON</span><span class="w"> </span><span class="c1">// rubricset.schema.json</span>
-</code></pre></div>
-<p><code>rubricset.schema.json</code> is the <strong>definition</strong> schema (how a rubric is authored);
-<code>rubric.schema.json</code> remains the <strong>report</strong> schema (an evaluation result).</p>
+<p>Every schema is <code>.strict()</code> — an unrecognized key fails parsing loudly instead of silently reading <code>undefined</code>. This exists to prevent a specific, confirmed bug class: a hand-maintained TS/Go consumer type silently drifting from the real report shape (wrong field names, wrong types, restructured shapes) causes <code>json.Unmarshal</code>/parse errors that get swallowed instead of surfaced.</p>
+<p>See the <a href="https://github.com/plexusone/structured-evaluation/tree/main/ts">package README</a> for regeneration instructions and known limitations.</p>
 <h2 id="backward-compatibility">Backward Compatibility<a class="headerlink" href="#backward-compatibility" title="Permanent link">&para;</a></h2>
-<p>All additions are optional. Categories scored via <code>Scale</code>, the existing report
-<code>PassCriteria</code>, and all report types are unchanged. Rubrics written for v0.9.0
-continue to work without modification.</p>
+<p><code>CategoryResult.Severity</code> is additive and <code>omitempty</code>. Existing reports and code that don't set it are unaffected; the field is simply empty until computed. No breaking changes.</p>
 <h2 id="commits">Commits<a class="headerlink" href="#commits" title="Permanent link">&para;</a></h2>
 <ul>
-<li><code>47b4673</code> feat(rubric): add rich weighted-criteria rubric form</li>
-<li><code>e1c58ae</code> feat(rubric): add yaml tags to rubric definition types</li>
+<li><code>9f008ef</code> feat(rubric): add computed CategoryResult.Severity field</li>
+<li><code>4a87481</code> test(rubric): add tests for CategoryResult.Severity computation</li>
+<li><code>9f8da9f</code> feat(ts): add @plexusone/structured-evaluation Zod/TS package</li>
+<li><code>560d045</code> docs: document CategoryResult.Severity rollup and TS/Zod bindings, bump ts/ to v0.11.0</li>
 </ul>
 
 

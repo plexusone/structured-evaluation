@@ -604,6 +604,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#category-severity-rollup-v0110" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Category Severity Rollup (v0.11.0)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#creating-findings" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1370,6 +1381,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../releases/v0.11.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.11.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../releases/v0.10/" class="md-nav__link">
         
   
@@ -1699,6 +1738,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#category-severity-rollup-v0110" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Category Severity Rollup (v0.11.0)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#creating-findings" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1980,67 +2030,106 @@
 </tr>
 </tbody>
 </table>
+<h2 id="category-severity-rollup-v0110">Category Severity Rollup (v0.11.0)<a class="headerlink" href="#category-severity-rollup-v0110" title="Permanent link">&para;</a></h2>
+<p><code>CategoryResult</code> carries a <code>Severity</code> field — the highest-severity finding in
+that category, or empty if it has none. It's computed automatically from the
+category's <code>Findings</code> via <code>WorstSeverity()</code>, never set independently by the
+judge, so it can't drift out of sync with what was actually found:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kd">type</span><span class="w"> </span><span class="nx">CategoryResult</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="nx">Category</span><span class="w"> </span><span class="kt">string</span><span class="w">     </span><span class="s">`json:&quot;category&quot;`</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nx">Score</span><span class="w">    </span><span class="nx">ScoreValue</span><span class="w"> </span><span class="s">`json:&quot;score&quot;`</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="nx">Severity</span><span class="w"> </span><span class="nx">Severity</span><span class="w">   </span><span class="s">`json:&quot;severity,omitempty&quot;`</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="nx">Findings</span><span class="w"> </span><span class="p">[]</span><span class="nx">Finding</span><span class="w">  </span><span class="s">`json:&quot;findings,omitempty&quot;`</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="c1">// ...</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="p">}</span>
+</code></pre></div>
+<p>It's computed in two places, so every path is covered:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1">// AddFinding recomputes Severity on every call.</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nx">cat</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">CategoryResult</span><span class="p">{</span><span class="nx">Category</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;security&quot;</span><span class="p">}</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nx">cat</span><span class="p">.</span><span class="nx">AddFinding</span><span class="p">(</span><span class="nx">rubric</span><span class="p">.</span><span class="nx">Finding</span><span class="p">{</span><span class="nx">Severity</span><span class="p">:</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">SeverityHigh</span><span class="p">,</span><span class="w"> </span><span class="nx">Title</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;...&quot;</span><span class="p">})</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nx">cat</span><span class="p">.</span><span class="nx">Severity</span><span class="w"> </span><span class="c1">// SeverityHigh</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="c1">// AddCategoryResult and Evaluate compute it as a safety net for categories</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="c1">// built via struct literal or appended directly to Rubric.Categories.</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="nx">report</span><span class="p">.</span><span class="nx">AddCategoryResult</span><span class="p">(</span><span class="nx">rubric</span><span class="p">.</span><span class="nx">CategoryResult</span><span class="p">{</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">    </span><span class="nx">Category</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;security&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">    </span><span class="nx">Findings</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="nx">rubric</span><span class="p">.</span><span class="nx">Finding</span><span class="p">{{</span><span class="nx">Severity</span><span class="p">:</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">SeverityCritical</span><span class="p">}},</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="p">})</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="c1">// report.Categories[len(report.Categories)-1].Severity == SeverityCritical</span>
+</code></pre></div>
+<p>An explicitly set <code>Severity</code> is never overwritten — the compute-if-unset
+behavior only fills it in when it's still the zero value, matching the same
+convention already used for <code>Rubric.IntScore</code> and <code>Rubric.Confidence</code>.</p>
+<p>This is distinct from <code>Score</code>/<code>IntScore</code>, which measure quality. <code>Severity</code>
+exists specifically to answer "which categories should I fix first?" —
+useful for sorting or highlighting categories in a UI independent of their
+pass/partial/fail status.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1">// Sort categories by severity for a &quot;fix these first&quot; view</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nx">sort</span><span class="p">.</span><span class="nx">Slice</span><span class="p">(</span><span class="nx">report</span><span class="p">.</span><span class="nx">Categories</span><span class="p">,</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span><span class="w"> </span><span class="nx">j</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">report</span><span class="p">.</span><span class="nx">Categories</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">Severity</span><span class="p">.</span><span class="nx">Weight</span><span class="p">()</span><span class="w"> </span><span class="p">&gt;</span><span class="w"> </span><span class="nx">report</span><span class="p">.</span><span class="nx">Categories</span><span class="p">[</span><span class="nx">j</span><span class="p">].</span><span class="nx">Severity</span><span class="p">.</span><span class="nx">Weight</span><span class="p">()</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="p">})</span>
+</code></pre></div>
 <h2 id="creating-findings">Creating Findings<a class="headerlink" href="#creating-findings" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1">// Critical finding - blocks approval</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nx">report</span><span class="p">.</span><span class="nx">AddFinding</span><span class="p">(</span><span class="nx">rubric</span><span class="p">.</span><span class="nx">Finding</span><span class="p">{</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nx">Severity</span><span class="p">:</span><span class="w">       </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">SeverityCritical</span><span class="p">,</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="nx">Category</span><span class="p">:</span><span class="w">       </span><span class="s">&quot;security&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="nx">Title</span><span class="p">:</span><span class="w">          </span><span class="s">&quot;SQL injection vulnerability&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="nx">Description</span><span class="p">:</span><span class="w">    </span><span class="s">&quot;User input is concatenated directly into SQL query&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="nx">Location</span><span class="p">:</span><span class="w">       </span><span class="s">&quot;src/db/queries.go:142&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="nx">Recommendation</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Use parameterized queries&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="nx">References</span><span class="p">:</span><span class="w">     </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;OWASP-A03:2021&quot;</span><span class="p">},</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="p">})</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="c1">// Medium finding - tracked but doesn&#39;t block</span>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="nx">report</span><span class="p">.</span><span class="nx">AddFinding</span><span class="p">(</span><span class="nx">rubric</span><span class="p">.</span><span class="nx">Finding</span><span class="p">{</span>
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">    </span><span class="nx">Severity</span><span class="p">:</span><span class="w">       </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">SeverityMedium</span><span class="p">,</span>
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">    </span><span class="nx">Category</span><span class="p">:</span><span class="w">       </span><span class="s">&quot;documentation&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">    </span><span class="nx">Title</span><span class="p">:</span><span class="w">          </span><span class="s">&quot;Missing API documentation&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">    </span><span class="nx">Description</span><span class="p">:</span><span class="w">    </span><span class="s">&quot;Public endpoints lack OpenAPI annotations&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">    </span><span class="nx">Recommendation</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Add swagger comments to all public handlers&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="p">})</span>
-<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>
-<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="c1">// Info finding - observation</span>
-<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="nx">report</span><span class="p">.</span><span class="nx">AddFinding</span><span class="p">(</span><span class="nx">rubric</span><span class="p">.</span><span class="nx">Finding</span><span class="p">{</span>
-<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="w">    </span><span class="nx">Severity</span><span class="p">:</span><span class="w">    </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">SeverityInfo</span><span class="p">,</span>
-<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="w">    </span><span class="nx">Category</span><span class="p">:</span><span class="w">    </span><span class="s">&quot;style&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="w">    </span><span class="nx">Title</span><span class="p">:</span><span class="w">       </span><span class="s">&quot;Consider using table-driven tests&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="w">    </span><span class="nx">Description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Test file has repetitive test cases&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="p">})</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1">// Critical finding - blocks approval</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nx">report</span><span class="p">.</span><span class="nx">AddFinding</span><span class="p">(</span><span class="nx">rubric</span><span class="p">.</span><span class="nx">Finding</span><span class="p">{</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="nx">Severity</span><span class="p">:</span><span class="w">       </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">SeverityCritical</span><span class="p">,</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="nx">Category</span><span class="p">:</span><span class="w">       </span><span class="s">&quot;security&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="nx">Title</span><span class="p">:</span><span class="w">          </span><span class="s">&quot;SQL injection vulnerability&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="nx">Description</span><span class="p">:</span><span class="w">    </span><span class="s">&quot;User input is concatenated directly into SQL query&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="nx">Location</span><span class="p">:</span><span class="w">       </span><span class="s">&quot;src/db/queries.go:142&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">    </span><span class="nx">Recommendation</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Use parameterized queries&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">    </span><span class="nx">References</span><span class="p">:</span><span class="w">     </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;OWASP-A03:2021&quot;</span><span class="p">},</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="p">})</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="c1">// Medium finding - tracked but doesn&#39;t block</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="nx">report</span><span class="p">.</span><span class="nx">AddFinding</span><span class="p">(</span><span class="nx">rubric</span><span class="p">.</span><span class="nx">Finding</span><span class="p">{</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">    </span><span class="nx">Severity</span><span class="p">:</span><span class="w">       </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">SeverityMedium</span><span class="p">,</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">    </span><span class="nx">Category</span><span class="p">:</span><span class="w">       </span><span class="s">&quot;documentation&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">    </span><span class="nx">Title</span><span class="p">:</span><span class="w">          </span><span class="s">&quot;Missing API documentation&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="w">    </span><span class="nx">Description</span><span class="p">:</span><span class="w">    </span><span class="s">&quot;Public endpoints lack OpenAPI annotations&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="w">    </span><span class="nx">Recommendation</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Add swagger comments to all public handlers&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="p">})</span>
+<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a>
+<a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="c1">// Info finding - observation</span>
+<a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a><span class="nx">report</span><span class="p">.</span><span class="nx">AddFinding</span><span class="p">(</span><span class="nx">rubric</span><span class="p">.</span><span class="nx">Finding</span><span class="p">{</span>
+<a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a><span class="w">    </span><span class="nx">Severity</span><span class="p">:</span><span class="w">    </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">SeverityInfo</span><span class="p">,</span>
+<a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a><span class="w">    </span><span class="nx">Category</span><span class="p">:</span><span class="w">    </span><span class="s">&quot;style&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a><span class="w">    </span><span class="nx">Title</span><span class="p">:</span><span class="w">       </span><span class="s">&quot;Consider using table-driven tests&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a><span class="w">    </span><span class="nx">Description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Test file has repetitive test cases&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-27" name="__codelineno-4-27" href="#__codelineno-4-27"></a><span class="p">})</span>
 </code></pre></div>
 <h2 id="finding-counts">Finding Counts<a class="headerlink" href="#finding-counts" title="Permanent link">&para;</a></h2>
 <p>The decision tracks finding counts by severity:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kd">type</span><span class="w"> </span><span class="nx">FindingCounts</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="nx">Critical</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="s">`json:&quot;critical&quot;`</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nx">High</span><span class="w">     </span><span class="kt">int</span><span class="w"> </span><span class="s">`json:&quot;high&quot;`</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="nx">Medium</span><span class="w">   </span><span class="kt">int</span><span class="w"> </span><span class="s">`json:&quot;medium&quot;`</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="nx">Low</span><span class="w">      </span><span class="kt">int</span><span class="w"> </span><span class="s">`json:&quot;low&quot;`</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="nx">Info</span><span class="w">     </span><span class="kt">int</span><span class="w"> </span><span class="s">`json:&quot;info&quot;`</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="nx">Total</span><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="s">`json:&quot;total&quot;`</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="p">}</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="c1">// BlockingCount returns critical + high</span>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">fc</span><span class="w"> </span><span class="nx">FindingCounts</span><span class="p">)</span><span class="w"> </span><span class="nx">BlockingCount</span><span class="p">()</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">fc</span><span class="p">.</span><span class="nx">Critical</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">fc</span><span class="p">.</span><span class="nx">High</span>
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kd">type</span><span class="w"> </span><span class="nx">FindingCounts</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="nx">Critical</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="s">`json:&quot;critical&quot;`</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="nx">High</span><span class="w">     </span><span class="kt">int</span><span class="w"> </span><span class="s">`json:&quot;high&quot;`</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="nx">Medium</span><span class="w">   </span><span class="kt">int</span><span class="w"> </span><span class="s">`json:&quot;medium&quot;`</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="nx">Low</span><span class="w">      </span><span class="kt">int</span><span class="w"> </span><span class="s">`json:&quot;low&quot;`</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">    </span><span class="nx">Info</span><span class="w">     </span><span class="kt">int</span><span class="w"> </span><span class="s">`json:&quot;info&quot;`</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">    </span><span class="nx">Total</span><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="s">`json:&quot;total&quot;`</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="p">}</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="c1">// BlockingCount returns critical + high</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">fc</span><span class="w"> </span><span class="nx">FindingCounts</span><span class="p">)</span><span class="w"> </span><span class="nx">BlockingCount</span><span class="p">()</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">fc</span><span class="p">.</span><span class="nx">Critical</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">fc</span><span class="p">.</span><span class="nx">High</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="p">}</span>
 </code></pre></div>
 <h3 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nx">counts</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">report</span><span class="p">.</span><span class="nx">Decision</span><span class="p">.</span><span class="nx">FindingCounts</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="k">if</span><span class="w"> </span><span class="nx">counts</span><span class="p">.</span><span class="nx">BlockingCount</span><span class="p">()</span><span class="w"> </span><span class="p">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;❌ %d blocking issues found\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">counts</span><span class="p">.</span><span class="nx">BlockingCount</span><span class="p">())</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="p">}</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;Findings: %d critical, %d high, %d medium, %d low\n&quot;</span><span class="p">,</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">    </span><span class="nx">counts</span><span class="p">.</span><span class="nx">Critical</span><span class="p">,</span><span class="w"> </span><span class="nx">counts</span><span class="p">.</span><span class="nx">High</span><span class="p">,</span><span class="w"> </span><span class="nx">counts</span><span class="p">.</span><span class="nx">Medium</span><span class="p">,</span><span class="w"> </span><span class="nx">counts</span><span class="p">.</span><span class="nx">Low</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nx">counts</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">report</span><span class="p">.</span><span class="nx">Decision</span><span class="p">.</span><span class="nx">FindingCounts</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="k">if</span><span class="w"> </span><span class="nx">counts</span><span class="p">.</span><span class="nx">BlockingCount</span><span class="p">()</span><span class="w"> </span><span class="p">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;❌ %d blocking issues found\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">counts</span><span class="p">.</span><span class="nx">BlockingCount</span><span class="p">())</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="p">}</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;Findings: %d critical, %d high, %d medium, %d low\n&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">    </span><span class="nx">counts</span><span class="p">.</span><span class="nx">Critical</span><span class="p">,</span><span class="w"> </span><span class="nx">counts</span><span class="p">.</span><span class="nx">High</span><span class="p">,</span><span class="w"> </span><span class="nx">counts</span><span class="p">.</span><span class="nx">Medium</span><span class="p">,</span><span class="w"> </span><span class="nx">counts</span><span class="p">.</span><span class="nx">Low</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="severity-methods">Severity Methods<a class="headerlink" href="#severity-methods" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nx">severity</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">SeverityHigh</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nx">severity</span><span class="p">.</span><span class="nx">Icon</span><span class="p">()</span><span class="w">        </span><span class="c1">// &quot;🔴&quot;</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="nx">severity</span><span class="p">.</span><span class="nx">IsBlocking</span><span class="p">()</span><span class="w">  </span><span class="c1">// true</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="nx">severity</span><span class="p">.</span><span class="nx">Priority</span><span class="p">()</span><span class="w">    </span><span class="c1">// 2 (lower = more severe)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nx">severity</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">SeverityHigh</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="nx">severity</span><span class="p">.</span><span class="nx">Icon</span><span class="p">()</span><span class="w">        </span><span class="c1">// &quot;🔴&quot;</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="nx">severity</span><span class="p">.</span><span class="nx">IsBlocking</span><span class="p">()</span><span class="w">  </span><span class="c1">// true</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="nx">severity</span><span class="p">.</span><span class="nx">Priority</span><span class="p">()</span><span class="w">    </span><span class="c1">// 2 (lower = more severe)</span>
 </code></pre></div>
 <table>
 <thead>
@@ -2086,17 +2175,17 @@
 </table>
 <h2 id="grouping-findings">Grouping Findings<a class="headerlink" href="#grouping-findings" title="Permanent link">&para;</a></h2>
 <p>Findings can be grouped by category or severity for display:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1">// Group by category</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nx">byCategory</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">][]</span><span class="nx">Finding</span><span class="p">)</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">f</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">report</span><span class="p">.</span><span class="nx">Findings</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="nx">byCategory</span><span class="p">[</span><span class="nx">f</span><span class="p">.</span><span class="nx">Category</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">append</span><span class="p">(</span><span class="nx">byCategory</span><span class="p">[</span><span class="nx">f</span><span class="p">.</span><span class="nx">Category</span><span class="p">],</span><span class="w"> </span><span class="nx">f</span><span class="p">)</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="p">}</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="c1">// Group by severity</span>
-<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="nx">bySeverity</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="nx">Severity</span><span class="p">][]</span><span class="nx">Finding</span><span class="p">)</span>
-<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">f</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">report</span><span class="p">.</span><span class="nx">Findings</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">    </span><span class="nx">bySeverity</span><span class="p">[</span><span class="nx">f</span><span class="p">.</span><span class="nx">Severity</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">append</span><span class="p">(</span><span class="nx">bySeverity</span><span class="p">[</span><span class="nx">f</span><span class="p">.</span><span class="nx">Severity</span><span class="p">],</span><span class="w"> </span><span class="nx">f</span><span class="p">)</span>
-<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1">// Group by category</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nx">byCategory</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">][]</span><span class="nx">Finding</span><span class="p">)</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">f</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">report</span><span class="p">.</span><span class="nx">Findings</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">    </span><span class="nx">byCategory</span><span class="p">[</span><span class="nx">f</span><span class="p">.</span><span class="nx">Category</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">append</span><span class="p">(</span><span class="nx">byCategory</span><span class="p">[</span><span class="nx">f</span><span class="p">.</span><span class="nx">Category</span><span class="p">],</span><span class="w"> </span><span class="nx">f</span><span class="p">)</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="p">}</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="c1">// Group by severity</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="nx">bySeverity</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="nx">Severity</span><span class="p">][]</span><span class="nx">Finding</span><span class="p">)</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">f</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">report</span><span class="p">.</span><span class="nx">Findings</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="w">    </span><span class="nx">bySeverity</span><span class="p">[</span><span class="nx">f</span><span class="p">.</span><span class="nx">Severity</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">append</span><span class="p">(</span><span class="nx">bySeverity</span><span class="p">[</span><span class="nx">f</span><span class="p">.</span><span class="nx">Severity</span><span class="p">],</span><span class="w"> </span><span class="nx">f</span><span class="p">)</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="p">}</span>
 </code></pre></div>
 <h2 id="best-practices">Best Practices<a class="headerlink" href="#best-practices" title="Permanent link">&para;</a></h2>
 <h3 id="writing-good-finding-titles">Writing Good Finding Titles<a class="headerlink" href="#writing-good-finding-titles" title="Permanent link">&para;</a></h3>
@@ -2112,94 +2201,94 @@
 <li>Reference standards when applicable</li>
 <li>Provide code examples if helpful</li>
 </ul>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nx">Finding</span><span class="p">{</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">    </span><span class="nx">Title</span><span class="p">:</span><span class="w">          </span><span class="s">&quot;Passwords stored in plaintext&quot;</span><span class="p">,</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="nx">Recommendation</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Use bcrypt with cost factor ≥12. See OWASP Password Storage Cheat Sheet.&quot;</span><span class="p">,</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nx">Finding</span><span class="p">{</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">    </span><span class="nx">Title</span><span class="p">:</span><span class="w">          </span><span class="s">&quot;Passwords stored in plaintext&quot;</span><span class="p">,</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">    </span><span class="nx">Recommendation</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Use bcrypt with cost factor ≥12. See OWASP Password Storage Cheat Sheet.&quot;</span><span class="p">,</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="p">}</span>
 </code></pre></div>
 <h3 id="using-location">Using Location<a class="headerlink" href="#using-location" title="Permanent link">&para;</a></h3>
 <p>Include file paths and line numbers when available:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nx">Finding</span><span class="p">{</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">    </span><span class="nx">Location</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;src/auth/handler.go:89&quot;</span><span class="p">,</span><span class="w">  </span><span class="c1">// File:line</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="nx">Location</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Section 3.2&quot;</span><span class="p">,</span><span class="w">              </span><span class="c1">// Document section</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span><span class="nx">Location</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;API: POST /users&quot;</span><span class="p">,</span><span class="w">         </span><span class="c1">// Endpoint</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nx">Finding</span><span class="p">{</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">    </span><span class="nx">Location</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;src/auth/handler.go:89&quot;</span><span class="p">,</span><span class="w">  </span><span class="c1">// File:line</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">    </span><span class="nx">Location</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Section 3.2&quot;</span><span class="p">,</span><span class="w">              </span><span class="c1">// Document section</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">    </span><span class="nx">Location</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;API: POST /users&quot;</span><span class="p">,</span><span class="w">         </span><span class="c1">// Endpoint</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="p">}</span>
 </code></pre></div>
 <h2 id="reason-codes-v090">Reason Codes (v0.9.0)<a class="headerlink" href="#reason-codes-v090" title="Permanent link">&para;</a></h2>
 <p>Reason codes provide standardized finding identifiers for automated repair workflows.</p>
 <h3 id="reasoncode-format">ReasonCode Format<a class="headerlink" href="#reasoncode-format" title="Permanent link">&para;</a></h3>
 <p>Codes use <code>{CATEGORY}-{ISSUE}</code> format:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1">// Category prefixes</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nx">CategoryREQ</span><span class="w">    </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;REQ&quot;</span><span class="w">    </span><span class="c1">// Requirements</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="nx">CategorySEC</span><span class="w">    </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;SEC&quot;</span><span class="w">    </span><span class="c1">// Security</span>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="nx">CategoryARCH</span><span class="w">   </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;ARCH&quot;</span><span class="w">   </span><span class="c1">// Architecture</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="nx">CategoryDOC</span><span class="w">    </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;DOC&quot;</span><span class="w">    </span><span class="c1">// Documentation</span>
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="nx">CategoryMETRIC</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;METRIC&quot;</span><span class="w"> </span><span class="c1">// Metrics</span>
-<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="nx">CategoryUSER</span><span class="w">   </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;USER&quot;</span><span class="w">   </span><span class="c1">// User personas</span>
-<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="nx">CategorySCALE</span><span class="w">  </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;SCALE&quot;</span><span class="w">  </span><span class="c1">// Scalability</span>
-<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="nx">CategoryINFRA</span><span class="w">  </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;INFRA&quot;</span><span class="w">  </span><span class="c1">// Infrastructure</span>
-<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="nx">CategorySCOPE</span><span class="w">  </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;SCOPE&quot;</span><span class="w">  </span><span class="c1">// Scope</span>
-<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="nx">CategoryUX</span><span class="w">     </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;UX&quot;</span><span class="w">     </span><span class="c1">// UX/Accessibility</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1">// Category prefixes</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="nx">CategoryREQ</span><span class="w">    </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;REQ&quot;</span><span class="w">    </span><span class="c1">// Requirements</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="nx">CategorySEC</span><span class="w">    </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;SEC&quot;</span><span class="w">    </span><span class="c1">// Security</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="nx">CategoryARCH</span><span class="w">   </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;ARCH&quot;</span><span class="w">   </span><span class="c1">// Architecture</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="nx">CategoryDOC</span><span class="w">    </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;DOC&quot;</span><span class="w">    </span><span class="c1">// Documentation</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="nx">CategoryMETRIC</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;METRIC&quot;</span><span class="w"> </span><span class="c1">// Metrics</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="nx">CategoryUSER</span><span class="w">   </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;USER&quot;</span><span class="w">   </span><span class="c1">// User personas</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="nx">CategorySCALE</span><span class="w">  </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;SCALE&quot;</span><span class="w">  </span><span class="c1">// Scalability</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="nx">CategoryINFRA</span><span class="w">  </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;INFRA&quot;</span><span class="w">  </span><span class="c1">// Infrastructure</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="nx">CategorySCOPE</span><span class="w">  </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;SCOPE&quot;</span><span class="w">  </span><span class="c1">// Scope</span>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="nx">CategoryUX</span><span class="w">     </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;UX&quot;</span><span class="w">     </span><span class="c1">// UX/Accessibility</span>
 </code></pre></div>
 <h3 id="pre-defined-codes">Pre-defined Codes<a class="headerlink" href="#pre-defined-codes" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1">// Requirements</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nx">CodeREQAmbiguous</span><span class="w">     </span><span class="c1">// &quot;REQ-AMBIGUOUS&quot;</span>
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="nx">CodeREQIncomplete</span><span class="w">    </span><span class="c1">// &quot;REQ-INCOMPLETE&quot;</span>
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="nx">CodeREQConflict</span><span class="w">      </span><span class="c1">// &quot;REQ-CONFLICT&quot;</span>
-<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>
-<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="c1">// Security</span>
-<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="nx">CodeSECMissingAuth</span><span class="w">   </span><span class="c1">// &quot;SEC-MISSING_AUTH&quot;</span>
-<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="nx">CodeSECNoValidation</span><span class="w">  </span><span class="c1">// &quot;SEC-NO_VALIDATION&quot;</span>
-<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>
-<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="c1">// Metrics</span>
-<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="nx">CodeMETRICNoBaseline</span><span class="w"> </span><span class="c1">// &quot;METRIC-NO_BASELINE&quot;</span>
-<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="nx">CodeMETRICNoTarget</span><span class="w">   </span><span class="c1">// &quot;METRIC-NO_TARGET&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1">// Requirements</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="nx">CodeREQAmbiguous</span><span class="w">     </span><span class="c1">// &quot;REQ-AMBIGUOUS&quot;</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="nx">CodeREQIncomplete</span><span class="w">    </span><span class="c1">// &quot;REQ-INCOMPLETE&quot;</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="nx">CodeREQConflict</span><span class="w">      </span><span class="c1">// &quot;REQ-CONFLICT&quot;</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="c1">// Security</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="nx">CodeSECMissingAuth</span><span class="w">   </span><span class="c1">// &quot;SEC-MISSING_AUTH&quot;</span>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="nx">CodeSECNoValidation</span><span class="w">  </span><span class="c1">// &quot;SEC-NO_VALIDATION&quot;</span>
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="c1">// Metrics</span>
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="nx">CodeMETRICNoBaseline</span><span class="w"> </span><span class="c1">// &quot;METRIC-NO_BASELINE&quot;</span>
+<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a><span class="nx">CodeMETRICNoTarget</span><span class="w">   </span><span class="c1">// &quot;METRIC-NO_TARGET&quot;</span>
 </code></pre></div>
 <h3 id="creating-findings-with-codes">Creating Findings with Codes<a class="headerlink" href="#creating-findings-with-codes" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1">// Using NewFindingWithCode (inherits severity from registry)</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="nx">finding</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewFindingWithCode</span><span class="p">(</span>
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">    </span><span class="s">&quot;f1&quot;</span><span class="p">,</span>
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">    </span><span class="s">&quot;requirements&quot;</span><span class="p">,</span>
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">    </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">CodeREQAmbiguous</span><span class="p">,</span>
-<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">    </span><span class="s">&quot;Ambiguous requirement&quot;</span><span class="p">,</span>
-<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">    </span><span class="s">&quot;Requirement REQ-12 can be interpreted multiple ways&quot;</span><span class="p">,</span>
-<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="p">)</span>
-<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>
-<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="c1">// Or set code on existing finding</span>
-<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="nx">finding</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewFinding</span><span class="p">(</span><span class="s">&quot;f2&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;security&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">SeverityHigh</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Missing auth&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;...&quot;</span><span class="p">)</span>
-<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="nx">finding</span><span class="p">.</span><span class="nx">SetCode</span><span class="p">(</span><span class="nx">rubric</span><span class="p">.</span><span class="nx">CodeSECMissingAuth</span><span class="p">)</span>
-<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a><span class="nx">finding</span><span class="p">.</span><span class="nx">SetLocation</span><span class="p">(</span><span class="s">&quot;Section 3.2&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1">// Using NewFindingWithCode (inherits severity from registry)</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="nx">finding</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewFindingWithCode</span><span class="p">(</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">    </span><span class="s">&quot;f1&quot;</span><span class="p">,</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">    </span><span class="s">&quot;requirements&quot;</span><span class="p">,</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">    </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">CodeREQAmbiguous</span><span class="p">,</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">    </span><span class="s">&quot;Ambiguous requirement&quot;</span><span class="p">,</span>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="w">    </span><span class="s">&quot;Requirement REQ-12 can be interpreted multiple ways&quot;</span><span class="p">,</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="p">)</span>
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="c1">// Or set code on existing finding</span>
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="nx">finding</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewFinding</span><span class="p">(</span><span class="s">&quot;f2&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;security&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">SeverityHigh</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Missing auth&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;...&quot;</span><span class="p">)</span>
+<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a><span class="nx">finding</span><span class="p">.</span><span class="nx">SetCode</span><span class="p">(</span><span class="nx">rubric</span><span class="p">.</span><span class="nx">CodeSECMissingAuth</span><span class="p">)</span>
+<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a><span class="nx">finding</span><span class="p">.</span><span class="nx">SetLocation</span><span class="p">(</span><span class="s">&quot;Section 3.2&quot;</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="automated-repair">Automated Repair<a class="headerlink" href="#automated-repair" title="Permanent link">&para;</a></h3>
 <p>Each code has a repair prompt in the registry:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1">// Get repair prompt for automated fixes</span>
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="nx">prompt</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">finding</span><span class="p">.</span><span class="nx">GetRepairPrompt</span><span class="p">()</span>
-<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="c1">// Returns: &quot;Rewrite this requirement to be specific and testable...&quot;</span>
-<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>
-<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="c1">// Or access code info directly</span>
-<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="nx">info</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">GetReasonCodeInfo</span><span class="p">(</span><span class="nx">rubric</span><span class="p">.</span><span class="nx">CodeREQAmbiguous</span><span class="p">)</span>
-<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="nx">info</span><span class="p">.</span><span class="nx">Category</span><span class="w">        </span><span class="c1">// &quot;REQ&quot;</span>
-<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="nx">info</span><span class="p">.</span><span class="nx">DefaultSeverity</span><span class="w"> </span><span class="c1">// SeverityMedium</span>
-<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="nx">info</span><span class="p">.</span><span class="nx">RepairPrompt</span><span class="w">    </span><span class="c1">// &quot;Rewrite this requirement...&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1">// Get repair prompt for automated fixes</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="nx">prompt</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">finding</span><span class="p">.</span><span class="nx">GetRepairPrompt</span><span class="p">()</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="c1">// Returns: &quot;Rewrite this requirement to be specific and testable...&quot;</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="c1">// Or access code info directly</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="nx">info</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">GetReasonCodeInfo</span><span class="p">(</span><span class="nx">rubric</span><span class="p">.</span><span class="nx">CodeREQAmbiguous</span><span class="p">)</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="nx">info</span><span class="p">.</span><span class="nx">Category</span><span class="w">        </span><span class="c1">// &quot;REQ&quot;</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="nx">info</span><span class="p">.</span><span class="nx">DefaultSeverity</span><span class="w"> </span><span class="c1">// SeverityMedium</span>
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="nx">info</span><span class="p">.</span><span class="nx">RepairPrompt</span><span class="w">    </span><span class="c1">// &quot;Rewrite this requirement...&quot;</span>
 </code></pre></div>
 <h3 id="aggregating-by-code">Aggregating by Code<a class="headerlink" href="#aggregating-by-code" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1">// Count findings by reason code</span>
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="nx">counts</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">CountFindingsByCode</span><span class="p">(</span><span class="nx">report</span><span class="p">.</span><span class="nx">Findings</span><span class="p">)</span>
-<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="c1">// map[ReasonCode]int{&quot;REQ-AMBIGUOUS&quot;: 3, &quot;SEC-MISSING_AUTH&quot;: 1}</span>
-<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>
-<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="c1">// Get blocking codes</span>
-<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="nx">blocking</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">GetBlockingCodes</span><span class="p">(</span><span class="nx">report</span><span class="p">.</span><span class="nx">Findings</span><span class="p">)</span>
-<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="c1">// []ReasonCode{&quot;SEC-MISSING_AUTH&quot;}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1">// Count findings by reason code</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="nx">counts</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">CountFindingsByCode</span><span class="p">(</span><span class="nx">report</span><span class="p">.</span><span class="nx">Findings</span><span class="p">)</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="c1">// map[ReasonCode]int{&quot;REQ-AMBIGUOUS&quot;: 3, &quot;SEC-MISSING_AUTH&quot;: 1}</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="c1">// Get blocking codes</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="nx">blocking</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">GetBlockingCodes</span><span class="p">(</span><span class="nx">report</span><span class="p">.</span><span class="nx">Findings</span><span class="p">)</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="c1">// []ReasonCode{&quot;SEC-MISSING_AUTH&quot;}</span>
 </code></pre></div>
 <h3 id="blocking-codes-on-rubric">Blocking Codes on Rubric<a class="headerlink" href="#blocking-codes-on-rubric" title="Permanent link">&para;</a></h3>
 <p>The rubric tracks which codes caused failure:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="nx">report</span><span class="p">.</span><span class="nx">Evaluate</span><span class="p">(</span><span class="nx">rubricSet</span><span class="p">)</span>
-<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>
-<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="k">if</span><span class="w"> </span><span class="p">!</span><span class="nx">report</span><span class="p">.</span><span class="nx">Pass</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">code</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">report</span><span class="p">.</span><span class="nx">Blocking</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;Blocked by: %s\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">code</span><span class="p">)</span>
-<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="nx">report</span><span class="p">.</span><span class="nx">Evaluate</span><span class="p">(</span><span class="nx">rubricSet</span><span class="p">)</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="k">if</span><span class="w"> </span><span class="p">!</span><span class="nx">report</span><span class="p">.</span><span class="nx">Pass</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">code</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">report</span><span class="p">.</span><span class="nx">Blocking</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;Blocked by: %s\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">code</span><span class="p">)</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="p">}</span>
 </code></pre></div>
 <h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
 <ul>

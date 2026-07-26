@@ -431,6 +431,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#typescript-javascript" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TypeScript / JavaScript
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#requirements" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1198,6 +1209,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../releases/v0.11.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.11.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../releases/v0.10/" class="md-nav__link">
         
   
@@ -1527,6 +1566,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#typescript-javascript" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TypeScript / JavaScript
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#requirements" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1591,6 +1641,22 @@
 <p>Verify installation:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>sevaluation<span class="w"> </span>version
 </code></pre></div>
+<h2 id="typescript-javascript">TypeScript / JavaScript<a class="headerlink" href="#typescript-javascript" title="Permanent link">&para;</a></h2>
+<p>For consumers that read reports in TypeScript, <code>@plexusone/structured-evaluation</code>
+provides generated Zod schemas and TS types (<code>Rubric</code>, <code>RubricSet</code>,
+<code>ClaimsReport</code>, <code>SummaryReport</code>) — downstream of the same Go structs, never
+hand-maintained:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>npm<span class="w"> </span>install<span class="w"> </span>@plexusone/structured-evaluation
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">RubricSchema</span><span class="p">,</span><span class="w"> </span><span class="kr">type</span><span class="w"> </span><span class="nx">Rubric</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;@plexusone/structured-evaluation&#39;</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="kd">const</span><span class="w"> </span><span class="nx">report</span><span class="o">:</span><span class="w"> </span><span class="kt">Rubric</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">RubricSchema</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nb">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">rawJson</span><span class="p">))</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">report</span><span class="p">.</span><span class="nx">intScore</span><span class="p">)</span><span class="w"> </span><span class="c1">// the 1-5 score, correctly typed</span>
+</code></pre></div>
+<p>Every schema is <code>.strict()</code> — an unrecognized key fails parsing loudly
+instead of silently reading <code>undefined</code>. See the
+<a href="https://github.com/plexusone/structured-evaluation/tree/main/ts">package README</a>
+for regeneration instructions and known limitations.</p>
 <h2 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Go 1.21 or later</li>
