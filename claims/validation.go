@@ -40,8 +40,10 @@ type ExternalValidation struct {
 	// Reliability indicates the trustworthiness of the source.
 	Reliability ReliabilityTier `json:"reliability"`
 
-	// AccessedAt is when the URL was accessed.
-	AccessedAt time.Time `json:"accessedAt,omitempty"`
+	// AccessedAt is when the URL was accessed. Nil when unknown — a pointer
+	// so omitempty actually omits it, rather than serializing the
+	// time.Time zero value ("0001-01-01T00:00:00Z").
+	AccessedAt *time.Time `json:"accessedAt,omitempty"`
 
 	// Archived indicates if the URL is archived (e.g., Wayback Machine).
 	Archived bool `json:"archived,omitempty"`
@@ -76,8 +78,10 @@ type InternalValidation struct {
 	// ValidatedBy identifies who performed the validation.
 	ValidatedBy string `json:"validatedBy,omitempty"`
 
-	// ValidatedAt is when validation was performed.
-	ValidatedAt time.Time `json:"validatedAt,omitempty"`
+	// ValidatedAt is when validation was performed. Nil when unknown — a
+	// pointer so omitempty actually omits it, rather than serializing the
+	// time.Time zero value ("0001-01-01T00:00:00Z").
+	ValidatedAt *time.Time `json:"validatedAt,omitempty"`
 
 	// Environment describes the validation environment.
 	Environment *ValidationEnvironment `json:"environment,omitempty"`
@@ -150,26 +154,28 @@ const (
 
 // NewExternalValidation creates a validation for an external source.
 func NewExternalValidation(url string, sourceType ExternalSourceType) *Validation {
+	accessedAt := time.Now().UTC()
 	return &Validation{
 		Type: SourceExternal,
 		External: &ExternalValidation{
 			URL:         url,
 			SourceType:  sourceType,
 			Reliability: DefaultReliabilityForSourceType(sourceType),
-			AccessedAt:  time.Now().UTC(),
+			AccessedAt:  &accessedAt,
 		},
 	}
 }
 
 // NewInternalValidation creates a validation for internal evidence.
 func NewInternalValidation(method InternalValidationMethod, evidencePath string, reproducible bool) *Validation {
+	validatedAt := time.Now().UTC()
 	return &Validation{
 		Type: SourceInternal,
 		Internal: &InternalValidation{
 			Method:       method,
 			EvidencePath: evidencePath,
 			Reproducible: reproducible,
-			ValidatedAt:  time.Now().UTC(),
+			ValidatedAt:  &validatedAt,
 		},
 	}
 }
@@ -184,6 +190,18 @@ func NewDerivedValidation(sourceClaimIDs []string, method, formula string) *Vali
 			Formula:          formula,
 		},
 	}
+}
+
+// WithAccessedAt sets AccessedAt and returns the receiver for chaining.
+func (e *ExternalValidation) WithAccessedAt(t time.Time) *ExternalValidation {
+	e.AccessedAt = &t
+	return e
+}
+
+// WithValidatedAt sets ValidatedAt and returns the receiver for chaining.
+func (i *InternalValidation) WithValidatedAt(t time.Time) *InternalValidation {
+	i.ValidatedAt = &t
+	return i
 }
 
 // NewSubjectiveValidation creates a validation for a subjective estimate.

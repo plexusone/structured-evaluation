@@ -155,7 +155,7 @@ func buildClaim(c *claims.Claim, icon, class string) claimView {
 			cv.RelClass = reliabilityClass(e.Reliability)
 			cv.QuotedText = e.QuotedText
 			cv.Verified = e.VerifiedMatch
-			if !e.AccessedAt.IsZero() && e.AccessedAt.Year() > 1 {
+			if e.AccessedAt != nil {
 				cv.AccessedAt = e.AccessedAt.Format("2006-01-02")
 			}
 		}
