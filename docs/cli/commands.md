@@ -19,8 +19,9 @@ sevaluation render <file> [--format=<format>]
 | `terminal` | ANSI colors + UTF8 icons | Rubric |
 | `markdown` | Markdown output | Rubric |
 | `detailed` | Verbose terminal output | Rubric |
-| `box` | ASCII box format (deterministic) | Both |
-| `json` | Pretty-printed JSON | Both |
+| `box` | ASCII box format (deterministic) | Rubric, Summary |
+| `json` | Pretty-printed JSON | Rubric, Summary, Claims |
+| `html` | Self-contained HTML audit page, grouped by verdict | Claims |
 
 ### Examples
 
@@ -39,17 +40,24 @@ sevaluation render eval.json --format=json | jq '.decision'
 
 # Box format for summary reports
 sevaluation render summary.json --format=box
+
+# Claims report -> self-contained HTML audit page, grouped by verdict
+sevaluation render claims.json --format=html > report.html
 ```
 
 ### Auto-Detection
 
-The command auto-detects report type (rubric vs summary) and uses the appropriate renderer.
+The command auto-detects report type from top-level JSON keys — `categories`
+(rubric/evaluation), `teams` (summary), or `claims` (claims report) — and
+uses the appropriate renderer.
 
 ---
 
 ## lint
 
-Validate report correctness including enum values, count accuracy, and decision consistency. Added in v0.7.0.
+Validate report correctness. Auto-detects evaluation reports (`categories`)
+vs. claims reports (`claims`) from the file's top-level keys and applies the
+matching checks. Added in v0.7.0; claims-report support added in v0.13.0.
 
 ### Usage
 
@@ -64,7 +72,7 @@ sevaluation lint <file> [--strict] [--format=<format>]
 | `--strict` | Treat warnings as errors |
 | `--format` | Output format: `text` (default), `json` |
 
-### Validation Checks
+### Validation Checks — Evaluation Reports
 
 | Check | Level | Description |
 |-------|-------|-------------|
@@ -74,6 +82,25 @@ sevaluation lint <file> [--strict] [--format=<format>]
 | Count Accuracy | Warning | Reported counts must match actual data |
 | Decision Consistency | Warning | Decision should align with findings |
 | OverallDecision Match | Warning | `overallDecision` should match `decision.status` |
+
+### Validation Checks — Claims Reports
+
+Evidence-integrity checks for `verified` claims — see
+[Evidence-Integrity Linting](../features/claims.md#evidence-integrity-linting-v0130)
+for the full explanation of each rule.
+
+| Rule | Level | Description |
+|------|-------|-------------|
+| `claim-missing-id` / `claim-duplicate-id` | Error | Every claim has a unique `id` |
+| `verified-requires-validation` | Error | A verified claim has a `validation` object |
+| `verified-requires-url` / `verified-requires-quote` | Error | A verified external claim has a source URL and a verbatim quote |
+| `verified-value-in-quote` | Warning | The claim's statistical value appears in the quoted text |
+| `verified-derived-needs-sources` | Error | A verified derived claim lists source claim ids |
+| `verified-internal-needs-evidence` | Error | A verified internal claim has an evidence path or output |
+| `verified-subjective` | Warning | A subjective estimate is published as verified — confirm intentionally |
+| `verified-role-needs-corroboration` | Error | A `secondary-analysis`/`self-reported` source has a corroborating `relatedClaimId` |
+| `verified-insufficient-corroboration` | Error | Opt-in via `criteria.minCorroboratingSources` — a verified claim has fewer independent sources than required |
+| `verified-stale-as-of-date` | Error | Opt-in via `criteria.maxClaimAge` — a verified statistic's `asOfDate` is older than the freshness threshold |
 
 ### Exit Codes
 
@@ -93,6 +120,9 @@ sevaluation lint report.json --strict
 
 # JSON output for programmatic use
 sevaluation lint report.json --format=json
+
+# Claims report — fails if any verified claim lacks a quote/URL/corroboration
+sevaluation lint claims.json --strict
 
 # CI pipeline validation
 for report in reports/*.json; do
@@ -123,6 +153,10 @@ or
 ## check
 
 Check if a report passes evaluation criteria. Useful for CI/CD gates.
+Auto-detects evaluation, summary, and claims reports; for a claims report,
+this checks `report.Decision.Passed` (the criteria decision, e.g. from
+`MinCorroboratingSources`/`MaxClaimAge`) — it does not run `claims.Lint`, so
+use `lint` as a separate, stricter gate.
 
 ### Usage
 

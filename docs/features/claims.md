@@ -211,6 +211,14 @@ permissive := claims.ClaimsCriteria{
 }
 ```
 
+`MinCorroboratingSources`/`CorroborationCategories` and `MaxClaimAge` (v0.13.0)
+are additional, opt-in criteria — see
+[Evidence-Integrity Linting](#evidence-integrity-linting-v0130). When either
+is set, a verified claim that fails it is treated the same way as a
+needs-review claim by `EvaluateClaims`: a conditional pass if
+`AllowNeedsReview`, otherwise a fail. This only affects the report-level
+`Decision`, never the claim's own stored `Verdict`.
+
 ## Summary Statistics
 
 After finalization, review statistics:
@@ -281,6 +289,15 @@ underlying fact was true (e.g. the earnings period a figure describes, or
 the date a public statement was made). A claim crawled today can describe a
 fact from months earlier — conflating the two dates misdates the claim.
 
+`AccessedAt` (and `InternalValidation.ValidatedAt`) are `*time.Time`, nil
+when unset — set them via the chainable `WithAccessedAt`/`WithValidatedAt`,
+or let `NewExternalValidation`/`NewInternalValidation` default them to
+`time.Now().UTC()`:
+
+```go
+validation.External.WithAccessedAt(time.Now().UTC())
+```
+
 ### Precision
 
 | Value | Meaning |
@@ -293,6 +310,128 @@ fact from months earlier — conflating the two dates misdates the claim.
 `Statistical` is nil for non-statistical claims, and setting it on a claim
 whose `Category` isn't `ClaimStatistical` is harmless but not rendered by
 convention — it's meant for numeric claims specifically.
+
+## Evidence-Integrity Linting (v0.13.0)
+
+`DetermineVerdict` computes a verdict from a `Validation`, but a verdict can
+also be hand-authored directly on a `Claim` — bypassing that computation
+entirely. `claims.Lint` re-checks the result: it re-verifies that every claim
+stated as `verified` actually earns the label, regardless of how the verdict
+was set. This is the exact gap that let a claim marked `verified` cite a
+figure synthesized from secondary reporting, when the primary source said
+something substantially different.
+
+```go
+findings := claims.Lint(report)
+if claims.HasErrors(findings) {
+    for _, f := range findings {
+        fmt.Printf("[%s] %s: %s\n", f.Severity, f.ClaimID, f.Message)
+    }
+}
+```
+
+Or from the CLI:
+
+```bash
+sevaluation lint report.json           # errors fail (exit 1), warnings are advisory
+sevaluation lint report.json --strict  # warnings fail too
+```
+
+`Lint` only gates `Verdict == VerdictVerified` claims — needs-review,
+rejected, and unverified claims carry no evidence obligation. It never
+mutates the report.
+
+### Baseline checks (always on)
+
+| Rule | Severity | Applies to | Checks |
+|------|----------|------------|--------|
+| `claim-missing-id` / `claim-duplicate-id` | Error | Any claim | Every claim has a unique `ID` |
+| `verified-requires-validation` | Error | Verified | `Validation` is not nil |
+| `verified-requires-url` / `verified-requires-quote` | Error | External | `URL` and `QuotedText` are both set |
+| `verified-value-in-quote` | Warning | External, with `Statistical` | `Statistical.Value` appears in `QuotedText` — advisory because a legitimate quote can state a rule ("0% target") or a range, or scale the value into a unit ("20 million") rather than repeat the literal number |
+| `verified-derived-needs-sources` | Error | Derived | `SourceClaimIDs` is non-empty |
+| `verified-internal-needs-evidence` | Error | Internal | `EvidencePath` or `Output` is set |
+| `verified-subjective` | Warning | Subjective | Flags that a subjective estimate is published as verified — confirm intentionally |
+
+### `SourceRole`: how directly a source speaks for the claim
+
+`ExternalSourceType` (NVD, reputable vendor, community, aggregator, ...)
+categorizes a source's general authority. `SourceRole` is a separate,
+orthogonal axis: how directly *this particular citation* speaks for the
+claim, independent of how authoritative the outlet is overall.
+
+```go
+type SourceRole string
+
+const (
+    SourceRolePrimary          SourceRole = "primary"           // the claim's own subject states it
+    SourceRoleSecondaryRelay   SourceRole = "secondary-relay"    // a wire report quoting the primary source directly
+    SourceRoleSecondaryAnalysis SourceRole = "secondary-analysis" // an outlet's own synthesis/estimate across other reporting
+    SourceRoleSelfReported     SourceRole = "self-reported"      // the claim's subject's own marketing/PR material
+)
+```
+
+Two "reputable vendor" citations can carry very different trust: a wire
+report relaying an earnings call is near-primary, but a research outlet's own
+synthesized estimate across several other reports is `secondary-analysis` —
+exactly the kind of citation that can drift from the underlying fact. Set it
+on `ExternalValidation.Role` (`sourceRole` in JSON), optional and empty by
+default so existing reports are unaffected:
+
+```go
+validation.External.Role = claims.SourceRoleSecondaryAnalysis
+```
+
+`SourceRole.RequiresCorroboration()` is `true` for `secondary-analysis` and
+`self-reported` (`false` for `primary`, `secondary-relay`, and an unset
+role). When it's true, `Lint` requires at least one corroborating claim in
+`RelatedClaimIDs`, or errors with `verified-role-needs-corroboration`:
+
+```go
+claim.RelatedClaimIDs = []string{"arr-independent-estimate"}
+```
+
+### `MinCorroboratingSources`: a general corroboration threshold
+
+`SourceRole` encodes a fixed policy (secondary-analysis and self-reported
+always need corroboration). `ClaimsCriteria.MinCorroboratingSources` is a
+separate, configurable threshold that applies regardless of role or
+validation type — useful for high-stakes categories where even a `primary`
+source shouldn't stand alone:
+
+```go
+report.Criteria = claims.ClaimsCriteria{
+    MinCorroboratingSources: 2,
+    // Optional: restrict the requirement to specific categories.
+    // An empty slice applies it to every category.
+    CorroborationCategories: []claims.ClaimCategory{claims.ClaimStatistical},
+}
+```
+
+A claim counts its own source plus each entry in `RelatedClaimIDs` toward
+the threshold (`IsSufficientlyCorroborated`). Disabled by default
+(`MinCorroboratingSources <= 1`), so opting in is required. `Lint` flags a
+shortfall as `verified-insufficient-corroboration`; `EvaluateClaims` folds
+it into the report-level decision the same way as needs-review claims (see
+[Pass Criteria](#pass-criteria) below).
+
+### `MaxClaimAge`: staleness
+
+A verified statistic can quietly go stale — presented as current years after
+the underlying fact was true (e.g. a 2022–23 study cited as if still
+representative). `ClaimsCriteria.MaxClaimAge` bounds how old a verified
+claim's `Statistical.AsOfDate` may be, relative to now:
+
+```go
+report.Criteria = claims.ClaimsCriteria{
+    MaxClaimAge: 365 * 24 * time.Hour,
+}
+```
+
+A claim with no `Statistical` detail, or an unset `AsOfDate`, is never
+flagged — age unknown is not the same as stale. Disabled by default
+(`MaxClaimAge <= 0`). `Lint` flags a violation as `verified-stale-as-of-date`;
+`EvaluateClaims` folds it into the report-level decision like needs-review.
 
 ## Example: Security Advisory
 
@@ -349,4 +488,6 @@ func main() {
 ## Next Steps
 
 - [Report Types](../concepts/report-types.md) - Compare Rubric, SummaryReport, ClaimsReport
-- [v0.6.0 Release Notes](../releases/v0.6.0.md) - Full changelog
+- [CLI Commands](../cli/commands.md#lint) - `sevaluation lint` reference for claims reports
+- [v0.13.0 Release Notes](../releases/v0.13.0.md) - Evidence-integrity linting, SourceRole, corroboration, staleness
+- [v0.6.0 Release Notes](../releases/v0.6.0.md) - Original claims validation release

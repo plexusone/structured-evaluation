@@ -92,6 +92,7 @@ go get github.com/plexusone/structured-evaluation
 | `render/detailed` | Detailed terminal renderer for rubric reports |
 | `render/terminal` | ANSI-colored terminal renderer with UTF8 icons |
 | `render/markdown` | Markdown report renderer |
+| `render/html` | Self-contained HTML renderer for claims reports, grouped by verdict |
 | `schema` | JSON Schema generation and embedding |
 
 ## Report Types
@@ -241,10 +242,14 @@ sevaluation render report.json --format=markdown   # Markdown output
 sevaluation render report.json --format=box
 sevaluation render report.json --format=json
 
-# Lint reports for correctness (v0.7.0)
+# Lint reports for correctness (v0.7.0; claims-report checks added v0.13.0)
 sevaluation lint report.json              # Basic validation
 sevaluation lint report.json --strict     # Warnings are errors
 sevaluation lint report.json --format=json
+
+# Claims reports: render, lint, check all auto-detect (top-level "claims" key)
+sevaluation render claims.json --format=html > report.html
+sevaluation lint claims.json --strict
 
 # Check pass/fail (exit code 0/1)
 sevaluation check report.json
@@ -436,6 +441,37 @@ if report.IsPassing() {
     fmt.Println("Ready for publication")
 }
 ```
+
+## Evidence-Integrity Linting (v0.13.0)
+
+A verdict can be hand-authored directly on a `Claim`, bypassing
+`DetermineVerdict` entirely. `claims.Lint` re-checks that every claim stated
+as `verified` actually earns the label — this is the check that would have
+caught a "$3B ARR" claim sourced from a secondary-analysis estimate that a
+primary-source check later put closer to $500M:
+
+```go
+findings := claims.Lint(&report)
+if claims.HasErrors(findings) {
+    // a verified claim is missing a URL/quote/evidence, or an opted-in
+    // criteria check (corroboration, staleness) failed
+}
+```
+
+- **`SourceRole`** (`primary` / `secondary-relay` / `secondary-analysis` /
+  `self-reported`) on `ExternalValidation.Role` — orthogonal to
+  `ExternalSourceType`'s authority tier, capturing how directly a source
+  speaks for the claim. `secondary-analysis` and `self-reported` require a
+  corroborating `RelatedClaimIDs` entry.
+- **`ClaimsCriteria.MinCorroboratingSources`** — a configurable "N
+  independent sources" threshold, applied regardless of role.
+- **`ClaimsCriteria.MaxClaimAge`** — flags a verified statistic whose
+  `Statistical.AsOfDate` is older than the threshold.
+
+Both new criteria are opt-in (disabled by default) and, when set, feed into
+`EvaluateClaims`'s report-level decision the same way needs-review claims do.
+See [Evidence-Integrity Linting](docs/features/claims.md#evidence-integrity-linting-v0130)
+for the full rule reference.
 
 ## Embedded Reports (v0.6.0)
 
