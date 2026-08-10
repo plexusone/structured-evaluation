@@ -316,6 +316,15 @@
             "type": "string"
           },
           "type": "array"
+        },
+        "minCorroboratingSources": {
+          "type": "integer"
+        },
+        "corroborationCategories": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         }
       },
       "additionalProperties": false,

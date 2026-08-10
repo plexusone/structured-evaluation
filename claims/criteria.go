@@ -19,6 +19,18 @@ type ClaimsCriteria struct {
 
 	// RequiredCategories are claim categories that must have at least one verified claim.
 	RequiredCategories []ClaimCategory `json:"requiredCategories,omitempty"`
+
+	// MinCorroboratingSources is the minimum number of independent sources
+	// required for a verified claim to be treated as sufficiently
+	// corroborated, counting the claim's own source plus each entry in its
+	// RelatedClaimIDs. 0 or 1 disables the requirement — a single source is
+	// always sufficient. See IsSufficientlyCorroborated.
+	MinCorroboratingSources int `json:"minCorroboratingSources,omitempty"`
+
+	// CorroborationCategories restricts MinCorroboratingSources to specific
+	// claim categories (e.g. only ClaimStatistical). An empty slice applies
+	// the requirement to every category.
+	CorroborationCategories []ClaimCategory `json:"corroborationCategories,omitempty"`
 }
 
 // DefaultClaimsCriteria returns standard criteria.
@@ -103,6 +115,7 @@ func CountClaims(claims []Claim) ClaimsCounts {
 // EvaluateClaims checks claims against criteria.
 func EvaluateClaims(claims []Claim, criteria ClaimsCriteria) ClaimsDecision {
 	counts := CountClaims(claims)
+	insufficientCorroboration := countInsufficientlyCorroborated(claims, criteria)
 
 	decision := ClaimsDecision{
 		Counts: counts,
@@ -124,17 +137,22 @@ func EvaluateClaims(claims []Claim, criteria ClaimsCriteria) ClaimsDecision {
 		return decision
 	}
 
-	// Check needs-review claims
-	if counts.NeedsReview > 0 {
+	// Check needs-review claims and insufficiently corroborated claims.
+	// A verified claim that doesn't clear criteria.MinCorroboratingSources
+	// is treated the same way as needs-review for decision purposes: a
+	// conditional pass if criteria allows it, otherwise a fail. This does
+	// not change the claim's own stored Verdict or the Counts breakdown —
+	// only the report-level decision.
+	if counts.NeedsReview > 0 || insufficientCorroboration > 0 {
 		if !criteria.AllowNeedsReview {
 			decision.Status = ClaimsDecisionFail
 			decision.Passed = false
-			decision.Rationale = formatNeedsReviewRationale(counts.NeedsReview)
+			decision.Rationale = formatNeedsReviewRationale(counts.NeedsReview, insufficientCorroboration)
 			return decision
 		}
 		decision.Status = ClaimsDecisionConditional
 		decision.Passed = true
-		decision.Rationale = formatConditionalRationale(counts.NeedsReview)
+		decision.Rationale = formatConditionalRationale(counts.NeedsReview, insufficientCorroboration)
 		return decision
 	}
 
@@ -186,18 +204,95 @@ func formatUnverifiedRationale(count int) string {
 	return itoa(count) + " claims unverified"
 }
 
-func formatNeedsReviewRationale(count int) string {
-	if count == 1 {
-		return "1 claim needs review (not allowed by criteria)"
-	}
-	return itoa(count) + " claims need review (not allowed by criteria)"
+func formatNeedsReviewRationale(needsReview, insufficientCorroboration int) string {
+	return joinFailReasons(needsReview, insufficientCorroboration) + " (not allowed by criteria)"
 }
 
-func formatConditionalRationale(count int) string {
-	if count == 1 {
-		return "Passed with 1 claim needing review"
+func joinFailReasons(needsReview, insufficientCorroboration int) string {
+	var parts []string
+	switch needsReview {
+	case 0:
+	case 1:
+		parts = append(parts, "1 claim needs review")
+	default:
+		parts = append(parts, itoa(needsReview)+" claims need review")
 	}
-	return "Passed with " + itoa(count) + " claims needing review"
+	switch insufficientCorroboration {
+	case 0:
+	case 1:
+		parts = append(parts, "1 claim lacks sufficient corroboration")
+	default:
+		parts = append(parts, itoa(insufficientCorroboration)+" claims lack sufficient corroboration")
+	}
+	if len(parts) == 2 {
+		return parts[0] + " and " + parts[1]
+	}
+	return parts[0]
+}
+
+func formatConditionalRationale(needsReview, insufficientCorroboration int) string {
+	return "Passed with " + joinConditionalReasons(needsReview, insufficientCorroboration)
+}
+
+func joinConditionalReasons(needsReview, insufficientCorroboration int) string {
+	var parts []string
+	switch needsReview {
+	case 0:
+	case 1:
+		parts = append(parts, "1 claim needing review")
+	default:
+		parts = append(parts, itoa(needsReview)+" claims needing review")
+	}
+	switch insufficientCorroboration {
+	case 0:
+	case 1:
+		parts = append(parts, "1 claim lacking sufficient corroboration")
+	default:
+		parts = append(parts, itoa(insufficientCorroboration)+" claims lacking sufficient corroboration")
+	}
+	if len(parts) == 2 {
+		return parts[0] + " and " + parts[1]
+	}
+	return parts[0]
+}
+
+// IsSufficientlyCorroborated reports whether c has enough independent
+// sources to satisfy criteria.MinCorroboratingSources, counting c's own
+// source plus each entry in c.RelatedClaimIDs. Always true when the
+// requirement is disabled (MinCorroboratingSources <= 1), or when
+// criteria.CorroborationCategories is set and does not include c.Category.
+func IsSufficientlyCorroborated(c Claim, criteria ClaimsCriteria) bool {
+	if criteria.MinCorroboratingSources <= 1 {
+		return true
+	}
+	if len(criteria.CorroborationCategories) > 0 && !categoryInScope(c.Category, criteria.CorroborationCategories) {
+		return true
+	}
+	return 1+len(c.RelatedClaimIDs) >= criteria.MinCorroboratingSources
+}
+
+func categoryInScope(cat ClaimCategory, scope []ClaimCategory) bool {
+	for _, s := range scope {
+		if s == cat {
+			return true
+		}
+	}
+	return false
+}
+
+// countInsufficientlyCorroborated counts verified claims that do not meet
+// criteria's corroboration requirement. Only verified claims are checked:
+// corroboration governs whether a claim earns the verified label for
+// decision purposes, so a claim that is already needs-review, rejected, or
+// unverified has nothing to add here.
+func countInsufficientlyCorroborated(claims []Claim, criteria ClaimsCriteria) int {
+	n := 0
+	for _, c := range claims {
+		if c.Verdict == VerdictVerified && !IsSufficientlyCorroborated(c, criteria) {
+			n++
+		}
+	}
+	return n
 }
 
 func formatMissingCategoriesRationale(missing []ClaimCategory) string {

@@ -21,6 +21,49 @@ func extClaim(id string, verdict Verdict, url, quote string, stat *StatisticalDe
 	return c
 }
 
+func TestLint_CriteriaCorroborationRequirement(t *testing.T) {
+	c := extClaim("x", VerdictVerified, "https://example.com", "1,500+ PRs merged",
+		NewStatisticalDetail(1500, "PRs", PrecisionApproximate))
+	// Primary role — the SourceRole-driven rule (RMI-002) would not flag
+	// this; only the criteria-driven threshold (RMI-003) should.
+	c.Validation.External.Role = SourceRolePrimary
+
+	r := &ClaimsReport{
+		Claims:   []Claim{c},
+		Criteria: ClaimsCriteria{MinCorroboratingSources: 2},
+	}
+	f := Lint(r)
+	if !hasRule(f, "verified-insufficient-corroboration") {
+		t.Errorf("expected verified-insufficient-corroboration, got %+v", f)
+	}
+	if hasRule(f, "verified-role-needs-corroboration") {
+		t.Error("primary role should not trigger the role-based rule")
+	}
+}
+
+func TestLint_CriteriaCorroborationSatisfied(t *testing.T) {
+	c := extClaim("x", VerdictVerified, "https://example.com", "1,500+ PRs merged",
+		NewStatisticalDetail(1500, "PRs", PrecisionApproximate))
+	c.RelatedClaimIDs = []string{"x-corroborating-1"}
+
+	r := &ClaimsReport{
+		Claims:   []Claim{c},
+		Criteria: ClaimsCriteria{MinCorroboratingSources: 2},
+	}
+	if f := Lint(r); hasRule(f, "verified-insufficient-corroboration") {
+		t.Errorf("corroborated claim should not be flagged, got %+v", f)
+	}
+}
+
+func TestLint_CriteriaCorroborationDisabledByDefault(t *testing.T) {
+	c := extClaim("x", VerdictVerified, "https://example.com", "1,500+ PRs merged",
+		NewStatisticalDetail(1500, "PRs", PrecisionApproximate))
+	// No Criteria set on the report (zero value) — requirement is off.
+	if f := Lint(&ClaimsReport{Claims: []Claim{c}}); hasRule(f, "verified-insufficient-corroboration") {
+		t.Errorf("corroboration requirement should be disabled by default, got %+v", f)
+	}
+}
+
 func TestLint_SecondaryAnalysisRequiresCorroboration(t *testing.T) {
 	c := extClaim("arr", VerdictVerified, "https://example.com", "grew to $500 million",
 		NewStatisticalDetail(500, "million USD", PrecisionApproximate))

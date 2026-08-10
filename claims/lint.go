@@ -40,6 +40,13 @@ type LintFinding struct {
 // errors. An unset Role is not flagged, so existing reports that predate the
 // Role field are unaffected.
 //
+// Separately, if the report's own Criteria.MinCorroboratingSources is set
+// (> 1), every verified claim in scope (all categories, or only
+// Criteria.CorroborationCategories when set) must have at least that many
+// independent sources (itself plus RelatedClaimIDs), regardless of
+// validation type or SourceRole. Disabled by default (0), so existing
+// reports are unaffected unless they opt in via Criteria.
+//
 // Lint does not mutate the report. It complements DetermineVerdict: because a
 // verdict can be hand-authored (bypassing DetermineVerdict), Lint re-checks
 // that a stated "verified" is earned.
@@ -63,6 +70,18 @@ func Lint(r *ClaimsReport) []LintFinding {
 		// rejected, and unverified carry no such obligation.
 		if c.Verdict != VerdictVerified {
 			continue
+		}
+
+		// General, configurable corroboration requirement (r.Criteria).
+		// Independent of validation type: corroboration is about having
+		// multiple independent claims behind a fact, not about how any one
+		// of them was validated. Distinct from the SourceRole-driven check
+		// below, which is a fixed policy (secondary-analysis/self-reported
+		// always need corroboration) rather than a criteria-configured one.
+		if !IsSufficientlyCorroborated(*c, r.Criteria) {
+			out = append(out, finding(c, "verified-insufficient-corroboration", LintError,
+				fmt.Sprintf("verified claim has %d source(s), fewer than the required %d",
+					1+len(c.RelatedClaimIDs), r.Criteria.MinCorroboratingSources)))
 		}
 
 		v := c.Validation
