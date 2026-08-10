@@ -44,6 +44,15 @@ const (
 
 	// ExternalAPI is from a public API (e.g., FIRST.org EPSS API).
 	ExternalAPI ExternalSourceType = "api"
+
+	// ExternalAggregator is a third-party content-roundup or "stats blog" site
+	// that reposts figures without independent reporting or a traceable
+	// primary source (e.g. AI-generated SEO stats pages). Distinct from
+	// ExternalCommunity: a community source (a named blog post, a forum
+	// thread) is still someone's own account: an aggregator has no original
+	// reporting to fall back on, so it defaults to auto-reject rather than
+	// requires-review.
+	ExternalAggregator ExternalSourceType = "aggregator"
 )
 
 // ReliabilityTier indicates the trustworthiness of a source.
@@ -105,6 +114,8 @@ func DefaultReliabilityForSourceType(st ExternalSourceType) ReliabilityTier {
 		return ReliabilityHigh
 	case ExternalCommunity:
 		return ReliabilityMedium
+	case ExternalAggregator:
+		return ReliabilityLow
 	default:
 		return ReliabilityLow
 	}
