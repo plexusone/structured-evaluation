@@ -1,6 +1,9 @@
 package claims
 
-import "testing"
+import (
+	"testing"
+	"time"
+)
 
 func extClaim(id string, verdict Verdict, url, quote string, stat *StatisticalDetail) Claim {
 	c := Claim{
@@ -52,6 +55,66 @@ func TestLint_CriteriaCorroborationSatisfied(t *testing.T) {
 	}
 	if f := Lint(r); hasRule(f, "verified-insufficient-corroboration") {
 		t.Errorf("corroborated claim should not be flagged, got %+v", f)
+	}
+}
+
+func TestLint_CriteriaStaleAsOfDateFlagged(t *testing.T) {
+	c := extClaim("x", VerdictVerified, "https://example.com", "1,500+ PRs merged",
+		NewStatisticalDetail(1500, "PRs", PrecisionApproximate))
+	old := time.Now().AddDate(-3, 0, 0)
+	c.Statistical.AsOfDate = &old
+
+	r := &ClaimsReport{
+		Claims:   []Claim{c},
+		Criteria: ClaimsCriteria{MaxClaimAge: 365 * 24 * time.Hour},
+	}
+	f := Lint(r)
+	if !hasRule(f, "verified-stale-as-of-date") {
+		t.Errorf("expected verified-stale-as-of-date, got %+v", f)
+	}
+	if !HasErrors(f) {
+		t.Error("stale claim should be an error")
+	}
+}
+
+func TestLint_CriteriaFreshAsOfDatePasses(t *testing.T) {
+	c := extClaim("x", VerdictVerified, "https://example.com", "1,500+ PRs merged",
+		NewStatisticalDetail(1500, "PRs", PrecisionApproximate))
+	recent := time.Now().AddDate(0, -1, 0)
+	c.Statistical.AsOfDate = &recent
+
+	r := &ClaimsReport{
+		Claims:   []Claim{c},
+		Criteria: ClaimsCriteria{MaxClaimAge: 365 * 24 * time.Hour},
+	}
+	if f := Lint(r); hasRule(f, "verified-stale-as-of-date") {
+		t.Errorf("recent claim should not be flagged, got %+v", f)
+	}
+}
+
+func TestLint_CriteriaStaleDisabledByDefault(t *testing.T) {
+	c := extClaim("x", VerdictVerified, "https://example.com", "1,500+ PRs merged",
+		NewStatisticalDetail(1500, "PRs", PrecisionApproximate))
+	old := time.Now().AddDate(-10, 0, 0)
+	c.Statistical.AsOfDate = &old
+
+	// No Criteria set on the report (zero value) — requirement is off.
+	if f := Lint(&ClaimsReport{Claims: []Claim{c}}); hasRule(f, "verified-stale-as-of-date") {
+		t.Errorf("staleness requirement should be disabled by default, got %+v", f)
+	}
+}
+
+func TestLint_CriteriaStaleUnsetAsOfDateNeverFlagged(t *testing.T) {
+	c := extClaim("x", VerdictVerified, "https://example.com", "1,500+ PRs merged",
+		NewStatisticalDetail(1500, "PRs", PrecisionApproximate))
+	// AsOfDate left unset — age is unknown, not stale.
+
+	r := &ClaimsReport{
+		Claims:   []Claim{c},
+		Criteria: ClaimsCriteria{MaxClaimAge: 24 * time.Hour},
+	}
+	if f := Lint(r); hasRule(f, "verified-stale-as-of-date") {
+		t.Errorf("claim with unset AsOfDate should never be flagged, got %+v", f)
 	}
 }
 

@@ -1,5 +1,10 @@
 package claims
 
+import (
+	"strings"
+	"time"
+)
+
 // ClaimsCriteria defines requirements for claim validation approval.
 type ClaimsCriteria struct {
 	// RequireAllVerified requires all claims to be verified.
@@ -31,6 +36,14 @@ type ClaimsCriteria struct {
 	// claim categories (e.g. only ClaimStatistical). An empty slice applies
 	// the requirement to every category.
 	CorroborationCategories []ClaimCategory `json:"corroborationCategories,omitempty"`
+
+	// MaxClaimAge is how old a verified statistical claim's
+	// StatisticalDetail.AsOfDate may be, relative to now, before it is
+	// treated as stale (presented as current when it no longer is). Zero or
+	// negative disables the requirement — no claim is ever too old. A claim
+	// with no Statistical detail, or one whose AsOfDate is unset, is never
+	// flagged: age is unknown, not stale. See IsFresh.
+	MaxClaimAge time.Duration `json:"maxClaimAge,omitempty"`
 }
 
 // DefaultClaimsCriteria returns standard criteria.
@@ -114,8 +127,10 @@ func CountClaims(claims []Claim) ClaimsCounts {
 
 // EvaluateClaims checks claims against criteria.
 func EvaluateClaims(claims []Claim, criteria ClaimsCriteria) ClaimsDecision {
+	now := time.Now().UTC()
 	counts := CountClaims(claims)
 	insufficientCorroboration := countInsufficientlyCorroborated(claims, criteria)
+	stale := countStaleClaims(claims, criteria, now)
 
 	decision := ClaimsDecision{
 		Counts: counts,
@@ -137,22 +152,23 @@ func EvaluateClaims(claims []Claim, criteria ClaimsCriteria) ClaimsDecision {
 		return decision
 	}
 
-	// Check needs-review claims and insufficiently corroborated claims.
-	// A verified claim that doesn't clear criteria.MinCorroboratingSources
-	// is treated the same way as needs-review for decision purposes: a
-	// conditional pass if criteria allows it, otherwise a fail. This does
-	// not change the claim's own stored Verdict or the Counts breakdown —
-	// only the report-level decision.
-	if counts.NeedsReview > 0 || insufficientCorroboration > 0 {
+	// Check needs-review claims, insufficiently corroborated claims, and
+	// stale claims. A verified claim that doesn't clear
+	// criteria.MinCorroboratingSources, or whose AsOfDate is older than
+	// criteria.MaxClaimAge, is treated the same way as needs-review for
+	// decision purposes: a conditional pass if criteria allows it,
+	// otherwise a fail. This does not change the claim's own stored Verdict
+	// or the Counts breakdown — only the report-level decision.
+	if counts.NeedsReview > 0 || insufficientCorroboration > 0 || stale > 0 {
 		if !criteria.AllowNeedsReview {
 			decision.Status = ClaimsDecisionFail
 			decision.Passed = false
-			decision.Rationale = formatNeedsReviewRationale(counts.NeedsReview, insufficientCorroboration)
+			decision.Rationale = formatNeedsReviewRationale(counts.NeedsReview, insufficientCorroboration, stale)
 			return decision
 		}
 		decision.Status = ClaimsDecisionConditional
 		decision.Passed = true
-		decision.Rationale = formatConditionalRationale(counts.NeedsReview, insufficientCorroboration)
+		decision.Rationale = formatConditionalRationale(counts.NeedsReview, insufficientCorroboration, stale)
 		return decision
 	}
 
@@ -204,56 +220,71 @@ func formatUnverifiedRationale(count int) string {
 	return itoa(count) + " claims unverified"
 }
 
-func formatNeedsReviewRationale(needsReview, insufficientCorroboration int) string {
-	return joinFailReasons(needsReview, insufficientCorroboration) + " (not allowed by criteria)"
+func formatNeedsReviewRationale(needsReview, insufficientCorroboration, stale int) string {
+	return joinFailReasons(needsReview, insufficientCorroboration, stale) + " (not allowed by criteria)"
 }
 
-func joinFailReasons(needsReview, insufficientCorroboration int) string {
+func joinFailReasons(needsReview, insufficientCorroboration, stale int) string {
 	var parts []string
-	switch needsReview {
-	case 0:
-	case 1:
-		parts = append(parts, "1 claim needs review")
-	default:
-		parts = append(parts, itoa(needsReview)+" claims need review")
+	if p := countedPhrase(needsReview, "1 claim needs review", "claims need review"); p != "" {
+		parts = append(parts, p)
 	}
-	switch insufficientCorroboration {
-	case 0:
-	case 1:
-		parts = append(parts, "1 claim lacks sufficient corroboration")
-	default:
-		parts = append(parts, itoa(insufficientCorroboration)+" claims lack sufficient corroboration")
+	if p := countedPhrase(insufficientCorroboration, "1 claim lacks sufficient corroboration", "claims lack sufficient corroboration"); p != "" {
+		parts = append(parts, p)
 	}
-	if len(parts) == 2 {
-		return parts[0] + " and " + parts[1]
+	if p := countedPhrase(stale, "1 claim has a stale statistic", "claims have stale statistics"); p != "" {
+		parts = append(parts, p)
 	}
-	return parts[0]
+	return joinReasons(parts)
 }
 
-func formatConditionalRationale(needsReview, insufficientCorroboration int) string {
-	return "Passed with " + joinConditionalReasons(needsReview, insufficientCorroboration)
+func formatConditionalRationale(needsReview, insufficientCorroboration, stale int) string {
+	return "Passed with " + joinConditionalReasons(needsReview, insufficientCorroboration, stale)
 }
 
-func joinConditionalReasons(needsReview, insufficientCorroboration int) string {
+func joinConditionalReasons(needsReview, insufficientCorroboration, stale int) string {
 	var parts []string
-	switch needsReview {
-	case 0:
-	case 1:
-		parts = append(parts, "1 claim needing review")
-	default:
-		parts = append(parts, itoa(needsReview)+" claims needing review")
+	if p := countedPhrase(needsReview, "1 claim needing review", "claims needing review"); p != "" {
+		parts = append(parts, p)
 	}
-	switch insufficientCorroboration {
-	case 0:
-	case 1:
-		parts = append(parts, "1 claim lacking sufficient corroboration")
-	default:
-		parts = append(parts, itoa(insufficientCorroboration)+" claims lacking sufficient corroboration")
+	if p := countedPhrase(insufficientCorroboration, "1 claim lacking sufficient corroboration", "claims lacking sufficient corroboration"); p != "" {
+		parts = append(parts, p)
 	}
-	if len(parts) == 2 {
+	if p := countedPhrase(stale, "1 claim with a stale statistic", "claims with stale statistics"); p != "" {
+		parts = append(parts, p)
+	}
+	return joinReasons(parts)
+}
+
+// countedPhrase renders a count as a phrase, or "" if the count is zero.
+// one is the exact 1-count phrase; many is appended after the count for
+// 2+ (e.g. countedPhrase(2, "1 claim needs review", "claims need review")
+// -> "2 claims need review").
+func countedPhrase(n int, one, many string) string {
+	switch {
+	case n == 0:
+		return ""
+	case n == 1:
+		return one
+	default:
+		return itoa(n) + " " + many
+	}
+}
+
+// joinReasons joins 1-3 non-empty reason phrases into a single clause,
+// preserving the exact single-reason and "X and Y" two-reason wording used
+// before multi-reason rationales existed.
+func joinReasons(parts []string) string {
+	switch len(parts) {
+	case 0:
+		return ""
+	case 1:
+		return parts[0]
+	case 2:
 		return parts[0] + " and " + parts[1]
+	default:
+		return strings.Join(parts[:len(parts)-1], ", ") + ", and " + parts[len(parts)-1]
 	}
-	return parts[0]
 }
 
 // IsSufficientlyCorroborated reports whether c has enough independent
@@ -269,6 +300,35 @@ func IsSufficientlyCorroborated(c Claim, criteria ClaimsCriteria) bool {
 		return true
 	}
 	return 1+len(c.RelatedClaimIDs) >= criteria.MinCorroboratingSources
+}
+
+// IsFresh reports whether c's statistical value is recent enough to satisfy
+// criteria.MaxClaimAge, measured from now. Always true when: the
+// requirement is disabled (MaxClaimAge <= 0), c has no Statistical detail,
+// or its AsOfDate is unset — age is unknown, not stale, so an unset date is
+// never penalized.
+func IsFresh(c Claim, criteria ClaimsCriteria, now time.Time) bool {
+	if criteria.MaxClaimAge <= 0 {
+		return true
+	}
+	if c.Statistical == nil || c.Statistical.AsOfDate == nil {
+		return true
+	}
+	return now.Sub(*c.Statistical.AsOfDate) <= criteria.MaxClaimAge
+}
+
+// countStaleClaims counts verified claims whose statistic is not IsFresh.
+// Only verified claims are checked, matching countInsufficientlyCorroborated:
+// staleness governs whether a claim earns the verified label for decision
+// purposes, so a claim that already isn't verified has nothing to add here.
+func countStaleClaims(claims []Claim, criteria ClaimsCriteria, now time.Time) int {
+	n := 0
+	for _, c := range claims {
+		if c.Verdict == VerdictVerified && !IsFresh(c, criteria, now) {
+			n++
+		}
+	}
+	return n
 }
 
 func categoryInScope(cat ClaimCategory, scope []ClaimCategory) bool {

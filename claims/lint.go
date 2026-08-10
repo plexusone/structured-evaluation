@@ -5,6 +5,7 @@ import (
 	"math"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // LintSeverity classifies a lint finding.
@@ -47,6 +48,16 @@ type LintFinding struct {
 // validation type or SourceRole. Disabled by default (0), so existing
 // reports are unaffected unless they opt in via Criteria.
 //
+// Separately again, if the report's own Criteria.MaxClaimAge is set (> 0),
+// every verified statistical claim's StatisticalDetail.AsOfDate must be
+// within that duration of now, or Lint errors — a stat presented as current
+// that describes a fact from years ago (e.g. a 2022 study cited as if it
+// were still representative) is exactly the kind of quiet drift that erodes
+// trust in a "verified" label over time. A claim with no Statistical detail,
+// or an unset AsOfDate, is never flagged: age is unknown, not stale.
+// Disabled by default (0), so existing reports are unaffected unless they
+// opt in via Criteria.
+//
 // Lint does not mutate the report. It complements DetermineVerdict: because a
 // verdict can be hand-authored (bypassing DetermineVerdict), Lint re-checks
 // that a stated "verified" is earned.
@@ -82,6 +93,17 @@ func Lint(r *ClaimsReport) []LintFinding {
 			out = append(out, finding(c, "verified-insufficient-corroboration", LintError,
 				fmt.Sprintf("verified claim has %d source(s), fewer than the required %d",
 					1+len(c.RelatedClaimIDs), r.Criteria.MinCorroboratingSources)))
+		}
+
+		// General, configurable staleness requirement (r.Criteria), same
+		// scope note as above: about the fact's currency, not how it was
+		// validated, so it's checked independent of validation type.
+		if !IsFresh(*c, r.Criteria, time.Now().UTC()) {
+			out = append(out, finding(c, "verified-stale-as-of-date", LintError,
+				fmt.Sprintf("verified claim's statistic is as of %s, %s old — exceeds the %s freshness threshold",
+					c.Statistical.AsOfDate.Format("2006-01-02"),
+					formatLintDuration(time.Since(*c.Statistical.AsOfDate)),
+					formatLintDuration(r.Criteria.MaxClaimAge))))
 		}
 
 		v := c.Validation
@@ -183,6 +205,17 @@ func valueInText(v float64, text string) bool {
 // formatLintValue renders a float without trailing zeros (1500, 4.7, 0, 77000).
 func formatLintValue(v float64) string {
 	return strconv.FormatFloat(v, 'f', -1, 64)
+}
+
+// formatLintDuration renders a duration in whole days ("742 days"), which is
+// a more meaningful unit than raw nanoseconds for claim-age thresholds and
+// messages.
+func formatLintDuration(d time.Duration) string {
+	days := int(d.Hours() / 24)
+	if days == 1 {
+		return "1 day"
+	}
+	return itoa(days) + " days"
 }
 
 // addThousands inserts comma grouping into an integer string ("77000" ->

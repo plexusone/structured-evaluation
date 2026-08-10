@@ -325,6 +325,9 @@
             "type": "string"
           },
           "type": "array"
+        },
+        "maxClaimAge": {
+          "type": "integer"
         }
       },
       "additionalProperties": false,

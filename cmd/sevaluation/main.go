@@ -123,6 +123,10 @@ Claims reports ('claims') — evidence integrity of verified claims:
     and unit-scaled values legitimately quote a rule rather than the number)
   - A verified claim sourced as secondary-analysis or self-reported has at
     least one corroborating relatedClaimId (error)
+  - A verified claim has at least criteria.minCorroboratingSources
+    independent sources, itself plus relatedClaimIds (error, opt-in via criteria)
+  - A verified statistical claim's asOfDate is within criteria.maxClaimAge
+    of now (error, opt-in via criteria)
 
 Exit codes:
   0 - Valid (no errors, warnings allowed unless --strict)
