@@ -107,14 +107,20 @@ var lintFlags struct {
 // Lint command
 var lintCmd = &cobra.Command{
 	Use:   "lint <file.json>",
-	Short: "Lint evaluation report for correctness",
-	Long: `Lint an evaluation report for correctness and consistency.
+	Short: "Lint an evaluation or claims report for correctness",
+	Long: `Lint an evaluation or claims report.
 
-Checks performed:
+Evaluation reports ('categories'):
   - All enum values are valid (score, severity, decision status)
   - Required fields are present
   - Reported counts match actual data
   - Decision is consistent with findings and category results
+
+Claims reports ('claims') — evidence integrity of verified claims:
+  - A verified external claim has a resolving URL and a verbatim quote (error)
+  - A verified derived claim lists source claims; internal claim has evidence (error)
+  - The statistical value appears in the quoted text (warning — targets/ranges
+    and unit-scaled values legitimately quote a rule rather than the number)
 
 Exit codes:
   0 - Valid (no errors, warnings allowed unless --strict)
@@ -224,6 +230,44 @@ func runRender(cmd *cobra.Command, args []string) error {
 	}
 
 	return fmt.Errorf("unknown report type: expected 'categories' (evaluation), 'teams' (summary), or 'claims' (claims)")
+}
+
+func lintClaims(data []byte, format string, strict bool) error {
+	var report claims.ClaimsReport
+	if err := json.Unmarshal(data, &report); err != nil {
+		return fmt.Errorf("parsing claims report: %w", err)
+	}
+
+	findings := claims.Lint(&report)
+
+	switch format {
+	case "json":
+		output, err := json.MarshalIndent(findings, "", "  ")
+		if err != nil {
+			return err
+		}
+		fmt.Println(string(output))
+	default:
+		if len(findings) == 0 {
+			fmt.Println("✓ no lint findings")
+		}
+		for _, f := range findings {
+			icon := "⚠"
+			if f.Severity == claims.LintError {
+				icon = "✗"
+			}
+			fmt.Printf("%s [%s] %s: %s\n", icon, f.Severity, f.ClaimID, f.Message)
+		}
+	}
+
+	if claims.HasErrors(findings) {
+		os.Exit(1)
+	}
+	if strict && claims.HasWarnings(findings) {
+		fmt.Println("\n(strict mode: treating warnings as errors)")
+		os.Exit(1)
+	}
+	return nil
 }
 
 func renderClaims(data []byte, format string) error {
@@ -414,9 +458,14 @@ func runLint(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("invalid JSON: %w", err)
 	}
 
-	// Only lint evaluation reports for now
+	// Claims reports have their own lint (evidence-integrity of verified claims).
+	if _, hasClaims := raw["claims"]; hasClaims {
+		return lintClaims(data, lintFlags.format, lintFlags.strict)
+	}
+
+	// Only lint evaluation reports otherwise.
 	if _, hasCategories := raw["categories"]; !hasCategories {
-		return fmt.Errorf("lint only supports evaluation reports (expected 'categories' field)")
+		return fmt.Errorf("lint supports evaluation reports ('categories') or claims reports ('claims')")
 	}
 
 	var report rubric.Rubric
