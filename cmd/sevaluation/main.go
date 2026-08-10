@@ -8,8 +8,10 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/plexusone/structured-evaluation/claims"
 	"github.com/plexusone/structured-evaluation/render/box"
 	"github.com/plexusone/structured-evaluation/render/detailed"
+	htmlrender "github.com/plexusone/structured-evaluation/render/html"
 	"github.com/plexusone/structured-evaluation/render/markdown"
 	"github.com/plexusone/structured-evaluation/render/terminal"
 	"github.com/plexusone/structured-evaluation/rubric"
@@ -55,7 +57,7 @@ var renderFlags struct {
 var renderCmd = &cobra.Command{
 	Use:   "render <file.json>",
 	Short: "Render a report to terminal",
-	Long: `Render an evaluation or summary report.
+	Long: `Render an evaluation, summary, or claims report.
 
 Formats for evaluation reports:
   box      - ASCII box format for TUI (deterministic, no colors/emojis)
@@ -66,6 +68,10 @@ Formats for evaluation reports:
 
 Formats for summary reports:
   box      - ASCII box format
+  json     - Pretty-printed JSON
+
+Formats for claims reports:
+  html     - Self-contained HTML page, claims grouped by verdict
   json     - Pretty-printed JSON`,
 	Args: cobra.ExactArgs(1),
 	RunE: runRender,
@@ -212,7 +218,34 @@ func runRender(cmd *cobra.Command, args []string) error {
 		return renderSummary(data, renderFlags.format)
 	}
 
-	return fmt.Errorf("unknown report type: expected 'categories' (evaluation) or 'teams' (summary)")
+	// Check for claims report markers
+	if _, hasClaims := raw["claims"]; hasClaims {
+		return renderClaims(data, renderFlags.format)
+	}
+
+	return fmt.Errorf("unknown report type: expected 'categories' (evaluation), 'teams' (summary), or 'claims' (claims)")
+}
+
+func renderClaims(data []byte, format string) error {
+	var report claims.ClaimsReport
+	if err := json.Unmarshal(data, &report); err != nil {
+		return fmt.Errorf("parsing claims report: %w", err)
+	}
+
+	switch format {
+	case "html":
+		renderer := htmlrender.New(os.Stdout)
+		return renderer.RenderClaims(&report)
+	case "json":
+		output, err := json.MarshalIndent(&report, "", "  ")
+		if err != nil {
+			return err
+		}
+		fmt.Println(string(output))
+		return nil
+	default:
+		return fmt.Errorf("format %q not supported for claims reports (use html or json)", format)
+	}
 }
 
 func renderEvaluation(data []byte, format string) error {
@@ -309,6 +342,23 @@ func runCheck(cmd *cobra.Command, args []string) error {
 			return nil
 		}
 		fmt.Printf("🔴 NO-GO: %s %s\n", report.Project, report.Version)
+		os.Exit(1)
+	}
+
+	// Check claims report
+	if _, hasClaims := raw["claims"]; hasClaims {
+		var report claims.ClaimsReport
+		if err := json.Unmarshal(data, &report); err != nil {
+			return fmt.Errorf("parsing claims report: %w", err)
+		}
+
+		c := report.Summary.Counts
+		if report.Decision.Passed {
+			fmt.Printf("✅ %s: %s (%d verified, %d needs-review of %d)\n",
+				report.Decision.Status, report.Metadata.DocumentTitle, c.Verified, c.NeedsReview, c.Total)
+			return nil
+		}
+		fmt.Printf("❌ %s: %s — %s\n", report.Decision.Status, report.Metadata.DocumentTitle, report.Decision.Rationale)
 		os.Exit(1)
 	}
 
