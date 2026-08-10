@@ -1,6 +1,6 @@
 {
   "name": "@plexusone/structured-evaluation",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "description": "Zod schemas and TypeScript types for structured-evaluation's LLM-as-Judge report types (Rubric, RubricSet, Claims, Summary), generated from the Go structs' canonical JSON Schema.",
   "type": "module",
   "main": "./dist/index.js",
@@ -20,6 +20,9 @@
     "directory": "ts"
   },
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "generate": "node scripts/generate.mjs",
     "build": "tsc -p tsconfig.json",

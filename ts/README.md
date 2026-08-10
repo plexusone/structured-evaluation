@@ -34,6 +34,27 @@ Every object schema is `.strict()` — an unrecognized key (e.g. a stale
 consumer still expecting a field that was renamed upstream) fails parsing
 loudly instead of being silently dropped.
 
+### Claims
+
+```ts
+import { ClaimsReportSchema, type ClaimsReport } from '@plexusone/structured-evaluation'
+
+const report: ClaimsReport = ClaimsReportSchema.parse(JSON.parse(rawJson))
+
+for (const claim of report.claims ?? []) {
+  if (claim.validation?.external?.sourceType === 'aggregator') {
+    // Sourced from a stats-roundup site with no original reporting —
+    // rejected by default even if the excerpt matches verbatim.
+    continue
+  }
+  if (claim.statistical) {
+    // Structured value/unit/precision/as-of-date, independent of the
+    // rendered claim.text (e.g. "4.7M paid subscribers").
+    console.log(claim.statistical.value, claim.statistical.unit, claim.statistical.precision)
+  }
+}
+```
+
 ## Regenerating
 
 ```bash
@@ -64,6 +85,7 @@ regression-guard test for what's covered today.
 
 ## Versioning
 
-This package's version tracks the Go module's version. If you're on
-`structured-evaluation` v0.11.0 in Go, use `@plexusone/structured-evaluation`
-v0.11.0 here.
+This package's version tracks the Go module's version — use the same
+version number here as the `structured-evaluation` Go module you're
+consuming reports from (e.g. Go v0.12.0 → `@plexusone/structured-evaluation`
+v0.12.0).
