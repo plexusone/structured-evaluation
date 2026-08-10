@@ -191,6 +191,25 @@
             "additionalProperties": false,
             "type": "object"
           },
+          "statistical": {
+            "properties": {
+              "value": {
+                "type": "number"
+              },
+              "unit": {
+                "type": "string"
+              },
+              "precision": {
+                "type": "string"
+              },
+              "asOfDate": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          },
           "verdict": {
             "type": "string"
           },

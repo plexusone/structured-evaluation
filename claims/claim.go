@@ -61,6 +61,12 @@ type Claim struct {
 	// Validation describes how the claim is validated.
 	Validation *Validation `json:"validation,omitempty"`
 
+	// Statistical holds structured numeric detail for statistical claims
+	// (Category == ClaimStatistical) — the value and unit behind Text, kept
+	// separate so the number itself is queryable rather than only existing
+	// inside a formatted string. Nil for non-statistical claims.
+	Statistical *StatisticalDetail `json:"statistical,omitempty"`
+
 	// Verdict is the validation result.
 	Verdict Verdict `json:"verdict"`
 
@@ -86,6 +92,14 @@ func NewClaim(id, text string, category ClaimCategory, location Location) *Claim
 func (c *Claim) SetValidation(v *Validation) *Claim {
 	c.Validation = v
 	c.Verdict = DetermineVerdict(v)
+	return c
+}
+
+// SetStatistical attaches structured numeric detail to the claim. Meaningful
+// when Category is ClaimStatistical; harmless (but not rendered by
+// convention) otherwise.
+func (c *Claim) SetStatistical(detail *StatisticalDetail) *Claim {
+	c.Statistical = detail
 	return c
 }
 
