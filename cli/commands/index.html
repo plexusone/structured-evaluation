@@ -1107,10 +1107,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#validation-checks" class="md-nav__link">
+  <a href="#validation-checks-evaluation-reports" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Validation Checks
+        Validation Checks — Evaluation Reports
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validation-checks-claims-reports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validation Checks — Claims Reports
       
     </span>
   </a>
@@ -1550,6 +1561,34 @@
     
   
     Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/v0.13.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.13.0
   
 
     
@@ -2028,10 +2067,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#validation-checks" class="md-nav__link">
+  <a href="#validation-checks-evaluation-reports" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Validation Checks
+        Validation Checks — Evaluation Reports
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validation-checks-claims-reports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validation Checks — Claims Reports
       
     </span>
   </a>
@@ -2414,12 +2464,17 @@
 <tr>
 <td><code>box</code></td>
 <td>ASCII box format (deterministic)</td>
-<td>Both</td>
+<td>Rubric, Summary</td>
 </tr>
 <tr>
 <td><code>json</code></td>
 <td>Pretty-printed JSON</td>
-<td>Both</td>
+<td>Rubric, Summary, Claims</td>
+</tr>
+<tr>
+<td><code>html</code></td>
+<td>Self-contained HTML audit page, grouped by verdict</td>
+<td>Claims</td>
 </tr>
 </tbody>
 </table>
@@ -2438,12 +2493,19 @@
 <a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>
 <a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="c1"># Box format for summary reports</span>
 <a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>sevaluation<span class="w"> </span>render<span class="w"> </span>summary.json<span class="w"> </span>--format<span class="o">=</span>box
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="c1"># Claims report -&gt; self-contained HTML audit page, grouped by verdict</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>sevaluation<span class="w"> </span>render<span class="w"> </span>claims.json<span class="w"> </span>--format<span class="o">=</span>html<span class="w"> </span>&gt;<span class="w"> </span>report.html
 </code></pre></div>
 <h3 id="auto-detection">Auto-Detection<a class="headerlink" href="#auto-detection" title="Permanent link">&para;</a></h3>
-<p>The command auto-detects report type (rubric vs summary) and uses the appropriate renderer.</p>
+<p>The command auto-detects report type from top-level JSON keys — <code>categories</code>
+(rubric/evaluation), <code>teams</code> (summary), or <code>claims</code> (claims report) — and
+uses the appropriate renderer.</p>
 <hr />
 <h2 id="lint">lint<a class="headerlink" href="#lint" title="Permanent link">&para;</a></h2>
-<p>Validate report correctness including enum values, count accuracy, and decision consistency. Added in v0.7.0.</p>
+<p>Validate report correctness. Auto-detects evaluation reports (<code>categories</code>)
+vs. claims reports (<code>claims</code>) from the file's top-level keys and applies the
+matching checks. Added in v0.7.0; claims-report support added in v0.13.0.</p>
 <h3 id="usage_1">Usage<a class="headerlink" href="#usage_1" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>sevaluation<span class="w"> </span>lint<span class="w"> </span>&lt;file&gt;<span class="w"> </span><span class="o">[</span>--strict<span class="o">]</span><span class="w"> </span><span class="o">[</span>--format<span class="o">=</span>&lt;format&gt;<span class="o">]</span>
 </code></pre></div>
@@ -2466,7 +2528,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="validation-checks">Validation Checks<a class="headerlink" href="#validation-checks" title="Permanent link">&para;</a></h3>
+<h3 id="validation-checks-evaluation-reports">Validation Checks — Evaluation Reports<a class="headerlink" href="#validation-checks-evaluation-reports" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -2508,6 +2570,71 @@
 </tr>
 </tbody>
 </table>
+<h3 id="validation-checks-claims-reports">Validation Checks — Claims Reports<a class="headerlink" href="#validation-checks-claims-reports" title="Permanent link">&para;</a></h3>
+<p>Evidence-integrity checks for <code>verified</code> claims — see
+<a href="../../features/claims/#evidence-integrity-linting-v0130">Evidence-Integrity Linting</a>
+for the full explanation of each rule.</p>
+<table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>Level</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>claim-missing-id</code> / <code>claim-duplicate-id</code></td>
+<td>Error</td>
+<td>Every claim has a unique <code>id</code></td>
+</tr>
+<tr>
+<td><code>verified-requires-validation</code></td>
+<td>Error</td>
+<td>A verified claim has a <code>validation</code> object</td>
+</tr>
+<tr>
+<td><code>verified-requires-url</code> / <code>verified-requires-quote</code></td>
+<td>Error</td>
+<td>A verified external claim has a source URL and a verbatim quote</td>
+</tr>
+<tr>
+<td><code>verified-value-in-quote</code></td>
+<td>Warning</td>
+<td>The claim's statistical value appears in the quoted text</td>
+</tr>
+<tr>
+<td><code>verified-derived-needs-sources</code></td>
+<td>Error</td>
+<td>A verified derived claim lists source claim ids</td>
+</tr>
+<tr>
+<td><code>verified-internal-needs-evidence</code></td>
+<td>Error</td>
+<td>A verified internal claim has an evidence path or output</td>
+</tr>
+<tr>
+<td><code>verified-subjective</code></td>
+<td>Warning</td>
+<td>A subjective estimate is published as verified — confirm intentionally</td>
+</tr>
+<tr>
+<td><code>verified-role-needs-corroboration</code></td>
+<td>Error</td>
+<td>A <code>secondary-analysis</code>/<code>self-reported</code> source has a corroborating <code>relatedClaimId</code></td>
+</tr>
+<tr>
+<td><code>verified-insufficient-corroboration</code></td>
+<td>Error</td>
+<td>Opt-in via <code>criteria.minCorroboratingSources</code> — a verified claim has fewer independent sources than required</td>
+</tr>
+<tr>
+<td><code>verified-stale-as-of-date</code></td>
+<td>Error</td>
+<td>Opt-in via <code>criteria.maxClaimAge</code> — a verified statistic's <code>asOfDate</code> is older than the freshness threshold</td>
+</tr>
+</tbody>
+</table>
 <h3 id="exit-codes">Exit Codes<a class="headerlink" href="#exit-codes" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -2540,13 +2667,16 @@
 <a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="c1"># JSON output for programmatic use</span>
 <a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>sevaluation<span class="w"> </span>lint<span class="w"> </span>report.json<span class="w"> </span>--format<span class="o">=</span>json
 <a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>
-<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="c1"># CI pipeline validation</span>
-<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="k">for</span><span class="w"> </span>report<span class="w"> </span><span class="k">in</span><span class="w"> </span>reports/*.json<span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span>!<span class="w"> </span>sevaluation<span class="w"> </span>lint<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$report</span><span class="s2">&quot;</span><span class="w"> </span>--strict<span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">        </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Invalid report: </span><span class="nv">$report</span><span class="s2">&quot;</span>
-<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">        </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
-<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">    </span><span class="k">fi</span>
-<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="k">done</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="c1"># Claims report — fails if any verified claim lacks a quote/URL/corroboration</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>sevaluation<span class="w"> </span>lint<span class="w"> </span>claims.json<span class="w"> </span>--strict
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="c1"># CI pipeline validation</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="k">for</span><span class="w"> </span>report<span class="w"> </span><span class="k">in</span><span class="w"> </span>reports/*.json<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span>!<span class="w"> </span>sevaluation<span class="w"> </span>lint<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$report</span><span class="s2">&quot;</span><span class="w"> </span>--strict<span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">        </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Invalid report: </span><span class="nv">$report</span><span class="s2">&quot;</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="w">        </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="w">    </span><span class="k">fi</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="k">done</span>
 </code></pre></div>
 <h3 id="output">Output<a class="headerlink" href="#output" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>✅ Valid: 0 errors, 0 warnings
@@ -2559,7 +2689,11 @@
 </code></pre></div>
 <hr />
 <h2 id="check">check<a class="headerlink" href="#check" title="Permanent link">&para;</a></h2>
-<p>Check if a report passes evaluation criteria. Useful for CI/CD gates.</p>
+<p>Check if a report passes evaluation criteria. Useful for CI/CD gates.
+Auto-detects evaluation, summary, and claims reports; for a claims report,
+this checks <code>report.Decision.Passed</code> (the criteria decision, e.g. from
+<code>MinCorroboratingSources</code>/<code>MaxClaimAge</code>) — it does not run <code>claims.Lint</code>, so
+use <code>lint</code> as a separate, stricter gate.</p>
 <h3 id="usage_2">Usage<a class="headerlink" href="#usage_2" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>sevaluation<span class="w"> </span>check<span class="w"> </span>&lt;file&gt;
 </code></pre></div>

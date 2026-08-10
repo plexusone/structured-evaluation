@@ -893,6 +893,67 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#evidence-integrity-linting-v0130" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Evidence-Integrity Linting (v0.13.0)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Evidence-Integrity Linting (v0.13.0)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#baseline-checks-always-on" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Baseline checks (always on)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sourcerole-how-directly-a-source-speaks-for-the-claim" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SourceRole: how directly a source speaks for the claim
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mincorroboratingsources-a-general-corroboration-threshold" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MinCorroboratingSources: a general corroboration threshold
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#maxclaimage-staleness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MaxClaimAge: staleness
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#example-security-advisory" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1311,6 +1372,34 @@
     
   
     Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/v0.13.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.13.0
   
 
     
@@ -1860,6 +1949,67 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#evidence-integrity-linting-v0130" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Evidence-Integrity Linting (v0.13.0)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Evidence-Integrity Linting (v0.13.0)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#baseline-checks-always-on" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Baseline checks (always on)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sourcerole-how-directly-a-source-speaks-for-the-claim" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SourceRole: how directly a source speaks for the claim
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mincorroboratingsources-a-general-corroboration-threshold" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MinCorroboratingSources: a general corroboration threshold
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#maxclaimage-staleness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MaxClaimAge: staleness
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#example-security-advisory" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2185,6 +2335,13 @@ itself as "WHO" or similar should still be classified <code>ExternalAggregator</
 <a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="w">    </span><span class="nx">MinReliabilityTier</span><span class="p">:</span><span class="w">           </span><span class="nx">claims</span><span class="p">.</span><span class="nx">ReliabilityMedium</span><span class="p">,</span>
 <a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="p">}</span>
 </code></pre></div>
+<p><code>MinCorroboratingSources</code>/<code>CorroborationCategories</code> and <code>MaxClaimAge</code> (v0.13.0)
+are additional, opt-in criteria — see
+<a href="#evidence-integrity-linting-v0130">Evidence-Integrity Linting</a>. When either
+is set, a verified claim that fails it is treated the same way as a
+needs-review claim by <code>EvaluateClaims</code>: a conditional pass if
+<code>AllowNeedsReview</code>, otherwise a fail. This only affects the report-level
+<code>Decision</code>, never the claim's own stored <code>Verdict</code>.</p>
 <h2 id="summary-statistics">Summary Statistics<a class="headerlink" href="#summary-statistics" title="Permanent link">&para;</a></h2>
 <p>After finalization, review statistics:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nx">report</span><span class="p">.</span><span class="nx">Finalize</span><span class="p">()</span>
@@ -2275,6 +2432,12 @@ independent:</p>
 underlying fact was true (e.g. the earnings period a figure describes, or
 the date a public statement was made). A claim crawled today can describe a
 fact from months earlier — conflating the two dates misdates the claim.</p>
+<p><code>AccessedAt</code> (and <code>InternalValidation.ValidatedAt</code>) are <code>*time.Time</code>, nil
+when unset — set them via the chainable <code>WithAccessedAt</code>/<code>WithValidatedAt</code>,
+or let <code>NewExternalValidation</code>/<code>NewInternalValidation</code> default them to
+<code>time.Now().UTC()</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nx">validation</span><span class="p">.</span><span class="nx">External</span><span class="p">.</span><span class="nx">WithAccessedAt</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Now</span><span class="p">().</span><span class="nx">UTC</span><span class="p">())</span>
+</code></pre></div>
 <h3 id="precision">Precision<a class="headerlink" href="#precision" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -2305,58 +2468,197 @@ fact from months earlier — conflating the two dates misdates the claim.</p>
 <p><code>Statistical</code> is nil for non-statistical claims, and setting it on a claim
 whose <code>Category</code> isn't <code>ClaimStatistical</code> is harmless but not rendered by
 convention — it's meant for numeric claims specifically.</p>
+<h2 id="evidence-integrity-linting-v0130">Evidence-Integrity Linting (v0.13.0)<a class="headerlink" href="#evidence-integrity-linting-v0130" title="Permanent link">&para;</a></h2>
+<p><code>DetermineVerdict</code> computes a verdict from a <code>Validation</code>, but a verdict can
+also be hand-authored directly on a <code>Claim</code> — bypassing that computation
+entirely. <code>claims.Lint</code> re-checks the result: it re-verifies that every claim
+stated as <code>verified</code> actually earns the label, regardless of how the verdict
+was set. This is the exact gap that let a claim marked <code>verified</code> cite a
+figure synthesized from secondary reporting, when the primary source said
+something substantially different.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nx">findings</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">claims</span><span class="p">.</span><span class="nx">Lint</span><span class="p">(</span><span class="nx">report</span><span class="p">)</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="k">if</span><span class="w"> </span><span class="nx">claims</span><span class="p">.</span><span class="nx">HasErrors</span><span class="p">(</span><span class="nx">findings</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">f</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">findings</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;[%s] %s: %s\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">Severity</span><span class="p">,</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">ClaimID</span><span class="p">,</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">Message</span><span class="p">)</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="p">}</span>
+</code></pre></div>
+<p>Or from the CLI:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>sevaluation<span class="w"> </span>lint<span class="w"> </span>report.json<span class="w">           </span><span class="c1"># errors fail (exit 1), warnings are advisory</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>sevaluation<span class="w"> </span>lint<span class="w"> </span>report.json<span class="w"> </span>--strict<span class="w">  </span><span class="c1"># warnings fail too</span>
+</code></pre></div>
+<p><code>Lint</code> only gates <code>Verdict == VerdictVerified</code> claims — needs-review,
+rejected, and unverified claims carry no evidence obligation. It never
+mutates the report.</p>
+<h3 id="baseline-checks-always-on">Baseline checks (always on)<a class="headerlink" href="#baseline-checks-always-on" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>Severity</th>
+<th>Applies to</th>
+<th>Checks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>claim-missing-id</code> / <code>claim-duplicate-id</code></td>
+<td>Error</td>
+<td>Any claim</td>
+<td>Every claim has a unique <code>ID</code></td>
+</tr>
+<tr>
+<td><code>verified-requires-validation</code></td>
+<td>Error</td>
+<td>Verified</td>
+<td><code>Validation</code> is not nil</td>
+</tr>
+<tr>
+<td><code>verified-requires-url</code> / <code>verified-requires-quote</code></td>
+<td>Error</td>
+<td>External</td>
+<td><code>URL</code> and <code>QuotedText</code> are both set</td>
+</tr>
+<tr>
+<td><code>verified-value-in-quote</code></td>
+<td>Warning</td>
+<td>External, with <code>Statistical</code></td>
+<td><code>Statistical.Value</code> appears in <code>QuotedText</code> — advisory because a legitimate quote can state a rule ("0% target") or a range, or scale the value into a unit ("20 million") rather than repeat the literal number</td>
+</tr>
+<tr>
+<td><code>verified-derived-needs-sources</code></td>
+<td>Error</td>
+<td>Derived</td>
+<td><code>SourceClaimIDs</code> is non-empty</td>
+</tr>
+<tr>
+<td><code>verified-internal-needs-evidence</code></td>
+<td>Error</td>
+<td>Internal</td>
+<td><code>EvidencePath</code> or <code>Output</code> is set</td>
+</tr>
+<tr>
+<td><code>verified-subjective</code></td>
+<td>Warning</td>
+<td>Subjective</td>
+<td>Flags that a subjective estimate is published as verified — confirm intentionally</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sourcerole-how-directly-a-source-speaks-for-the-claim"><code>SourceRole</code>: how directly a source speaks for the claim<a class="headerlink" href="#sourcerole-how-directly-a-source-speaks-for-the-claim" title="Permanent link">&para;</a></h3>
+<p><code>ExternalSourceType</code> (NVD, reputable vendor, community, aggregator, ...)
+categorizes a source's general authority. <code>SourceRole</code> is a separate,
+orthogonal axis: how directly <em>this particular citation</em> speaks for the
+claim, independent of how authoritative the outlet is overall.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="kd">type</span><span class="w"> </span><span class="nx">SourceRole</span><span class="w"> </span><span class="kt">string</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="kd">const</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">    </span><span class="nx">SourceRolePrimary</span><span class="w">          </span><span class="nx">SourceRole</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;primary&quot;</span><span class="w">           </span><span class="c1">// the claim&#39;s own subject states it</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">    </span><span class="nx">SourceRoleSecondaryRelay</span><span class="w">   </span><span class="nx">SourceRole</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;secondary-relay&quot;</span><span class="w">    </span><span class="c1">// a wire report quoting the primary source directly</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">    </span><span class="nx">SourceRoleSecondaryAnalysis</span><span class="w"> </span><span class="nx">SourceRole</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;secondary-analysis&quot;</span><span class="w"> </span><span class="c1">// an outlet&#39;s own synthesis/estimate across other reporting</span>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="w">    </span><span class="nx">SourceRoleSelfReported</span><span class="w">     </span><span class="nx">SourceRole</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;self-reported&quot;</span><span class="w">      </span><span class="c1">// the claim&#39;s subject&#39;s own marketing/PR material</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="p">)</span>
+</code></pre></div>
+<p>Two "reputable vendor" citations can carry very different trust: a wire
+report relaying an earnings call is near-primary, but a research outlet's own
+synthesized estimate across several other reports is <code>secondary-analysis</code> —
+exactly the kind of citation that can drift from the underlying fact. Set it
+on <code>ExternalValidation.Role</code> (<code>sourceRole</code> in JSON), optional and empty by
+default so existing reports are unaffected:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="nx">validation</span><span class="p">.</span><span class="nx">External</span><span class="p">.</span><span class="nx">Role</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">claims</span><span class="p">.</span><span class="nx">SourceRoleSecondaryAnalysis</span>
+</code></pre></div>
+<p><code>SourceRole.RequiresCorroboration()</code> is <code>true</code> for <code>secondary-analysis</code> and
+<code>self-reported</code> (<code>false</code> for <code>primary</code>, <code>secondary-relay</code>, and an unset
+role). When it's true, <code>Lint</code> requires at least one corroborating claim in
+<code>RelatedClaimIDs</code>, or errors with <code>verified-role-needs-corroboration</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="nx">claim</span><span class="p">.</span><span class="nx">RelatedClaimIDs</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;arr-independent-estimate&quot;</span><span class="p">}</span>
+</code></pre></div>
+<h3 id="mincorroboratingsources-a-general-corroboration-threshold"><code>MinCorroboratingSources</code>: a general corroboration threshold<a class="headerlink" href="#mincorroboratingsources-a-general-corroboration-threshold" title="Permanent link">&para;</a></h3>
+<p><code>SourceRole</code> encodes a fixed policy (secondary-analysis and self-reported
+always need corroboration). <code>ClaimsCriteria.MinCorroboratingSources</code> is a
+separate, configurable threshold that applies regardless of role or
+validation type — useful for high-stakes categories where even a <code>primary</code>
+source shouldn't stand alone:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="nx">report</span><span class="p">.</span><span class="nx">Criteria</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">claims</span><span class="p">.</span><span class="nx">ClaimsCriteria</span><span class="p">{</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">    </span><span class="nx">MinCorroboratingSources</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">    </span><span class="c1">// Optional: restrict the requirement to specific categories.</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="w">    </span><span class="c1">// An empty slice applies it to every category.</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="w">    </span><span class="nx">CorroborationCategories</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="nx">claims</span><span class="p">.</span><span class="nx">ClaimCategory</span><span class="p">{</span><span class="nx">claims</span><span class="p">.</span><span class="nx">ClaimStatistical</span><span class="p">},</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="p">}</span>
+</code></pre></div>
+<p>A claim counts its own source plus each entry in <code>RelatedClaimIDs</code> toward
+the threshold (<code>IsSufficientlyCorroborated</code>). Disabled by default
+(<code>MinCorroboratingSources &lt;= 1</code>), so opting in is required. <code>Lint</code> flags a
+shortfall as <code>verified-insufficient-corroboration</code>; <code>EvaluateClaims</code> folds
+it into the report-level decision the same way as needs-review claims (see
+<a href="#pass-criteria">Pass Criteria</a> below).</p>
+<h3 id="maxclaimage-staleness"><code>MaxClaimAge</code>: staleness<a class="headerlink" href="#maxclaimage-staleness" title="Permanent link">&para;</a></h3>
+<p>A verified statistic can quietly go stale — presented as current years after
+the underlying fact was true (e.g. a 2022–23 study cited as if still
+representative). <code>ClaimsCriteria.MaxClaimAge</code> bounds how old a verified
+claim's <code>Statistical.AsOfDate</code> may be, relative to now:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="nx">report</span><span class="p">.</span><span class="nx">Criteria</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">claims</span><span class="p">.</span><span class="nx">ClaimsCriteria</span><span class="p">{</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="w">    </span><span class="nx">MaxClaimAge</span><span class="p">:</span><span class="w"> </span><span class="mi">365</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">24</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Hour</span><span class="p">,</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="p">}</span>
+</code></pre></div>
+<p>A claim with no <code>Statistical</code> detail, or an unset <code>AsOfDate</code>, is never
+flagged — age unknown is not the same as stale. Disabled by default
+(<code>MaxClaimAge &lt;= 0</code>). <code>Lint</code> flags a violation as <code>verified-stale-as-of-date</code>;
+<code>EvaluateClaims</code> folds it into the report-level decision like needs-review.</p>
 <h2 id="example-security-advisory">Example: Security Advisory<a class="headerlink" href="#example-security-advisory" title="Permanent link">&para;</a></h2>
 <p>Complete example validating a security advisory:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="kn">import</span><span class="w"> </span><span class="p">(</span>
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">    </span><span class="s">&quot;fmt&quot;</span>
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">    </span><span class="s">&quot;github.com/plexusone/structured-evaluation/claims&quot;</span>
-<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="p">)</span>
-<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>
-<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="w">    </span><span class="nx">report</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">claims</span><span class="p">.</span><span class="nx">NewClaimsReport</span><span class="p">(</span><span class="s">&quot;CVE-2026-25253-advisory.md&quot;</span><span class="p">)</span>
-<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>
-<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="w">    </span><span class="c1">// CVE ID from NVD</span>
-<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="w">    </span><span class="nx">cve</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">claims</span><span class="p">.</span><span class="nx">NewClaim</span><span class="p">(</span><span class="s">&quot;cve-id&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;CVE-2026-25253&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">claims</span><span class="p">.</span><span class="nx">ClaimMetadata</span><span class="p">,</span>
-<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a><span class="w">        </span><span class="nx">claims</span><span class="p">.</span><span class="nx">Location</span><span class="p">{</span><span class="nx">Section</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;header&quot;</span><span class="p">})</span>
-<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a><span class="w">    </span><span class="nx">cve</span><span class="p">.</span><span class="nx">SetValidation</span><span class="p">(</span><span class="nx">claims</span><span class="p">.</span><span class="nx">NewExternalValidation</span><span class="p">(</span>
-<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a><span class="w">        </span><span class="s">&quot;https://nvd.nist.gov/vuln/detail/CVE-2026-25253&quot;</span><span class="p">,</span>
-<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a><span class="w">        </span><span class="nx">claims</span><span class="p">.</span><span class="nx">ExternalNVD</span><span class="p">,</span>
-<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a><span class="w">    </span><span class="p">))</span>
-<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a><span class="w">    </span><span class="nx">report</span><span class="p">.</span><span class="nx">AddClaim</span><span class="p">(</span><span class="o">*</span><span class="nx">cve</span><span class="p">)</span>
-<a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a>
-<a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a><span class="w">    </span><span class="c1">// CVSS score from NVD</span>
-<a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a><span class="w">    </span><span class="nx">cvss</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">claims</span><span class="p">.</span><span class="nx">NewClaim</span><span class="p">(</span><span class="s">&quot;cvss&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;CVSS 8.8 High&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">claims</span><span class="p">.</span><span class="nx">ClaimRiskAssessment</span><span class="p">,</span>
-<a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a><span class="w">        </span><span class="nx">claims</span><span class="p">.</span><span class="nx">Location</span><span class="p">{</span><span class="nx">Section</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;severity&quot;</span><span class="p">})</span>
-<a id="__codelineno-10-23" name="__codelineno-10-23" href="#__codelineno-10-23"></a><span class="w">    </span><span class="nx">cvss</span><span class="p">.</span><span class="nx">SetValidation</span><span class="p">(</span><span class="nx">claims</span><span class="p">.</span><span class="nx">NewExternalValidation</span><span class="p">(</span>
-<a id="__codelineno-10-24" name="__codelineno-10-24" href="#__codelineno-10-24"></a><span class="w">        </span><span class="s">&quot;https://nvd.nist.gov/vuln/detail/CVE-2026-25253&quot;</span><span class="p">,</span>
-<a id="__codelineno-10-25" name="__codelineno-10-25" href="#__codelineno-10-25"></a><span class="w">        </span><span class="nx">claims</span><span class="p">.</span><span class="nx">ExternalNVD</span><span class="p">,</span>
-<a id="__codelineno-10-26" name="__codelineno-10-26" href="#__codelineno-10-26"></a><span class="w">    </span><span class="p">))</span>
-<a id="__codelineno-10-27" name="__codelineno-10-27" href="#__codelineno-10-27"></a><span class="w">    </span><span class="nx">report</span><span class="p">.</span><span class="nx">AddClaim</span><span class="p">(</span><span class="o">*</span><span class="nx">cvss</span><span class="p">)</span>
-<a id="__codelineno-10-28" name="__codelineno-10-28" href="#__codelineno-10-28"></a>
-<a id="__codelineno-10-29" name="__codelineno-10-29" href="#__codelineno-10-29"></a><span class="w">    </span><span class="c1">// Exploit confirmed via testing</span>
-<a id="__codelineno-10-30" name="__codelineno-10-30" href="#__codelineno-10-30"></a><span class="w">    </span><span class="nx">exploit</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">claims</span><span class="p">.</span><span class="nx">NewClaim</span><span class="p">(</span><span class="s">&quot;exploit&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Remote code execution confirmed&quot;</span><span class="p">,</span>
-<a id="__codelineno-10-31" name="__codelineno-10-31" href="#__codelineno-10-31"></a><span class="w">        </span><span class="nx">claims</span><span class="p">.</span><span class="nx">ClaimTechnicalFinding</span><span class="p">,</span><span class="w"> </span><span class="nx">claims</span><span class="p">.</span><span class="nx">Location</span><span class="p">{</span><span class="nx">Section</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;impact&quot;</span><span class="p">})</span>
-<a id="__codelineno-10-32" name="__codelineno-10-32" href="#__codelineno-10-32"></a><span class="w">    </span><span class="nx">exploit</span><span class="p">.</span><span class="nx">SetValidation</span><span class="p">(</span><span class="nx">claims</span><span class="p">.</span><span class="nx">NewInternalValidation</span><span class="p">(</span>
-<a id="__codelineno-10-33" name="__codelineno-10-33" href="#__codelineno-10-33"></a><span class="w">        </span><span class="nx">claims</span><span class="p">.</span><span class="nx">MethodCodeExecution</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;exploits/poc.py&quot;</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
-<a id="__codelineno-10-34" name="__codelineno-10-34" href="#__codelineno-10-34"></a><span class="w">    </span><span class="p">))</span>
-<a id="__codelineno-10-35" name="__codelineno-10-35" href="#__codelineno-10-35"></a><span class="w">    </span><span class="nx">report</span><span class="p">.</span><span class="nx">AddClaim</span><span class="p">(</span><span class="o">*</span><span class="nx">exploit</span><span class="p">)</span>
-<a id="__codelineno-10-36" name="__codelineno-10-36" href="#__codelineno-10-36"></a>
-<a id="__codelineno-10-37" name="__codelineno-10-37" href="#__codelineno-10-37"></a><span class="w">    </span><span class="c1">// Evaluate</span>
-<a id="__codelineno-10-38" name="__codelineno-10-38" href="#__codelineno-10-38"></a><span class="w">    </span><span class="nx">report</span><span class="p">.</span><span class="nx">Finalize</span><span class="p">()</span>
-<a id="__codelineno-10-39" name="__codelineno-10-39" href="#__codelineno-10-39"></a>
-<a id="__codelineno-10-40" name="__codelineno-10-40" href="#__codelineno-10-40"></a><span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;Decision: %s\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">report</span><span class="p">.</span><span class="nx">Decision</span><span class="p">.</span><span class="nx">Status</span><span class="p">)</span>
-<a id="__codelineno-10-41" name="__codelineno-10-41" href="#__codelineno-10-41"></a><span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;Claims: %d verified, %d unverified\n&quot;</span><span class="p">,</span>
-<a id="__codelineno-10-42" name="__codelineno-10-42" href="#__codelineno-10-42"></a><span class="w">        </span><span class="nx">report</span><span class="p">.</span><span class="nx">Summary</span><span class="p">.</span><span class="nx">Counts</span><span class="p">.</span><span class="nx">Verified</span><span class="p">,</span>
-<a id="__codelineno-10-43" name="__codelineno-10-43" href="#__codelineno-10-43"></a><span class="w">        </span><span class="nx">report</span><span class="p">.</span><span class="nx">Summary</span><span class="p">.</span><span class="nx">Counts</span><span class="p">.</span><span class="nx">Unverified</span><span class="p">,</span>
-<a id="__codelineno-10-44" name="__codelineno-10-44" href="#__codelineno-10-44"></a><span class="w">    </span><span class="p">)</span>
-<a id="__codelineno-10-45" name="__codelineno-10-45" href="#__codelineno-10-45"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="w">    </span><span class="s">&quot;fmt&quot;</span>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="w">    </span><span class="s">&quot;github.com/plexusone/structured-evaluation/claims&quot;</span>
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="p">)</span>
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a>
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a><span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a><span class="w">    </span><span class="nx">report</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">claims</span><span class="p">.</span><span class="nx">NewClaimsReport</span><span class="p">(</span><span class="s">&quot;CVE-2026-25253-advisory.md&quot;</span><span class="p">)</span>
+<a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a>
+<a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a><span class="w">    </span><span class="c1">// CVE ID from NVD</span>
+<a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a><span class="w">    </span><span class="nx">cve</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">claims</span><span class="p">.</span><span class="nx">NewClaim</span><span class="p">(</span><span class="s">&quot;cve-id&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;CVE-2026-25253&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">claims</span><span class="p">.</span><span class="nx">ClaimMetadata</span><span class="p">,</span>
+<a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a><span class="w">        </span><span class="nx">claims</span><span class="p">.</span><span class="nx">Location</span><span class="p">{</span><span class="nx">Section</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;header&quot;</span><span class="p">})</span>
+<a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a><span class="w">    </span><span class="nx">cve</span><span class="p">.</span><span class="nx">SetValidation</span><span class="p">(</span><span class="nx">claims</span><span class="p">.</span><span class="nx">NewExternalValidation</span><span class="p">(</span>
+<a id="__codelineno-18-15" name="__codelineno-18-15" href="#__codelineno-18-15"></a><span class="w">        </span><span class="s">&quot;https://nvd.nist.gov/vuln/detail/CVE-2026-25253&quot;</span><span class="p">,</span>
+<a id="__codelineno-18-16" name="__codelineno-18-16" href="#__codelineno-18-16"></a><span class="w">        </span><span class="nx">claims</span><span class="p">.</span><span class="nx">ExternalNVD</span><span class="p">,</span>
+<a id="__codelineno-18-17" name="__codelineno-18-17" href="#__codelineno-18-17"></a><span class="w">    </span><span class="p">))</span>
+<a id="__codelineno-18-18" name="__codelineno-18-18" href="#__codelineno-18-18"></a><span class="w">    </span><span class="nx">report</span><span class="p">.</span><span class="nx">AddClaim</span><span class="p">(</span><span class="o">*</span><span class="nx">cve</span><span class="p">)</span>
+<a id="__codelineno-18-19" name="__codelineno-18-19" href="#__codelineno-18-19"></a>
+<a id="__codelineno-18-20" name="__codelineno-18-20" href="#__codelineno-18-20"></a><span class="w">    </span><span class="c1">// CVSS score from NVD</span>
+<a id="__codelineno-18-21" name="__codelineno-18-21" href="#__codelineno-18-21"></a><span class="w">    </span><span class="nx">cvss</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">claims</span><span class="p">.</span><span class="nx">NewClaim</span><span class="p">(</span><span class="s">&quot;cvss&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;CVSS 8.8 High&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">claims</span><span class="p">.</span><span class="nx">ClaimRiskAssessment</span><span class="p">,</span>
+<a id="__codelineno-18-22" name="__codelineno-18-22" href="#__codelineno-18-22"></a><span class="w">        </span><span class="nx">claims</span><span class="p">.</span><span class="nx">Location</span><span class="p">{</span><span class="nx">Section</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;severity&quot;</span><span class="p">})</span>
+<a id="__codelineno-18-23" name="__codelineno-18-23" href="#__codelineno-18-23"></a><span class="w">    </span><span class="nx">cvss</span><span class="p">.</span><span class="nx">SetValidation</span><span class="p">(</span><span class="nx">claims</span><span class="p">.</span><span class="nx">NewExternalValidation</span><span class="p">(</span>
+<a id="__codelineno-18-24" name="__codelineno-18-24" href="#__codelineno-18-24"></a><span class="w">        </span><span class="s">&quot;https://nvd.nist.gov/vuln/detail/CVE-2026-25253&quot;</span><span class="p">,</span>
+<a id="__codelineno-18-25" name="__codelineno-18-25" href="#__codelineno-18-25"></a><span class="w">        </span><span class="nx">claims</span><span class="p">.</span><span class="nx">ExternalNVD</span><span class="p">,</span>
+<a id="__codelineno-18-26" name="__codelineno-18-26" href="#__codelineno-18-26"></a><span class="w">    </span><span class="p">))</span>
+<a id="__codelineno-18-27" name="__codelineno-18-27" href="#__codelineno-18-27"></a><span class="w">    </span><span class="nx">report</span><span class="p">.</span><span class="nx">AddClaim</span><span class="p">(</span><span class="o">*</span><span class="nx">cvss</span><span class="p">)</span>
+<a id="__codelineno-18-28" name="__codelineno-18-28" href="#__codelineno-18-28"></a>
+<a id="__codelineno-18-29" name="__codelineno-18-29" href="#__codelineno-18-29"></a><span class="w">    </span><span class="c1">// Exploit confirmed via testing</span>
+<a id="__codelineno-18-30" name="__codelineno-18-30" href="#__codelineno-18-30"></a><span class="w">    </span><span class="nx">exploit</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">claims</span><span class="p">.</span><span class="nx">NewClaim</span><span class="p">(</span><span class="s">&quot;exploit&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Remote code execution confirmed&quot;</span><span class="p">,</span>
+<a id="__codelineno-18-31" name="__codelineno-18-31" href="#__codelineno-18-31"></a><span class="w">        </span><span class="nx">claims</span><span class="p">.</span><span class="nx">ClaimTechnicalFinding</span><span class="p">,</span><span class="w"> </span><span class="nx">claims</span><span class="p">.</span><span class="nx">Location</span><span class="p">{</span><span class="nx">Section</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;impact&quot;</span><span class="p">})</span>
+<a id="__codelineno-18-32" name="__codelineno-18-32" href="#__codelineno-18-32"></a><span class="w">    </span><span class="nx">exploit</span><span class="p">.</span><span class="nx">SetValidation</span><span class="p">(</span><span class="nx">claims</span><span class="p">.</span><span class="nx">NewInternalValidation</span><span class="p">(</span>
+<a id="__codelineno-18-33" name="__codelineno-18-33" href="#__codelineno-18-33"></a><span class="w">        </span><span class="nx">claims</span><span class="p">.</span><span class="nx">MethodCodeExecution</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;exploits/poc.py&quot;</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<a id="__codelineno-18-34" name="__codelineno-18-34" href="#__codelineno-18-34"></a><span class="w">    </span><span class="p">))</span>
+<a id="__codelineno-18-35" name="__codelineno-18-35" href="#__codelineno-18-35"></a><span class="w">    </span><span class="nx">report</span><span class="p">.</span><span class="nx">AddClaim</span><span class="p">(</span><span class="o">*</span><span class="nx">exploit</span><span class="p">)</span>
+<a id="__codelineno-18-36" name="__codelineno-18-36" href="#__codelineno-18-36"></a>
+<a id="__codelineno-18-37" name="__codelineno-18-37" href="#__codelineno-18-37"></a><span class="w">    </span><span class="c1">// Evaluate</span>
+<a id="__codelineno-18-38" name="__codelineno-18-38" href="#__codelineno-18-38"></a><span class="w">    </span><span class="nx">report</span><span class="p">.</span><span class="nx">Finalize</span><span class="p">()</span>
+<a id="__codelineno-18-39" name="__codelineno-18-39" href="#__codelineno-18-39"></a>
+<a id="__codelineno-18-40" name="__codelineno-18-40" href="#__codelineno-18-40"></a><span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;Decision: %s\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">report</span><span class="p">.</span><span class="nx">Decision</span><span class="p">.</span><span class="nx">Status</span><span class="p">)</span>
+<a id="__codelineno-18-41" name="__codelineno-18-41" href="#__codelineno-18-41"></a><span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;Claims: %d verified, %d unverified\n&quot;</span><span class="p">,</span>
+<a id="__codelineno-18-42" name="__codelineno-18-42" href="#__codelineno-18-42"></a><span class="w">        </span><span class="nx">report</span><span class="p">.</span><span class="nx">Summary</span><span class="p">.</span><span class="nx">Counts</span><span class="p">.</span><span class="nx">Verified</span><span class="p">,</span>
+<a id="__codelineno-18-43" name="__codelineno-18-43" href="#__codelineno-18-43"></a><span class="w">        </span><span class="nx">report</span><span class="p">.</span><span class="nx">Summary</span><span class="p">.</span><span class="nx">Counts</span><span class="p">.</span><span class="nx">Unverified</span><span class="p">,</span>
+<a id="__codelineno-18-44" name="__codelineno-18-44" href="#__codelineno-18-44"></a><span class="w">    </span><span class="p">)</span>
+<a id="__codelineno-18-45" name="__codelineno-18-45" href="#__codelineno-18-45"></a><span class="p">}</span>
 </code></pre></div>
 <h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../../concepts/report-types/">Report Types</a> - Compare Rubric, SummaryReport, ClaimsReport</li>
-<li><a href="../../releases/v0.6.0/">v0.6.0 Release Notes</a> - Full changelog</li>
+<li><a href="../../cli/commands/#lint">CLI Commands</a> - <code>sevaluation lint</code> reference for claims reports</li>
+<li><a href="../../releases/v0.13.0/">v0.13.0 Release Notes</a> - Evidence-integrity linting, SourceRole, corroboration, staleness</li>
+<li><a href="../../releases/v0.6.0/">v0.6.0 Release Notes</a> - Original claims validation release</li>
 </ul>
 
 
