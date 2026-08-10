@@ -416,8 +416,13 @@ import "github.com/plexusone/structured-evaluation/claims"
 report := claims.NewClaimsReport("article.md")
 
 // Source types: external (URL), internal (code/lab), derived, subjective
+//   External sources also classify aggregator sites (stats-roundup blogs
+//   with no original reporting) as low-reliability, auto-reject — distinct
+//   from an unrecognized-but-real community source, which just needs review
 // Reliability tiers: authoritative, high, medium, low
 // Verdicts: verified, unverified, needs-review, rejected
+// ClaimStatistical claims can carry a structured value/unit/precision/as-of
+//   date via claim.SetStatistical(...), independent of the rendered Text
 
 // Configure pass criteria
 report.SetCriteria(claims.ClaimsCriteria{
