@@ -82,6 +82,50 @@ func (r ReliabilityTier) RequiresReview() bool {
 	return r == ReliabilityMedium
 }
 
+// SourceRole distinguishes how directly an external source speaks for the
+// claim, independent of ExternalSourceType (which is about the source's
+// general authority/category). Two "reputable-vendor" sources can carry very
+// different trust: a wire report quoting an earnings call verbatim is
+// SourceRolePrimary-adjacent; an outlet's own synthesis across several other
+// reports is SourceRoleSecondaryAnalysis and is exactly the shape that
+// produced a false-positive "verified" figure ($3B ARR from a secondary
+// synthesis, contradicted by the primary source's own $500M figure) — the
+// incident that motivated this field.
+type SourceRole string
+
+const (
+	// SourceRolePrimary is the entity the claim is about, speaking for
+	// itself (a company blog post, an official filing, a direct quote from
+	// an executive).
+	SourceRolePrimary SourceRole = "primary"
+
+	// SourceRoleSecondaryRelay is a reputable outlet directly reporting a
+	// primary statement (e.g. a wire service relaying an earnings-call
+	// quote) — one hop from primary, with low synthesis risk.
+	SourceRoleSecondaryRelay SourceRole = "secondary-relay"
+
+	// SourceRoleSecondaryAnalysis is an outlet's own synthesis, estimate, or
+	// aggregation across multiple other reports — not a direct relay of a
+	// single primary statement. Higher risk of drift from the underlying
+	// fact; requires corroboration to be published as verified.
+	SourceRoleSecondaryAnalysis SourceRole = "secondary-analysis"
+
+	// SourceRoleSelfReported is the claim's subject describing itself in a
+	// context with a promotional incentive (marketing page, press release
+	// superlative) rather than an audited disclosure. Requires
+	// corroboration to be published as verified.
+	SourceRoleSelfReported SourceRole = "self-reported"
+)
+
+// RequiresCorroboration reports whether a claim sourced with this role needs
+// at least one independent corroborating source before it can be published
+// as verified. Primary and secondary-relay sources speak for themselves;
+// secondary-analysis and self-reported sources carry synthesis or incentive
+// risk that a second independent source mitigates.
+func (r SourceRole) RequiresCorroboration() bool {
+	return r == SourceRoleSecondaryAnalysis || r == SourceRoleSelfReported
+}
+
 // InternalValidationMethod describes how internal validation was performed.
 type InternalValidationMethod string
 

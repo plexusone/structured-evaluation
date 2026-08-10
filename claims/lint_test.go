@@ -21,6 +21,58 @@ func extClaim(id string, verdict Verdict, url, quote string, stat *StatisticalDe
 	return c
 }
 
+func TestLint_SecondaryAnalysisRequiresCorroboration(t *testing.T) {
+	c := extClaim("arr", VerdictVerified, "https://example.com", "grew to $500 million",
+		NewStatisticalDetail(500, "million USD", PrecisionApproximate))
+	c.Validation.External.Role = SourceRoleSecondaryAnalysis
+
+	f := Lint(&ClaimsReport{Claims: []Claim{c}})
+	if !hasRule(f, "verified-role-needs-corroboration") {
+		t.Errorf("expected verified-role-needs-corroboration, got %+v", f)
+	}
+	if !HasErrors(f) {
+		t.Error("missing corroboration for secondary-analysis should be an error")
+	}
+}
+
+func TestLint_SelfReportedRequiresCorroboration(t *testing.T) {
+	c := extClaim("f500", VerdictVerified, "https://cursor.com/enterprise", "64% of Fortune 500",
+		NewStatisticalDetail(64, "% of Fortune 500", PrecisionExact))
+	c.Validation.External.Role = SourceRoleSelfReported
+
+	f := Lint(&ClaimsReport{Claims: []Claim{c}})
+	if !hasRule(f, "verified-role-needs-corroboration") {
+		t.Errorf("expected verified-role-needs-corroboration, got %+v", f)
+	}
+}
+
+func TestLint_CorroboratedSecondaryAnalysisPasses(t *testing.T) {
+	c := extClaim("arr", VerdictVerified, "https://example.com", "grew to $500 million",
+		NewStatisticalDetail(500, "million USD", PrecisionApproximate))
+	c.Validation.External.Role = SourceRoleSecondaryAnalysis
+	c.RelatedClaimIDs = []string{"arr-corroborating-1"}
+
+	f := Lint(&ClaimsReport{Claims: []Claim{c}})
+	if hasRule(f, "verified-role-needs-corroboration") {
+		t.Errorf("corroborated secondary-analysis claim should not be flagged, got %+v", f)
+	}
+}
+
+func TestLint_PrimaryAndUnsetRoleNeedNoCorroboration(t *testing.T) {
+	primary := extClaim("p", VerdictVerified, "https://example.com", "1,500+ PRs merged",
+		NewStatisticalDetail(1500, "PRs", PrecisionApproximate))
+	primary.Validation.External.Role = SourceRolePrimary
+
+	unset := extClaim("u", VerdictVerified, "https://example.com", "1,500+ PRs merged",
+		NewStatisticalDetail(1500, "PRs", PrecisionApproximate))
+	// Role left unset — reports predating this field must not be penalized.
+
+	f := Lint(&ClaimsReport{Claims: []Claim{primary, unset}})
+	if hasRule(f, "verified-role-needs-corroboration") {
+		t.Errorf("primary and unset-role claims should not require corroboration, got %+v", f)
+	}
+}
+
 func hasRule(findings []LintFinding, rule string) bool {
 	for _, f := range findings {
 		if f.Rule == rule {

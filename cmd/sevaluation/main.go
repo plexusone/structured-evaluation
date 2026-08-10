@@ -121,6 +121,8 @@ Claims reports ('claims') — evidence integrity of verified claims:
   - A verified derived claim lists source claims; internal claim has evidence (error)
   - The statistical value appears in the quoted text (warning — targets/ranges
     and unit-scaled values legitimately quote a rule rather than the number)
+  - A verified claim sourced as secondary-analysis or self-reported has at
+    least one corroborating relatedClaimId (error)
 
 Exit codes:
   0 - Valid (no errors, warnings allowed unless --strict)

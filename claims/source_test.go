@@ -38,3 +38,22 @@ func TestReliabilityTier_AggregatorIsRejectedByDefault(t *testing.T) {
 		t.Errorf("aggregator sources should reject outright, not just require review, got tier %q", tier)
 	}
 }
+
+func TestSourceRole_RequiresCorroboration(t *testing.T) {
+	tests := []struct {
+		role SourceRole
+		want bool
+	}{
+		{SourceRolePrimary, false},
+		{SourceRoleSecondaryRelay, false},
+		{SourceRoleSecondaryAnalysis, true},
+		{SourceRoleSelfReported, true},
+		{SourceRole(""), false}, // unset must not be flagged (backward compat)
+		{SourceRole("unknown"), false},
+	}
+	for _, tt := range tests {
+		if got := tt.role.RequiresCorroboration(); got != tt.want {
+			t.Errorf("SourceRole(%q).RequiresCorroboration() = %v, want %v", tt.role, got, tt.want)
+		}
+	}
+}

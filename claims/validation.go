@@ -29,6 +29,14 @@ type ExternalValidation struct {
 	// SourceType categorizes the source.
 	SourceType ExternalSourceType `json:"sourceType"`
 
+	// Role distinguishes how directly this source speaks for the claim
+	// (primary / secondary-relay / secondary-analysis / self-reported),
+	// independent of SourceType's general authority category. Optional and
+	// empty by default so existing claims are unaffected: an empty Role is
+	// not flagged by RequiresCorroboration — only an explicitly-set
+	// secondary-analysis or self-reported role is.
+	Role SourceRole `json:"sourceRole,omitempty"`
+
 	// Reliability indicates the trustworthiness of the source.
 	Reliability ReliabilityTier `json:"reliability"`
 

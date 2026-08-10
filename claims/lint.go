@@ -34,6 +34,12 @@ type LintFinding struct {
 // verified claims quote a rule rather than the number (e.g. a "0%" target) or
 // a range, or scale the value into a unit ("20 million", "$60 billion").
 //
+// A verified external claim whose SourceRole is secondary-analysis or
+// self-reported (SourceRole.RequiresCorroboration) must carry at least one
+// entry in RelatedClaimIDs — an independent corroborating claim — or Lint
+// errors. An unset Role is not flagged, so existing reports that predate the
+// Role field are unaffected.
+//
 // Lint does not mutate the report. It complements DetermineVerdict: because a
 // verdict can be hand-authored (bypassing DetermineVerdict), Lint re-checks
 // that a stated "verified" is earned.
@@ -106,6 +112,10 @@ func lintVerifiedExternal(c *Claim, e *ExternalValidation) []LintFinding {
 		out = append(out, finding(c, "verified-value-in-quote", LintWarning,
 			fmt.Sprintf("value %s not found in the quoted text — confirm the quote supports it",
 				formatLintValue(c.Statistical.Value))))
+	}
+	if e.Role.RequiresCorroboration() && len(c.RelatedClaimIDs) == 0 {
+		out = append(out, finding(c, "verified-role-needs-corroboration", LintError,
+			fmt.Sprintf("verified claim sourced as %q has no corroborating relatedClaimIds", e.Role)))
 	}
 	return out
 }

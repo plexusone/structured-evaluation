@@ -76,6 +76,9 @@
                   "sourceType": {
                     "type": "string"
                   },
+                  "sourceRole": {
+                    "type": "string"
+                  },
                   "reliability": {
                     "type": "string"
                   },
