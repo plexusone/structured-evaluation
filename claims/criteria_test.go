@@ -5,10 +5,10 @@ import (
 	"time"
 )
 
-func verifiedClaim(id string, category ClaimCategory, related ...string) Claim {
+func verifiedClaim(id string, related ...string) Claim {
 	return Claim{
 		ID:              id,
-		Category:        category,
+		Category:        ClaimStatistical,
 		Verdict:         VerdictVerified,
 		RelatedClaimIDs: related,
 	}
@@ -24,8 +24,8 @@ func verifiedStatClaim(id string, asOfDate *time.Time) Claim {
 }
 
 func TestIsSufficientlyCorroborated(t *testing.T) {
-	single := verifiedClaim("c1", ClaimStatistical)
-	double := verifiedClaim("c2", ClaimStatistical, "c2-corroborating-1")
+	single := verifiedClaim("c1")
+	double := verifiedClaim("c2", "c2-corroborating-1")
 
 	tests := []struct {
 		name     string
@@ -59,7 +59,7 @@ func TestIsSufficientlyCorroborated(t *testing.T) {
 }
 
 func TestEvaluateClaims_CorroborationDisabledByDefault(t *testing.T) {
-	claims := []Claim{verifiedClaim("c1", ClaimStatistical)}
+	claims := []Claim{verifiedClaim("c1")}
 	decision := EvaluateClaims(claims, DefaultClaimsCriteria())
 	if decision.Status != ClaimsDecisionPass {
 		t.Errorf("expected pass with corroboration disabled, got %s: %s", decision.Status, decision.Rationale)
@@ -67,7 +67,7 @@ func TestEvaluateClaims_CorroborationDisabledByDefault(t *testing.T) {
 }
 
 func TestEvaluateClaims_InsufficientCorroborationIsConditionalWhenAllowed(t *testing.T) {
-	claims := []Claim{verifiedClaim("c1", ClaimStatistical)}
+	claims := []Claim{verifiedClaim("c1")}
 	criteria := DefaultClaimsCriteria()
 	criteria.MinCorroboratingSources = 2
 	criteria.AllowNeedsReview = true
@@ -82,7 +82,7 @@ func TestEvaluateClaims_InsufficientCorroborationIsConditionalWhenAllowed(t *tes
 }
 
 func TestEvaluateClaims_InsufficientCorroborationFailsWhenNeedsReviewDisallowed(t *testing.T) {
-	claims := []Claim{verifiedClaim("c1", ClaimStatistical)}
+	claims := []Claim{verifiedClaim("c1")}
 	criteria := DefaultClaimsCriteria()
 	criteria.MinCorroboratingSources = 2
 	criteria.AllowNeedsReview = false
@@ -97,7 +97,7 @@ func TestEvaluateClaims_InsufficientCorroborationFailsWhenNeedsReviewDisallowed(
 }
 
 func TestEvaluateClaims_CorroboratedClaimPasses(t *testing.T) {
-	claims := []Claim{verifiedClaim("c1", ClaimStatistical, "c1-corroborating-1")}
+	claims := []Claim{verifiedClaim("c1", "c1-corroborating-1")}
 	criteria := DefaultClaimsCriteria()
 	criteria.MinCorroboratingSources = 2
 
@@ -110,7 +110,7 @@ func TestEvaluateClaims_CorroboratedClaimPasses(t *testing.T) {
 func TestEvaluateClaims_NeedsReviewAndCorroborationCombine(t *testing.T) {
 	claims := []Claim{
 		{ID: "nr", Category: ClaimStatistical, Verdict: VerdictNeedsReview},
-		verifiedClaim("uc", ClaimStatistical),
+		verifiedClaim("uc"),
 	}
 	criteria := DefaultClaimsCriteria()
 	criteria.MinCorroboratingSources = 2
@@ -216,7 +216,7 @@ func TestEvaluateClaims_AllThreeReasonsCombine(t *testing.T) {
 	staleButCorroborated.RelatedClaimIDs = []string{"stale-corroborating-1"}
 	claims := []Claim{
 		{ID: "nr", Category: ClaimStatistical, Verdict: VerdictNeedsReview},
-		verifiedClaim("uc", ClaimStatistical),
+		verifiedClaim("uc"),
 		staleButCorroborated,
 	}
 	criteria := DefaultClaimsCriteria()
