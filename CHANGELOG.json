@@ -7,6 +7,26 @@
   "commitConvention": "conventional",
   "releases": [
     {
+      "version": "v0.12.0",
+      "date": "2026-08-09",
+      "highlights": [
+        { "description": "ExternalAggregator source type: claims sourced from stats-roundup sites with no original reporting default to auto-reject, even when their excerpt verifies verbatim" },
+        { "description": "StatisticalDetail: statistical claims carry a structured value/unit/precision/as-of-date, independent of the rendered claim text" },
+        { "description": "@plexusone/structured-evaluation: Zod schemas and TypeScript types regenerated for the new claim.statistical field" }
+      ],
+      "added": [
+        { "description": "`ExternalAggregator` `ExternalSourceType`, defaulting to `ReliabilityLow` — distinct from `ExternalCommunity` (`ReliabilityMedium`): an aggregator has no original reporting to fall back on, unlike a named blog post or forum thread", "commit": "614cd5b" },
+        { "description": "`IsKnownAggregatorURL(url string) bool` and a starting `knownAggregatorDomains` list for classifying sources by domain rather than by self-reported label", "commit": "614cd5b" },
+        { "description": "`StatisticalDetail` type (`Value`, `Unit`, `Precision`, `AsOfDate`) and `Claim.Statistical` field, populated via `Claim.SetStatistical`", "commit": "a5d0f37" },
+        { "description": "`Precision` enum: `PrecisionExact`, `PrecisionApproximate`, `PrecisionEstimated`, `PrecisionRange`", "commit": "a5d0f37" },
+        { "description": "`NewStatisticalDetail(value, unit, precision)` constructor and `StatisticalDetail.WithAsOfDate(t)` chainable setter", "commit": "a5d0f37" },
+        { "description": "`@plexusone/structured-evaluation` npm package: regenerated Zod schemas and TS types including `ClaimsReport`'s new `statistical` object", "commit": "e1c3038" }
+      ],
+      "documentation": [
+        { "description": "Document `ExternalAggregator` in the source-types table and `StatisticalDetail` in a new \"Statistical Claims\" section in docs/features/claims.md; mirror both in README's compact claims example", "commit": "01e5925" }
+      ]
+    },
+    {
       "version": "v0.11.0",
       "date": "2026-07-20",
       "highlights": [
