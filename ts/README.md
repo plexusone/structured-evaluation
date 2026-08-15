@@ -73,6 +73,49 @@ npm test
 Never hand-edit `src/generated/*.ts` — it's regenerated wholesale from
 `../schema/*.schema.json` by `scripts/generate.mjs`.
 
+## Publishing
+
+**A `structured-evaluation` release that changes an exported Go type is not
+finished until this package ships the matching Zod.** npm consumers pin a
+version; if the Go module gains a field and npm doesn't, their
+`ClaimsReportSchema.parse()` silently drops it (or `.strict()` rejects it) —
+the exact drift this package exists to prevent, now reintroduced at the
+package boundary. Publish npm in lockstep with the Git tag.
+
+> npm versions need not be contiguous — if a release was skipped on npm
+> (e.g. v0.13.0 was never published), just publish the current version. The
+> latest package always reflects the current schema; there's no need to
+> backfill intermediate versions.
+
+There is **no `prepublishOnly`/`prepack` hook**, so `pnpm publish` ships
+whatever is already in `dist/` — you must regenerate and build first.
+
+```bash
+# 0. Authenticate — pnpm reads npm's ~/.npmrc token; needs @plexusone
+#    publish rights. Verify with `npm whoami`.
+npm login
+
+# 1. Regenerate from the current JSON Schema and rebuild dist/.
+pnpm run generate
+pnpm run build
+pnpm test              # build + parse real Go-generated fixtures
+
+# 2. Bump the version to match the Go module (see Versioning below), then:
+pnpm publish --access public
+```
+
+Notes:
+
+- **Build before publish.** With no prepublish hook, a stale `dist/` would
+  ship silently. `pnpm publish --dry-run` prints the exact tarball contents
+  (should be `dist/` + `package.json` only) — eyeball it first.
+- **Git checks.** `pnpm publish` verifies a clean tree on the publish branch
+  by default; publish from the tagged commit. Append `--no-git-checks` only
+  if you must override.
+- **Lockfile.** This package is npm-managed (`package-lock.json`, no
+  `pnpm-lock.yaml`), so `pnpm install --frozen-lockfile` fails — use plain
+  `pnpm install` (or rely on the existing `node_modules`).
+
 ## Known limitation
 
 The JSON Schema currently declares no `required` fields (no Go struct has a

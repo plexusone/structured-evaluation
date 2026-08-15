@@ -65,9 +65,23 @@ the new field is explicitly set.
   `golangci-lint`, error handling per the priority order (return, never
   discard).
 - Verify dependency versions before bumping (`go list -m -versions ...`).
-- Every exported type change: regenerate `schema/*.schema.json` via
-  `cmd/genschema` and consider whether `ts/` needs regenerating too.
-- Releases: update `CHANGELOG.json` (compact single-line leaf objects — the
-  existing style, not `json.dump(indent=2)`), regenerate `CHANGELOG.md` via
-  `schangelog generate`, add `docs/releases/vX.Y.Z.md`, and add the release
-  to `mkdocs.yml`'s nav. Tag only after commits are pushed and CI is green.
+- Every exported type change in `rubric`, `claims`, or `summary`: regenerate
+  `schema/*.schema.json` via `cmd/genschema` **and** regenerate the `ts/`
+  Zod bindings (`npm run generate` in `ts/`). These are one atomic change —
+  the JSON Schema and the Zod schema are both downstream of the Go structs
+  and must never lag them. Never hand-edit either.
+- Releases (full checklist):
+    1. Update `CHANGELOG.json` (compact single-line leaf objects — the
+       existing style, not `json.dump(indent=2)`) and regenerate
+       `CHANGELOG.md` via `schangelog generate`.
+    2. Add `docs/releases/vX.Y.Z.md` and wire it into `mkdocs.yml`'s nav.
+    3. Regenerate `ts/` Zod bindings and bump `ts/package.json` to the same
+       `vX.Y.Z` (the npm package version tracks the Go module version).
+    4. Tag only after commits are pushed and CI is green.
+    5. **Publish npm in lockstep with the tag** — a release that changes an
+       exported type is incomplete until `@plexusone/structured-evaluation`
+       ships the matching Zod, or TS consumers silently drift from the real
+       report shape. See [ts/README.md](ts/README.md#publishing) and the
+       [Releasing runbook](docs/contributing/releasing.md). npm versions need
+       not be contiguous — a skipped version (e.g. v0.13.0 was never
+       published) does not need backfilling; publish the current version.

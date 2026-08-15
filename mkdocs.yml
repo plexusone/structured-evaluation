@@ -66,6 +66,8 @@ nav:
       - Overview: cli/index.md
       - Commands: cli/commands.md
   - API Reference: https://pkg.go.dev/github.com/plexusone/structured-evaluation
+  - Contributing:
+      - Releasing: contributing/releasing.md
   - Releases:
       - Changelog: releases/changelog.md
       - v0.14.0: releases/v0.14.0.md
