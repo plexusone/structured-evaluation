@@ -13,6 +13,46 @@ const (
 	EvaluationTypeHolistic EvaluationType = "holistic"
 )
 
+// CriterionClass classifies a category or criterion by the kind of judgment it
+// represents, so a rubric can separate advisory principle-based judgment from
+// gating implementation checks instead of collapsing everything into one
+// composite score.
+type CriterionClass string
+
+const (
+	// ClassLeadershipPrinciple is principle-based judgment (e.g., AWS Leadership
+	// Principles): a decision-making lens, not a mechanical completeness check.
+	// Never blocking (see RubricSet.Validate).
+	ClassLeadershipPrinciple CriterionClass = "leadership_principle"
+
+	// ClassSpecificationQuality asks whether the intended behavior is complete
+	// and unambiguous.
+	ClassSpecificationQuality CriterionClass = "specification_quality"
+
+	// ClassImplementationReadiness asks whether an agent could implement and
+	// verify the spec safely without guessing.
+	ClassImplementationReadiness CriterionClass = "implementation_readiness"
+
+	// ClassDeterministicIntegrity covers structural checks: headings, IDs,
+	// links, broken references, schema validity.
+	ClassDeterministicIntegrity CriterionClass = "deterministic_integrity"
+)
+
+// EvaluationMethod names how a category or criterion is checked.
+type EvaluationMethod string
+
+const (
+	// EvalMethodDeterministic is a mechanical check (parseable, no judgment).
+	EvalMethodDeterministic EvaluationMethod = "deterministic"
+
+	// EvalMethodSemantic is LLM judgment of meaning, clarity, or completeness.
+	EvalMethodSemantic EvaluationMethod = "semantic"
+
+	// EvalMethodHuman requires a human decision (e.g., strategic merit, risk
+	// acceptance) that a judge should not resolve unilaterally.
+	EvalMethodHuman EvaluationMethod = "human"
+)
+
 // ScaleType defines the type of scoring scale.
 type ScaleType string
 
@@ -61,6 +101,12 @@ type RubricSet struct {
 	// JudgePromptTemplate is the prompt template for LLM evaluation.
 	// Supports placeholders: {content}, {categories}, etc.
 	JudgePromptTemplate string `json:"judgePromptTemplate,omitempty" yaml:"judgePromptTemplate,omitempty"`
+
+	// JudgeInstructions are evidence-discipline rules for an LLM judge (e.g.,
+	// "cite the relevant section and requirement IDs", "do not reward length",
+	// "distinguish missing evidence from negative evidence"). They apply across
+	// all categories, complementing any category-specific EvaluationPrompt.
+	JudgeInstructions []string `json:"judgeInstructions,omitempty" yaml:"judgeInstructions,omitempty"`
 
 	// Metadata contains additional information about the rubric.
 	Metadata *RubricMetadata `json:"metadata,omitempty" yaml:"metadata,omitempty"`
@@ -121,6 +167,20 @@ type Category struct {
 	// Required indicates if this category must pass for overall pass.
 	Required bool `json:"required,omitempty" yaml:"required,omitempty"`
 
+	// Class classifies the kind of judgment this category represents. Empty
+	// means unclassified (legacy rubrics); consumers should treat an empty
+	// Class as ClassSpecificationQuality.
+	Class CriterionClass `json:"class,omitempty" yaml:"class,omitempty"`
+
+	// Blocking marks this category as a hard gate: a fail here blocks approval
+	// regardless of other scores. A category with Class ==
+	// ClassLeadershipPrinciple must not set Blocking (see RubricSet.Validate) —
+	// advisory judgment cannot gate implementation.
+	Blocking bool `json:"blocking,omitempty" yaml:"blocking,omitempty"`
+
+	// Evaluation names how this category is checked. Empty means unspecified.
+	Evaluation EvaluationMethod `json:"evaluation,omitempty" yaml:"evaluation,omitempty"`
+
 	// Scale defines how this category is scored.
 	Scale Scale `json:"scale" yaml:"scale"`
 
@@ -157,6 +217,19 @@ type Criterion struct {
 
 	// Weight is the relative importance within the category (default 1.0).
 	Weight float64 `json:"weight,omitempty" yaml:"weight,omitempty"`
+
+	// Class classifies the kind of judgment this criterion represents. Empty
+	// means unclassified (legacy rubrics); consumers should treat an empty
+	// Class as ClassSpecificationQuality.
+	Class CriterionClass `json:"class,omitempty" yaml:"class,omitempty"`
+
+	// Blocking marks this criterion as a hard gate. A criterion with Class ==
+	// ClassLeadershipPrinciple must not set Blocking (see RubricSet.Validate) —
+	// advisory judgment cannot gate implementation.
+	Blocking bool `json:"blocking,omitempty" yaml:"blocking,omitempty"`
+
+	// Evaluation names how this criterion is checked. Empty means unspecified.
+	Evaluation EvaluationMethod `json:"evaluation,omitempty" yaml:"evaluation,omitempty"`
 
 	// Pass, Partial, and Fail describe the scoring bands for this criterion.
 	Pass    CriterionLevel `json:"pass" yaml:"pass"`
@@ -349,6 +422,14 @@ func (rs *RubricSet) Validate() []string {
 		if cat.Scale.LikertConfig != nil {
 			if cat.Scale.LikertConfig.Min >= cat.Scale.LikertConfig.Max {
 				issues = append(issues, "category "+cat.ID+": likert scale min must be less than max")
+			}
+		}
+		if cat.Class == ClassLeadershipPrinciple && cat.Blocking {
+			issues = append(issues, "category "+cat.ID+": leadership_principle class must not be blocking (advisory judgment cannot gate implementation)")
+		}
+		for _, cr := range cat.Criteria {
+			if cr.Class == ClassLeadershipPrinciple && cr.Blocking {
+				issues = append(issues, "category "+cat.ID+" criterion "+cr.ID+": leadership_principle class must not be blocking (advisory judgment cannot gate implementation)")
 			}
 		}
 	}

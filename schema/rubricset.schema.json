@@ -79,6 +79,15 @@
           "required": {
             "type": "boolean"
           },
+          "class": {
+            "type": "string"
+          },
+          "blocking": {
+            "type": "boolean"
+          },
+          "evaluation": {
+            "type": "string"
+          },
           "scale": {
             "properties": {
               "type": {
@@ -233,6 +242,15 @@
                 "weight": {
                   "type": "number"
                 },
+                "class": {
+                  "type": "string"
+                },
+                "blocking": {
+                  "type": "boolean"
+                },
+                "evaluation": {
+                  "type": "string"
+                },
                 "pass": {
                   "properties": {
                     "description": {
@@ -292,6 +310,12 @@
     },
     "judgePromptTemplate": {
       "type": "string"
+    },
+    "judgeInstructions": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
     },
     "metadata": {
       "properties": {
