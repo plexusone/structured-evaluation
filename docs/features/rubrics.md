@@ -16,6 +16,9 @@ type Category struct {
     Description string            `json:"description" yaml:"description"`
     Weight      float64           `json:"weight,omitempty" yaml:"weight,omitempty"`
     Required    bool              `json:"required,omitempty" yaml:"required,omitempty"`
+    Class       CriterionClass    `json:"class,omitempty" yaml:"class,omitempty"`         // v0.14.0
+    Blocking    bool              `json:"blocking,omitempty" yaml:"blocking,omitempty"`   // v0.14.0
+    Evaluation  EvaluationMethod  `json:"evaluation,omitempty" yaml:"evaluation,omitempty"` // v0.14.0
     Scale       Scale             `json:"scale" yaml:"scale"`                             // flat scoring
     Criteria    []Criterion       `json:"criteria,omitempty" yaml:"criteria,omitempty"`   // rich scoring
     Examples    *CategoryExamples `json:"examples,omitempty" yaml:"examples,omitempty"`
@@ -77,6 +80,107 @@ Rich categories pair with numeric `scoreThresholds` on the rubric's pass
 criteria (weighted roll-up to a 0-100 score) — see
 [Pass Criteria](../concepts/pass-criteria.md).
 
+## Layered Classification (v0.14.0)
+
+A single composite score hides an important distinction: *advisory,
+principle-based judgment* (e.g. "does this show enough long-term thinking?")
+is not the same kind of thing as a *mechanical implementation check* (e.g.
+"is every requirement traceable to an ID?"). Collapsing both into one number
+lets a soft, debatable dimension silently sink — or worse, block — a decision
+that should hinge on hard, checkable ones.
+
+Three optional fields on both `Category` and `Criterion` let a rubric keep
+these layers separate:
+
+- **`Class`** — the *kind* of judgment. One of:
+
+    | `CriterionClass` | Meaning |
+    |------------------|---------|
+    | `leadership_principle` | Principle-based decision lens (e.g. AWS Leadership Principles), not a completeness check. **Never blocking.** |
+    | `specification_quality` | Is the intended behavior complete and unambiguous? |
+    | `implementation_readiness` | Could an agent implement and verify the spec safely without guessing? |
+    | `deterministic_integrity` | Structural checks: headings, IDs, links, broken references, schema validity. |
+
+    An empty `Class` means unclassified (legacy rubrics); consumers should
+    treat it as `specification_quality`.
+
+- **`Blocking`** — marks the category/criterion as a hard gate: a fail here
+  blocks approval regardless of other scores. This is distinct from
+  `Required` (which feeds `minCategoriesPassing`) — `Blocking` is an
+  absolute veto.
+
+- **`Evaluation`** — *how* the check is performed:
+
+    | `EvaluationMethod` | Meaning |
+    |--------------------|---------|
+    | `deterministic` | Mechanical check, parseable, no judgment. |
+    | `semantic` | LLM judgment of meaning, clarity, or completeness. |
+    | `human` | Requires a human decision (strategic merit, risk acceptance) a judge shouldn't resolve unilaterally. |
+
+```go
+cat := rubric.NewCategory("traceability", "Requirement Traceability",
+    "Every requirement maps to a stable ID").
+    WithPassPartialFail(
+        []string{"All requirements carry unique, referenced IDs"},
+        []string{"Most requirements have IDs; some references dangle"},
+        []string{"Requirements lack IDs or references are broken"},
+    )
+cat.Class = rubric.ClassDeterministicIntegrity
+cat.Evaluation = rubric.EvalMethodDeterministic
+cat.Blocking = true // a broken reference is a hard stop
+```
+
+### Invariant: advisory judgment cannot gate implementation
+
+`RubricSet.Validate()` enforces **INV-3**: a category or criterion whose
+`Class` is `leadership_principle` must not set `Blocking`. Principle-based
+judgment is advisory by design, so wiring it as a hard gate is flagged as a
+definition error:
+
+```go
+issues := rubricSet.Validate()
+// "category think_big: leadership_principle class must not be blocking
+//  (advisory judgment cannot gate implementation)"
+```
+
+### Judge Instructions
+
+`RubricSet.JudgeInstructions` carries evidence-discipline rules that apply
+across *all* categories, complementing any per-category `EvaluationPrompt`.
+Render them into the judge system prompt so the same rules govern every
+dimension:
+
+```go
+rubricSet.JudgeInstructions = []string{
+    "Cite the relevant section and requirement IDs for every score",
+    "Do not reward length; reward completeness and precision",
+    "Distinguish missing evidence from negative evidence",
+}
+```
+
+All four fields are `omitempty` and default to their zero values, so a
+v0.13.0-shaped rubric with none of them parses and validates identically.
+
+### In YAML
+
+```yaml
+judgeInstructions:
+  - Cite the relevant section and requirement IDs for every score
+  - Do not reward length; reward completeness and precision
+categories:
+  - id: think_big
+    name: Think Big
+    class: leadership_principle   # advisory — must not be blocking
+    evaluation: human
+    scale: {type: categorical, options: [{value: pass, criteria: ["Bold, long-term framing"]}]}
+  - id: traceability
+    name: Requirement Traceability
+    class: deterministic_integrity
+    evaluation: deterministic
+    blocking: true                # a broken reference is a hard stop
+    scale: {type: categorical, options: [{value: pass, criteria: ["All requirements carry IDs"]}]}
+```
+
 ## Adding Examples
 
 Few-shot examples calibrate an evaluator; including the reasoning improves LLM
@@ -101,10 +205,11 @@ Group rubric categories for a specific review type:
 
 ```go
 type RubricSet struct {
-    ID          string     `json:"id"`
-    Name        string     `json:"name"`
-    Description string     `json:"description"`
-    Categories  []Category `json:"categories"`
+    ID                string     `json:"id"`
+    Name              string     `json:"name"`
+    Description       string     `json:"description"`
+    JudgeInstructions []string   `json:"judgeInstructions,omitempty"` // v0.14.0 — cross-category evidence rules
+    Categories        []Category `json:"categories"`
 }
 ```
 

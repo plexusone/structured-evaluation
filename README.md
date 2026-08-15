@@ -338,6 +338,32 @@ bands carrying a description and concrete indicators, scored by numeric
 authored as YAML and parsed directly into a `RubricSet`. See
 [docs/features/rubrics.md](docs/features/rubrics.md).
 
+### Layered Classification (v0.14.0)
+
+Categories and criteria can be classified so a rubric separates advisory,
+principle-based judgment from gating implementation checks instead of
+collapsing everything into one composite score:
+
+```go
+cat := rubric.NewCategory("traceability", "Requirement Traceability",
+    "Every requirement maps to a stable ID").
+    WithPassPartialFail(pass, partial, fail)
+cat.Class = rubric.ClassDeterministicIntegrity // vs. ClassLeadershipPrinciple, etc.
+cat.Evaluation = rubric.EvalMethodDeterministic // vs. EvalMethodSemantic / EvalMethodHuman
+cat.Blocking = true                             // a hard gate, distinct from Required
+
+rubricSet.JudgeInstructions = []string{ // cross-category evidence-discipline rules
+    "Cite the relevant section and requirement IDs for every score",
+    "Do not reward length; reward completeness and precision",
+}
+```
+
+`Class`, `Blocking`, and `Evaluation` live on both `Category` and `Criterion`;
+all are `omitempty`, so a v0.13.0-shaped rubric parses unchanged.
+`RubricSet.Validate()` enforces **INV-3**: a `leadership_principle` class must
+never be `Blocking` — advisory judgment cannot gate implementation. See
+[docs/features/rubrics.md](docs/features/rubrics.md#layered-classification-v0140).
+
 ## Judge Metadata (v0.2.0)
 
 Track LLM judge configuration for reproducibility:
