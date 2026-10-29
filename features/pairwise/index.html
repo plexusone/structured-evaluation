@@ -1258,7 +1258,7 @@
   <span class="md-ellipsis">
     
   
-    Releases
+    Contributing
   
 
     
@@ -1271,6 +1271,95 @@
         
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Contributing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributing/releasing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Releasing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Releases
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1295,6 +1384,34 @@
     
   
     Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/v0.15.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.15.0
   
 
     
@@ -2028,10 +2145,8 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1">// Store human preference</span>
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="nx">comp</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewPairwiseComparison</span><span class="p">(</span><span class="nx">instruction</span><span class="p">,</span><span class="w"> </span><span class="nx">outputA</span><span class="p">,</span><span class="w"> </span><span class="nx">outputB</span><span class="p">)</span>
 <a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="nx">comp</span><span class="p">.</span><span class="nx">SetWinner</span><span class="p">(</span><span class="nx">rubric</span><span class="p">.</span><span class="nx">WinnerB</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Preferred by human annotator&quot;</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">)</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="nx">comp</span><span class="p">.</span><span class="nx">Judge</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">rubric</span><span class="p">.</span><span class="nx">JudgeMetadata</span><span class="p">{</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">    </span><span class="nx">Model</span><span class="p">:</span><span class="w">    </span><span class="s">&quot;human&quot;</span><span class="p">,</span>
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">    </span><span class="nx">Provider</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;internal-annotation&quot;</span><span class="p">,</span>
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="p">}</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="nx">comp</span><span class="p">.</span><span class="nx">Judge</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">rubric</span><span class="p">.</span><span class="nx">NewHumanJudgeMetadata</span><span class="p">(</span><span class="s">&quot;annotator-42&quot;</span><span class="p">).</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">    </span><span class="nx">WithReviewerName</span><span class="p">(</span><span class="s">&quot;Internal Annotation Team&quot;</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="best-practices">Best Practices<a class="headerlink" href="#best-practices" title="Permanent link">&para;</a></h2>
 <h3 id="randomize-position">Randomize Position<a class="headerlink" href="#randomize-position" title="Permanent link">&para;</a></h3>
