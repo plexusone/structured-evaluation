@@ -15,11 +15,12 @@ import (
 // EnumDefinitions contains all enum values for the structured evaluation types.
 // These are exported for cross-language tooling that needs to know valid values.
 var EnumDefinitions = map[string][]string{
-	"ScoreValue":     rubric.ValidScoreValues(),
-	"Severity":       rubric.ValidSeverityValues(),
-	"DecisionStatus": rubric.ValidDecisionStatusValues(),
-	"EvaluationType": rubric.ValidEvaluationTypeValues(),
-	"ScaleType":      rubric.ValidScaleTypeValues(),
+	"ScoreValue":       rubric.ValidScoreValues(),
+	"Severity":         rubric.ValidSeverityValues(),
+	"DecisionStatus":   rubric.ValidDecisionStatusValues(),
+	"EvaluationType":   rubric.ValidEvaluationTypeValues(),
+	"EvaluationMethod": rubric.ValidEvaluationMethodValues(),
+	"ScaleType":        rubric.ValidScaleTypeValues(),
 }
 
 // GenerateRubricSchema generates JSON Schema for Rubric.
@@ -118,6 +119,12 @@ func addEnumConstraintByFieldName(fieldName string, schema *jsonschema.Schema) {
 	case "evaluationType":
 		schema.Enum = toInterfaceSlice(rubric.ValidEvaluationTypeValues())
 		schema.Description = "Evaluation type: analytic or holistic"
+	case "evaluation", "method":
+		// "evaluation" on Category/Criterion (how it should be checked) and
+		// "method" on JudgeMetadata (how it was checked) share the same
+		// EvaluationMethod vocabulary.
+		schema.Enum = toInterfaceSlice(rubric.ValidEvaluationMethodValues())
+		schema.Description = "Evaluation method: deterministic (mechanical check), semantic (LLM judgment), or human (human decision)"
 	case "type":
 		// Check if this is a scale type field by looking at context
 		// This is a heuristic - may need refinement
@@ -199,6 +206,11 @@ func GenerateEnumsJSON() ([]byte, error) {
 				"description": "Decision status values",
 				"usage":       "Decision.status and overallDecision fields",
 				"passing":     []string{"pass", "conditional"},
+			},
+			"evaluationMethod": map[string]any{
+				"values":      rubric.ValidEvaluationMethodValues(),
+				"description": "How an evaluation is performed: a mechanical check (Code-as-a-Judge), an LLM (LLM-as-a-Judge), or a human reviewer (Human-as-a-Judge)",
+				"usage":       "Category.evaluation, Criterion.evaluation, and JudgeMetadata.method fields",
 			},
 			"evaluationType": map[string]any{
 				"values":      rubric.ValidEvaluationTypeValues(),

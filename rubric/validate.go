@@ -163,6 +163,15 @@ func ValidEvaluationTypeValues() []string {
 	}
 }
 
+// ValidEvaluationMethodValues returns all valid evaluation method values.
+func ValidEvaluationMethodValues() []string {
+	return []string{
+		string(EvalMethodDeterministic),
+		string(EvalMethodSemantic),
+		string(EvalMethodHuman),
+	}
+}
+
 // ValidScaleTypeValues returns all valid scale type values.
 func ValidScaleTypeValues() []string {
 	return []string{

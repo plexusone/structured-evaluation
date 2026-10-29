@@ -8,6 +8,11 @@
       "fail",
       "human_review"
     ],
+    "EvaluationMethod": [
+      "deterministic",
+      "semantic",
+      "human"
+    ],
     "EvaluationType": [
       "analytic",
       "holistic"
@@ -45,6 +50,15 @@
         "conditional",
         "fail",
         "human_review"
+      ]
+    },
+    "evaluationMethod": {
+      "description": "How an evaluation is performed: a mechanical check (Code-as-a-Judge), an LLM (LLM-as-a-Judge), or a human reviewer (Human-as-a-Judge)",
+      "usage": "Category.evaluation, Criterion.evaluation, and JudgeMetadata.method fields",
+      "values": [
+        "deterministic",
+        "semantic",
+        "human"
       ]
     },
     "evaluationType": {

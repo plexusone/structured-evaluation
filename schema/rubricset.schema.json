@@ -86,7 +86,13 @@
             "type": "boolean"
           },
           "evaluation": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "deterministic",
+              "semantic",
+              "human"
+            ],
+            "description": "Evaluation method: deterministic (mechanical check), semantic (LLM judgment), or human (human decision)"
           },
           "scale": {
             "properties": {
@@ -249,7 +255,13 @@
                   "type": "boolean"
                 },
                 "evaluation": {
-                  "type": "string"
+                  "type": "string",
+                  "enum": [
+                    "deterministic",
+                    "semantic",
+                    "human"
+                  ],
+                  "description": "Evaluation method: deterministic (mechanical check), semantic (LLM judgment), or human (human decision)"
                 },
                 "pass": {
                   "properties": {

@@ -2,14 +2,27 @@ package rubric
 
 import "time"
 
-// JudgeMetadata tracks information about the LLM judge that produced an evaluation.
-// This enables reproducibility, debugging, and comparison of different judge configurations.
+// JudgeMetadata tracks information about the judge that produced an
+// evaluation — a deterministic check (Code-as-a-Judge), an LLM
+// (LLM-as-a-Judge), or a human reviewer (Human-as-a-Judge) — so all three
+// are recorded with the same structured identity rather than only the LLM
+// case being first-class. This enables reproducibility, debugging, and
+// comparison of different judge configurations.
 type JudgeMetadata struct {
 	// JudgeID is a unique identifier for this judge configuration.
 	JudgeID string `json:"judge_id,omitempty"`
 
-	// Model is the LLM model used (e.g., "claude-3-opus-20240229", "gpt-4-turbo").
-	Model string `json:"model"`
+	// Method classifies how this judge evaluates: EvalMethodDeterministic
+	// (mechanical check), EvalMethodSemantic (LLM judgment), or
+	// EvalMethodHuman (human decision). Empty is treated as
+	// EvalMethodSemantic — JudgeMetadata's original, sole meaning before
+	// this field existed — so a value created before this field existed
+	// keeps meaning exactly what it always meant.
+	Method EvaluationMethod `json:"method,omitempty"`
+
+	// Model is the LLM model used (e.g., "claude-3-opus-20240229",
+	// "gpt-4-turbo"). Applies when Method is EvalMethodSemantic (or empty).
+	Model string `json:"model,omitempty"`
 
 	// ModelProvider is the API provider (e.g., "anthropic", "openai", "bedrock").
 	ModelProvider string `json:"model_provider,omitempty"`
@@ -31,6 +44,23 @@ type JudgeMetadata struct {
 
 	// MaxTokens is the max tokens setting.
 	MaxTokens int `json:"max_tokens,omitempty"`
+
+	// CheckID identifies the specific deterministic check or tool that
+	// produced this evaluation (e.g. "golangci-lint", "schema-validate",
+	// "sas-validate-security-profile"). Applies when Method is
+	// EvalMethodDeterministic.
+	CheckID string `json:"check_id,omitempty"`
+
+	// CheckVersion is the version of the deterministic check or tool.
+	CheckVersion string `json:"check_version,omitempty"`
+
+	// ReviewerID identifies the human reviewer who produced this
+	// evaluation (e.g. a username or employee ID). Applies when Method is
+	// EvalMethodHuman.
+	ReviewerID string `json:"reviewer_id,omitempty"`
+
+	// ReviewerName is the human reviewer's display name.
+	ReviewerName string `json:"reviewer_name,omitempty"`
 
 	// RubricID references the rubric set used for scoring.
 	RubricID string `json:"rubric_id,omitempty"`
@@ -72,10 +102,34 @@ type TokenUsage struct {
 	CacheWriteTokens int `json:"cache_write_tokens,omitempty"`
 }
 
-// NewJudgeMetadata creates judge metadata with required fields.
+// NewJudgeMetadata creates judge metadata for an LLM judge
+// (LLM-as-a-Judge) with required fields.
 func NewJudgeMetadata(model string) *JudgeMetadata {
 	return &JudgeMetadata{
+		Method:      EvalMethodSemantic,
 		Model:       model,
+		EvaluatedAt: time.Now().UTC(),
+	}
+}
+
+// NewDeterministicJudgeMetadata creates judge metadata for a mechanical,
+// code-based check (Code-as-a-Judge) — no LLM involved. checkID identifies
+// the specific check or tool, e.g. "golangci-lint" or "schema-validate".
+func NewDeterministicJudgeMetadata(checkID string) *JudgeMetadata {
+	return &JudgeMetadata{
+		Method:      EvalMethodDeterministic,
+		CheckID:     checkID,
+		EvaluatedAt: time.Now().UTC(),
+	}
+}
+
+// NewHumanJudgeMetadata creates judge metadata for a human reviewer
+// (Human-as-a-Judge). reviewerID identifies the reviewer, e.g. a username
+// or employee ID.
+func NewHumanJudgeMetadata(reviewerID string) *JudgeMetadata {
+	return &JudgeMetadata{
+		Method:      EvalMethodHuman,
+		ReviewerID:  reviewerID,
 		EvaluatedAt: time.Now().UTC(),
 	}
 }
@@ -126,4 +180,48 @@ func (j *JudgeMetadata) WithTrace(traceID, spanID string) *JudgeMetadata {
 // SetLatency records the evaluation duration.
 func (j *JudgeMetadata) SetLatency(d time.Duration) {
 	j.Latency = d
+}
+
+// WithCheckVersion sets the deterministic check or tool's version.
+func (j *JudgeMetadata) WithCheckVersion(version string) *JudgeMetadata {
+	j.CheckVersion = version
+	return j
+}
+
+// WithReviewerName sets the human reviewer's display name.
+func (j *JudgeMetadata) WithReviewerName(name string) *JudgeMetadata {
+	j.ReviewerName = name
+	return j
+}
+
+// Validate checks that JudgeMetadata carries the fields its Method
+// requires, returning a human-readable issue for each problem found. An
+// empty Method is treated as EvalMethodSemantic, matching JudgeMetadata's
+// original, sole meaning.
+func (j *JudgeMetadata) Validate() []string {
+	var issues []string
+
+	method := j.Method
+	if method == "" {
+		method = EvalMethodSemantic
+	}
+
+	switch method {
+	case EvalMethodSemantic:
+		if j.Model == "" {
+			issues = append(issues, "semantic judge requires Model")
+		}
+	case EvalMethodDeterministic:
+		if j.CheckID == "" {
+			issues = append(issues, "deterministic judge requires CheckID")
+		}
+	case EvalMethodHuman:
+		if j.ReviewerID == "" {
+			issues = append(issues, "human judge requires ReviewerID")
+		}
+	default:
+		issues = append(issues, "unknown Method: "+string(method))
+	}
+
+	return issues
 }
