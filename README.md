@@ -364,19 +364,37 @@ all are `omitempty`, so a v0.13.0-shaped rubric parses unchanged.
 never be `Blocking` — advisory judgment cannot gate implementation. See
 [docs/features/rubrics.md](docs/features/rubrics.md#layered-classification-v0140).
 
-## Judge Metadata (v0.2.0)
+## Judge Metadata (v0.2.0, v0.15.0)
 
-Track LLM judge configuration for reproducibility:
+Record who or what produced an evaluation, for reproducibility. A judge can be
+an LLM, a deterministic check, or a human reviewer; `Method` (an
+`EvaluationMethod`) says which:
 
 ```go
+// LLM-as-a-Judge
 judge := rubric.NewJudgeMetadata("claude-3-opus").
     WithProvider("anthropic").
     WithPrompt("prd-eval-v1", "1.0").
     WithTemperature(0.0).
     WithTokenUsage(1500, 800)
 
+// Code-as-a-Judge (v0.15.0)
+lint := rubric.NewDeterministicJudgeMetadata("golangci-lint").
+    WithCheckVersion("v2.14.0")
+
+// Human-as-a-Judge (v0.15.0)
+reviewer := rubric.NewHumanJudgeMetadata("jsmith").
+    WithReviewerName("Jane Smith")
+
+if issues := judge.Validate(); len(issues) > 0 {
+    // e.g. "deterministic judge requires CheckID"
+}
+
 report.SetJudge(judge)
 ```
+
+An empty `Method` means `semantic`, so `JudgeMetadata` written before v0.15.0
+still parses and validates unchanged.
 
 ## Pairwise Comparison (v0.2.0)
 

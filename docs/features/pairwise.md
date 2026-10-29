@@ -132,10 +132,8 @@ Collect human preferences for RLHF:
 // Store human preference
 comp := rubric.NewPairwiseComparison(instruction, outputA, outputB)
 comp.SetWinner(rubric.WinnerB, "Preferred by human annotator", 1.0)
-comp.Judge = &rubric.JudgeMetadata{
-    Model:    "human",
-    Provider: "internal-annotation",
-}
+comp.Judge = rubric.NewHumanJudgeMetadata("annotator-42").
+    WithReviewerName("Internal Annotation Team")
 ```
 
 ## Best Practices

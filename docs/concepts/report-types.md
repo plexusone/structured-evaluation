@@ -16,7 +16,7 @@ type Rubric struct {
     Findings    []Finding        // Issues discovered
     Decision    Decision         // Overall pass/fail decision
     NextSteps   []string         // Recommended actions
-    Judge       *JudgeMetadata   // LLM judge info (optional)
+    Judge       *JudgeMetadata   // judge info: deterministic, LLM, or human (optional)
     RubricID    string           // Rubric used (optional)
 }
 ```
