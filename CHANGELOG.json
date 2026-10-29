@@ -7,6 +7,36 @@
   "commitConvention": "conventional",
   "releases": [
     {
+      "version": "v0.15.0",
+      "date": "2026-10-29",
+      "highlights": [
+        { "description": "JudgeMetadata covers all three kinds of judge: Code-as-a-Judge, LLM-as-a-Judge, and Human-as-a-Judge, where it used to describe only LLMs. A new Method field, reusing the EvaluationMethod vocabulary already used on Category and Criterion, says which one produced an evaluation" },
+        { "description": "Backward compatible: an empty Method means semantic (JudgeMetadata's only meaning before v0.15.0), so existing judge JSON parses and validates unchanged" }
+      ],
+      "added": [
+        { "description": "`JudgeMetadata.Method` (`EvaluationMethod`), plus `CheckID`/`CheckVersion` for deterministic judges and `ReviewerID`/`ReviewerName` for human judges, alongside the existing LLM fields", "commit": "b6c281b" },
+        { "description": "`NewDeterministicJudgeMetadata(checkID)` and `NewHumanJudgeMetadata(reviewerID)` constructors next to `NewJudgeMetadata(model)`, which now sets `Method` to `semantic`; `WithCheckVersion` and `WithReviewerName` builder methods", "commit": "b6c281b" },
+        { "description": "`JudgeMetadata.Validate() []string`: checks that a judge carries the field its `Method` requires (`Model`, `CheckID`, or `ReviewerID`) and rejects unknown methods", "commit": "b6c281b" },
+        { "description": "`ValidEvaluationMethodValues()`; `EvaluationMethod` added to `schema.EnumDefinitions` and `schema/enums.json`. The JSON Schema `evaluation` (Category/Criterion) and `method` (JudgeMetadata) fields are now constrained to `deterministic`/`semantic`/`human` where `evaluation` used to be an unconstrained string", "commit": "b6c281b" },
+        { "description": "`@plexusone/structured-evaluation@0.15.0`: Zod schemas and TS types regenerated for the judge method fields and the `evaluation` enum", "commit": "a8fcdf8" }
+      ],
+      "changed": [
+        { "description": "`JudgeMetadata.Model` is now `omitempty`, because deterministic and human judges have no model", "commit": "b6c281b" }
+      ],
+      "fixed": [
+        { "description": "`cmd/genschema` writes schema files through `os.Root`, confining them to the output directory (resolves gosec G703 findings)", "commit": "8f02cab" }
+      ],
+      "dependencies": [
+        { "description": "Bump github.com/pb33f/ordered-map/v2 from v2.3.1 to v2.3.2, which replaces go.yaml.in/yaml/v4 with github.com/pb33f/go-yaml", "commit": "5beded2" }
+      ],
+      "documentation": [
+        { "description": "README and pairwise docs show the LLM, deterministic, and human judge constructors; the pairwise human-preference example no longer uses a nonexistent `Provider` field", "commit": "0de36f7" }
+      ],
+      "tests": [
+        { "description": "Judge constructors, per-method `Validate` errors, v0.14.0-shaped judge JSON, and deterministic judge round-trip with `model` omitted", "commit": "f5195f2" }
+      ]
+    },
+    {
       "version": "v0.14.0",
       "date": "2026-08-15",
       "highlights": [
