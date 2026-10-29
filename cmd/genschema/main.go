@@ -4,7 +4,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"path/filepath"
 
 	"github.com/plexusone/structured-evaluation/schema"
 )
@@ -14,56 +13,55 @@ func main() {
 	if len(os.Args) > 1 {
 		schemaDir = os.Args[1]
 	}
-	// Clean the path to prevent path traversal (gosec G703)
-	schemaDir = filepath.Clean(schemaDir)
 
-	// Generate rubric schema
-	evalData, err := schema.GenerateRubricSchema()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error generating rubric schema: %v\n", err)
+	if err := run(schemaDir); err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		os.Exit(1)
 	}
-	if err := os.WriteFile(filepath.Join(schemaDir, "rubric.schema.json"), evalData, 0600); err != nil {
-		fmt.Fprintf(os.Stderr, "Error writing rubric schema: %v\n", err)
-		os.Exit(1)
-	}
-	fmt.Println("Generated rubric.schema.json")
-
-	// Generate rubric definition (RubricSet) schema
-	rubricSetData, err := schema.GenerateRubricSetSchema()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error generating rubricset schema: %v\n", err)
-		os.Exit(1)
-	}
-	if err := os.WriteFile(filepath.Join(schemaDir, "rubricset.schema.json"), rubricSetData, 0600); err != nil {
-		fmt.Fprintf(os.Stderr, "Error writing rubricset schema: %v\n", err)
-		os.Exit(1)
-	}
-	fmt.Println("Generated rubricset.schema.json")
-
-	// Generate summary schema
-	summaryData, err := schema.GenerateSummarySchema()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error generating summary schema: %v\n", err)
-		os.Exit(1)
-	}
-	if err := os.WriteFile(filepath.Join(schemaDir, "summary.schema.json"), summaryData, 0600); err != nil {
-		fmt.Fprintf(os.Stderr, "Error writing summary schema: %v\n", err)
-		os.Exit(1)
-	}
-	fmt.Println("Generated summary.schema.json")
-
-	// Generate claims schema
-	claimsData, err := schema.GenerateClaimsSchema()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error generating claims schema: %v\n", err)
-		os.Exit(1)
-	}
-	if err := os.WriteFile(filepath.Join(schemaDir, "claims.schema.json"), claimsData, 0600); err != nil {
-		fmt.Fprintf(os.Stderr, "Error writing claims schema: %v\n", err)
-		os.Exit(1)
-	}
-	fmt.Println("Generated claims.schema.json")
-
 	fmt.Println("All schemas generated successfully")
+}
+
+func run(schemaDir string) error {
+	// os.Root confines every write to schemaDir, so a schema file name can
+	// never escape it (gosec G703).
+	root, err := os.OpenRoot(schemaDir)
+	if err != nil {
+		return fmt.Errorf("open schema dir %q: %w", schemaDir, err)
+	}
+	// Closing a read-only directory handle loses no data, so its error is
+	// not actionable.
+	defer func() { _ = root.Close() }()
+
+	generators := []struct {
+		file     string
+		generate func() ([]byte, error)
+	}{
+		{"rubric.schema.json", schema.GenerateRubricSchema},
+		{"rubricset.schema.json", schema.GenerateRubricSetSchema},
+		{"summary.schema.json", schema.GenerateSummarySchema},
+		{"claims.schema.json", schema.GenerateClaimsSchema},
+	}
+	for _, g := range generators {
+		data, err := g.generate()
+		if err != nil {
+			return fmt.Errorf("generate %s: %w", g.file, err)
+		}
+		if err := writeFile(root, g.file, data); err != nil {
+			return fmt.Errorf("write %s: %w", g.file, err)
+		}
+		fmt.Printf("Generated %s\n", g.file)
+	}
+	return nil
+}
+
+func writeFile(root *os.Root, name string, data []byte) error {
+	f, err := root.OpenFile(name, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
+	if err != nil {
+		return err
+	}
+	if _, err := f.Write(data); err != nil {
+		_ = f.Close() // the write error is the one worth reporting
+		return err
+	}
+	return f.Close()
 }
