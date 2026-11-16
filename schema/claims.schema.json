@@ -224,6 +224,78 @@
               "type": "string"
             },
             "type": "array"
+          },
+          "evidence": {
+            "items": {
+              "properties": {
+                "sourceRef": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "stance": {
+                  "type": "string"
+                },
+                "quote": {
+                  "type": "string"
+                },
+                "locator": {
+                  "type": "string"
+                },
+                "language": {
+                  "type": "string"
+                },
+                "translation": {
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    },
+                    "language": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "type": "object"
+                },
+                "sourceRole": {
+                  "type": "string"
+                },
+                "howChecked": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "checkedBy": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "string"
+          },
+          "review": {
+            "properties": {
+              "judge": {
+                "type": "string"
+              },
+              "agrees": {
+                "type": "boolean"
+              },
+              "firstVerdict": {
+                "type": "string"
+              },
+              "rationale": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
           }
         },
         "additionalProperties": false,
@@ -248,6 +320,15 @@
               "type": "integer"
             },
             "rejected": {
+              "type": "integer"
+            },
+            "contested": {
+              "type": "integer"
+            },
+            "contradicted": {
+              "type": "integer"
+            },
+            "citationGap": {
               "type": "integer"
             }
           },
@@ -289,6 +370,21 @@
             "type": "string"
           },
           "type": "array"
+        },
+        "secondReview": {
+          "properties": {
+            "reviewed": {
+              "type": "integer"
+            },
+            "agreed": {
+              "type": "integer"
+            },
+            "rate": {
+              "type": "number"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
         }
       },
       "additionalProperties": false,
@@ -360,6 +456,15 @@
             },
             "rejected": {
               "type": "integer"
+            },
+            "contested": {
+              "type": "integer"
+            },
+            "contradicted": {
+              "type": "integer"
+            },
+            "citationGap": {
+              "type": "integer"
             }
           },
           "additionalProperties": false,
@@ -368,6 +473,24 @@
       },
       "additionalProperties": false,
       "type": "object"
+    },
+    "inaccessible": {
+      "items": {
+        "properties": {
+          "sourceRef": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object"
+      },
+      "type": "array"
     }
   },
   "additionalProperties": false,

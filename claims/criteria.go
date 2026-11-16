@@ -104,6 +104,13 @@ type ClaimsCounts struct {
 	Unverified  int `json:"unverified"`
 	NeedsReview int `json:"needsReview"`
 	Rejected    int `json:"rejected"`
+
+	// Contested, Contradicted and CitationGap count the verdicts of
+	// multi-source checking. They are omitted when zero, so reports that
+	// do not use these verdicts are unchanged.
+	Contested    int `json:"contested,omitempty"`
+	Contradicted int `json:"contradicted,omitempty"`
+	CitationGap  int `json:"citationGap,omitempty"`
 }
 
 // CountClaims counts claims by verdict.
@@ -120,6 +127,12 @@ func CountClaims(claims []Claim) ClaimsCounts {
 			counts.NeedsReview++
 		case VerdictRejected:
 			counts.Rejected++
+		case VerdictContested:
+			counts.Contested++
+		case VerdictContradicted:
+			counts.Contradicted++
+		case VerdictCitationGap:
+			counts.CitationGap++
 		}
 	}
 	return counts
@@ -136,11 +149,12 @@ func EvaluateClaims(claims []Claim, criteria ClaimsCriteria) ClaimsDecision {
 		Counts: counts,
 	}
 
-	// Check for rejected claims
-	if counts.Rejected > 0 {
+	// Check for rejected claims. A contradicted claim, one a source
+	// says otherwise, fails the report the same way.
+	if counts.Rejected > 0 || counts.Contradicted > 0 {
 		decision.Status = ClaimsDecisionFail
 		decision.Passed = false
-		decision.Rationale = formatRejectedRationale(counts.Rejected)
+		decision.Rationale = formatRejectedRationale(counts.Rejected + counts.Contradicted)
 		return decision
 	}
 
@@ -159,16 +173,19 @@ func EvaluateClaims(claims []Claim, criteria ClaimsCriteria) ClaimsDecision {
 	// decision purposes: a conditional pass if criteria allows it,
 	// otherwise a fail. This does not change the claim's own stored Verdict
 	// or the Counts breakdown — only the report-level decision.
-	if counts.NeedsReview > 0 || insufficientCorroboration > 0 || stale > 0 {
+	// Contested and citation-gap claims ask a person to decide, like
+	// needs-review claims.
+	needsPerson := counts.NeedsReview + counts.Contested + counts.CitationGap
+	if needsPerson > 0 || insufficientCorroboration > 0 || stale > 0 {
 		if !criteria.AllowNeedsReview {
 			decision.Status = ClaimsDecisionFail
 			decision.Passed = false
-			decision.Rationale = formatNeedsReviewRationale(counts.NeedsReview, insufficientCorroboration, stale)
+			decision.Rationale = formatNeedsReviewRationale(needsPerson, insufficientCorroboration, stale)
 			return decision
 		}
 		decision.Status = ClaimsDecisionConditional
 		decision.Passed = true
-		decision.Rationale = formatConditionalRationale(counts.NeedsReview, insufficientCorroboration, stale)
+		decision.Rationale = formatConditionalRationale(needsPerson, insufficientCorroboration, stale)
 		return decision
 	}
 

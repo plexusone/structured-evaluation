@@ -108,8 +108,12 @@ func Lint(r *ClaimsReport) []LintFinding {
 
 		v := c.Validation
 		if v == nil {
-			out = append(out, finding(c, "verified-requires-validation", LintError,
-				"verified claim has no validation"))
+			// A claim checked against several sources carries its proof as
+			// quoted supporting evidence rather than a single validation.
+			if len(c.SupportingQuotes()) == 0 {
+				out = append(out, finding(c, "verified-requires-validation", LintError,
+					"verified claim has no validation and no quoted supporting evidence"))
+			}
 			continue
 		}
 

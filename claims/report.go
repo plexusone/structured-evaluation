@@ -24,6 +24,10 @@ type ClaimsReport struct {
 
 	// Decision is the validation outcome.
 	Decision ClaimsDecision `json:"decision"`
+
+	// Inaccessible lists sources a judge could not open, so a reader knows
+	// which evidence was never checked.
+	Inaccessible []InaccessibleSource `json:"inaccessible,omitempty"`
 }
 
 // ClaimsMetadata contains report identification.
@@ -72,6 +76,10 @@ type ClaimsSummary struct {
 
 	// RejectedClaims lists IDs of rejected claims.
 	RejectedClaims []string `json:"rejectedClaims,omitempty"`
+
+	// SecondReview summarizes how often second judges agreed with first
+	// judges. It is omitted when no claim has a second check.
+	SecondReview *ReviewAgreement `json:"secondReview,omitempty"`
 }
 
 // NewClaimsReport creates a new claims report.
@@ -129,12 +137,13 @@ func (r *ClaimsReport) computeSummary() {
 		switch c.Verdict {
 		case VerdictUnverified:
 			r.Summary.UnverifiedClaims = append(r.Summary.UnverifiedClaims, c.ID)
-		case VerdictNeedsReview:
+		case VerdictNeedsReview, VerdictContested, VerdictCitationGap:
 			r.Summary.NeedsReviewClaims = append(r.Summary.NeedsReviewClaims, c.ID)
-		case VerdictRejected:
+		case VerdictRejected, VerdictContradicted:
 			r.Summary.RejectedClaims = append(r.Summary.RejectedClaims, c.ID)
 		}
 	}
+	r.Summary.SecondReview = AgreementOf(r.Claims)
 }
 
 // Finalize computes all derived fields.

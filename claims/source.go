@@ -115,6 +115,11 @@ const (
 	// superlative) rather than an audited disclosure. Requires
 	// corroboration to be published as verified.
 	SourceRoleSelfReported SourceRole = "self-reported"
+
+	// SourceRoleSecondary is a secondary source whose kind, relay or
+	// analysis, is not recorded. Like a relay, it does not require
+	// corroboration; record secondary-analysis when the source synthesizes.
+	SourceRoleSecondary SourceRole = "secondary"
 )
 
 // RequiresCorroboration reports whether a claim sourced with this role needs

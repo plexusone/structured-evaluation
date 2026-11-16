@@ -15,6 +15,17 @@ const (
 
 	// VerdictRejected indicates the claim should be removed.
 	VerdictRejected Verdict = "rejected"
+
+	// VerdictContested indicates sources disagree, or support only part of
+	// the claim. It needs a person's judgment.
+	VerdictContested Verdict = "contested"
+
+	// VerdictContradicted indicates a source says otherwise.
+	VerdictContradicted Verdict = "contradicted"
+
+	// VerdictCitationGap indicates the claim is supported, but by a source
+	// other than the one it cites, so the citation needs fixing.
+	VerdictCitationGap Verdict = "citation-gap"
 )
 
 // IsPassing returns true if the verdict is acceptable for publication.
@@ -24,7 +35,13 @@ func (v Verdict) IsPassing() bool {
 
 // IsBlocking returns true if the verdict blocks publication.
 func (v Verdict) IsBlocking() bool {
-	return v == VerdictUnverified || v == VerdictRejected
+	return v == VerdictUnverified || v == VerdictRejected || v == VerdictContradicted
+}
+
+// NeedsPerson returns true if the verdict asks a person to decide: the
+// claim needs review, sources disagree, or its citation needs fixing.
+func (v Verdict) NeedsPerson() bool {
+	return v == VerdictNeedsReview || v == VerdictContested || v == VerdictCitationGap
 }
 
 // Icon returns the emoji icon for the verdict.
@@ -36,8 +53,10 @@ func (v Verdict) Icon() string {
 		return "✗"
 	case VerdictNeedsReview:
 		return "?"
-	case VerdictRejected:
+	case VerdictRejected, VerdictContradicted:
 		return "✗"
+	case VerdictContested, VerdictCitationGap:
+		return "?"
 	default:
 		return "○"
 	}

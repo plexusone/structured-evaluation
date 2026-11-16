@@ -75,6 +75,21 @@ type Claim struct {
 
 	// RelatedClaimIDs are IDs of related claims.
 	RelatedClaimIDs []string `json:"relatedClaimIds,omitempty"`
+
+	// Evidence lists quoted passages that bear on the claim, from one or
+	// more sources, each with its stance. It complements Validation: use it
+	// when a judge checks a claim against several sources that may
+	// disagree.
+	Evidence []Evidence `json:"evidence,omitempty"`
+
+	// CheckedBy identifies the judge that set the verdict.
+	CheckedBy string `json:"checkedBy,omitempty"`
+
+	// Confidence is the judge's confidence in the verdict.
+	Confidence Confidence `json:"confidence,omitempty"`
+
+	// Review is an optional second judge's check of the verdict.
+	Review *Review `json:"review,omitempty"`
 }
 
 // NewClaim creates a new claim with the given details.
