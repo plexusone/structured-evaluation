@@ -144,6 +144,14 @@ Each claim receives a verdict based on its validation:
 | **Unverified** | Yes | No validation provided |
 | **NeedsReview** | Configurable | Requires human review |
 | **Rejected** | Yes | Failed validation |
+| **Contested** | Configurable | Sources disagree, or support only part of the claim |
+| **Contradicted** | Yes | A source says otherwise |
+| **CitationGap** | Configurable | Supported, but by a source other than the one cited |
+
+Contested and citation-gap claims count like needs-review claims in the decision: a conditional pass when
+`AllowNeedsReview` is set, otherwise a fail. A contradicted claim fails the report like a rejected one. These three
+verdicts come from checking a claim against several sources (see [Multi-Source Evidence](#multi-source-evidence));
+`DetermineVerdict` never returns them.
 
 Verdict determination:
 
@@ -346,7 +354,7 @@ mutates the report.
 | Rule | Severity | Applies to | Checks |
 |------|----------|------------|--------|
 | `claim-missing-id` / `claim-duplicate-id` | Error | Any claim | Every claim has a unique `ID` |
-| `verified-requires-validation` | Error | Verified | `Validation` is not nil |
+| `verified-requires-validation` | Error | Verified | `Validation` is not nil, or `Evidence` has a supporting quote from a named source |
 | `verified-requires-url` / `verified-requires-quote` | Error | External | `URL` and `QuotedText` are both set |
 | `verified-value-in-quote` | Warning | External, with `Statistical` | `Statistical.Value` appears in `QuotedText` — advisory because a legitimate quote can state a rule ("0% target") or a range, or scale the value into a unit ("20 million") rather than repeat the literal number |
 | `verified-derived-needs-sources` | Error | Derived | `SourceClaimIDs` is non-empty |
@@ -432,6 +440,40 @@ A claim with no `Statistical` detail, or an unset `AsOfDate`, is never
 flagged — age unknown is not the same as stale. Disabled by default
 (`MaxClaimAge <= 0`). `Lint` flags a violation as `verified-stale-as-of-date`;
 `EvaluateClaims` folds it into the report-level decision like needs-review.
+
+## Multi-Source Evidence
+
+`Validation` holds one source. When a judge checks a claim against several sources that may disagree, record each
+passage in `Evidence` instead:
+
+```go
+claim := claims.Claim{
+    ID:        "claim-founding",
+    Text:      "The company was founded in 1929.",
+    Category:  claims.ClaimTimeline,
+    Verdict:   claims.VerdictContested,
+    CheckedBy: "checker",
+    Evidence: []claims.Evidence{
+        {SourceRef: "src-registry", Stance: claims.StanceSupports, Quote: "fondata nel 1929", Language: "it",
+            Translation: &claims.Translation{Text: "founded in 1929", Language: "en"}, Role: claims.SourceRolePrimary},
+        {URL: "https://example.org/history", Stance: claims.StanceDisputes, Quote: "founded in 1930"},
+    },
+    Review: &claims.Review{Judge: "skeptic", Agrees: false, FirstVerdict: claims.VerdictVerified,
+        Rationale: "A second source gives 1930."},
+}
+```
+
+- **Evidence** names its source by `SourceRef` (an ID in the caller's source list), `URL`, or both. Its `Stance` is
+  `supports`, `disputes` or `context`. A quote not in English carries its `Language` (a BCP 47 tag) and a
+  `Translation`.
+- **CheckedBy** is the judge that set the verdict, and **Confidence** its confidence: `high`, `medium` or `low`. **Review** is an optional second judge. The claim's `Verdict` is
+  the final one: when the second judge disagrees and its verdict replaces the first, `FirstVerdict` records the
+  first judge's.
+- **Agreement.** The report summary's `secondReview` gives how many claims a second judge checked, how many it agreed
+  with, and the rate, a measure of how consistent the judging is.
+- **Inaccessible** on the report lists sources a judge could not open.
+
+All of these are optional and omitted when unused, so reports that do not use them are unchanged.
 
 ## Example: Security Advisory
 
