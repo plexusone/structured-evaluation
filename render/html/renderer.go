@@ -98,6 +98,7 @@ var verdictOrder = []struct {
 	{claims.VerdictCitationGap, "Citation gap", "?", "citation-gap"},
 	{claims.VerdictNeedsReview, "Needs review", "?", "needs-review"},
 	{claims.VerdictContradicted, "Contradicted", "✗", "contradicted"},
+	{claims.VerdictRefuted, "Refuted", "✗", "refuted"},
 	{claims.VerdictRejected, "Rejected", "✗", "rejected"},
 	{claims.VerdictUnverified, "Unverified", "✗", "unverified"},
 }

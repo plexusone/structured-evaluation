@@ -15,8 +15,8 @@ var claimsTemplate = template.Must(template.New("claims").Parse(`<!DOCTYPE html>
     --bg: #ffffff; --fg: #1a1a1a; --muted: #666; --border: #e2e2e2;
     --verified: #047857; --needs-review: #b45309; --rejected: #b91c1c; --unverified: #6b7280;
     --verified-bg: #ecfdf5; --needs-review-bg: #fffbeb; --rejected-bg: #fef2f2; --unverified-bg: #f9fafb;
-    --contested: var(--needs-review); --citation-gap: var(--needs-review); --contradicted: var(--rejected);
-    --contested-bg: var(--needs-review-bg); --citation-gap-bg: var(--needs-review-bg); --contradicted-bg: var(--rejected-bg);
+    --contested: var(--needs-review); --citation-gap: var(--needs-review); --contradicted: var(--rejected); --refuted: var(--rejected);
+    --contested-bg: var(--needs-review-bg); --citation-gap-bg: var(--needs-review-bg); --contradicted-bg: var(--rejected-bg); --refuted-bg: var(--rejected-bg);
   }
   @media (prefers-color-scheme: dark) {
     :root {
@@ -48,6 +48,7 @@ var claimsTemplate = template.Must(template.New("claims").Parse(`<!DOCTYPE html>
   .chip.contested { color: var(--contested); }
   .chip.citation-gap { color: var(--citation-gap); }
   .chip.contradicted { color: var(--contradicted); }
+  .chip.refuted { color: var(--refuted); }
   section.group { margin-bottom: 2rem; }
   section.group > h2 { font-size: 1rem; text-transform: uppercase; letter-spacing: .04em;
     display: flex; align-items: center; gap: .5rem; padding-bottom: .4rem; border-bottom: 2px solid var(--border); }
@@ -64,6 +65,7 @@ var claimsTemplate = template.Must(template.New("claims").Parse(`<!DOCTYPE html>
   .claim.contested { border-left-color: var(--contested); background: var(--contested-bg); }
   .claim.citation-gap { border-left-color: var(--citation-gap); background: var(--citation-gap-bg); }
   .claim.contradicted { border-left-color: var(--contradicted); background: var(--contradicted-bg); }
+  .claim.refuted { border-left-color: var(--refuted); background: var(--refuted-bg); }
   .claim-head { display: flex; align-items: baseline; gap: .5rem; }
   .claim-icon { font-weight: 700; }
   .claim.verified .claim-icon { color: var(--verified); }
@@ -73,6 +75,7 @@ var claimsTemplate = template.Must(template.New("claims").Parse(`<!DOCTYPE html>
   .claim.contested .claim-icon { color: var(--contested); }
   .claim.citation-gap .claim-icon { color: var(--citation-gap); }
   .claim.contradicted .claim-icon { color: var(--contradicted); }
+  .claim.refuted .claim-icon { color: var(--refuted); }
   .claim-text { font-weight: 600; }
   .claim-id { margin-left: auto; color: var(--muted); font-size: .72rem;
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
