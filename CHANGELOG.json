@@ -7,466 +7,1260 @@
   "commitConvention": "conventional",
   "releases": [
     {
+      "version": "v0.17.0",
+      "date": "2026-11-16",
+      "highlights": [
+        {
+          "description": "Opt-in support criteria for quoted support, judge confidence and exceptional claims, with WikipediaClaimsCriteria at an encyclopedic standard of verifiability"
+        },
+        {
+          "description": "The refuted verdict records that a reliable source shows a claim false"
+        },
+        {
+          "description": "Report metadata names the standard the claims were judged against"
+        }
+      ],
+      "added": [
+        {
+          "description": "`VerdictRefuted`: a reliable source shows the claim false; blocks publication, counted in `Counts.Refuted`, and Lint requires a quoted disputes passage",
+          "commit": "98813d6",
+          "rmis": [
+            "RMI-STRUCTUREDEVALUATION-001"
+          ]
+        },
+        {
+          "description": "`ClaimsCriteria.RequireQuotedSupport`, `MinSupportConfidence` and `ExceptionalMinSources`, `Claim.Exceptional`, `SupportShortfalls`, and `WikipediaClaimsCriteria()`; `EvaluateClaims` and `Lint` apply them",
+          "commit": "98813d6",
+          "rmis": [
+            "RMI-STRUCTUREDEVALUATION-001"
+          ]
+        },
+        {
+          "description": "`ClaimsMetadata.Standard` names the standard and version applied",
+          "commit": "98813d6",
+          "rmis": [
+            "RMI-STRUCTUREDEVALUATION-001"
+          ]
+        },
+        {
+          "description": "HTML report shows refuted claims",
+          "commit": "6bd814d",
+          "rmis": [
+            "RMI-STRUCTUREDEVALUATION-001"
+          ]
+        }
+      ],
+      "tests": [
+        {
+          "description": "Refuted verdict, support criteria and the Wikipedia preset",
+          "commit": "e7083fb",
+          "rmis": [
+            "RMI-STRUCTUREDEVALUATION-001"
+          ]
+        }
+      ],
+      "documentation": [
+        {
+          "description": "Roadmap and TRD for the encyclopedic claims standard",
+          "commit": "3dec5ee",
+          "rmis": [
+            "RMI-STRUCTUREDEVALUATION-001"
+          ]
+        },
+        {
+          "description": "README and claims guide describe the support criteria, refuted claims and named standards",
+          "commit": "6e8bbaa",
+          "rmis": [
+            "RMI-STRUCTUREDEVALUATION-001"
+          ]
+        },
+        {
+          "description": "v0.17.0 release notes"
+        }
+      ]
+    },
+    {
       "version": "v0.16.0",
       "date": "2026-11-15",
       "highlights": [
-        { "description": "Claims checked against several sources: a claim carries every quoted passage that bears on it, each with its stance, so a report records when reliable sources disagree" },
-        { "description": "Verdicts for disagreement: `contested`, `contradicted` and `citation-gap` join the original four" },
-        { "description": "Judges and agreement: who checked a claim, with what confidence, and an optional second judge, with the second-check agreement rate in the summary" },
-        { "description": "Deterministic quotation and figure matching confirms a quotation is in its source's text without a model" }
+        {
+          "description": "Claims checked against several sources: a claim carries every quoted passage that bears on it, each with its stance, so a report records when reliable sources disagree"
+        },
+        {
+          "description": "Verdicts for disagreement: `contested`, `contradicted` and `citation-gap` join the original four"
+        },
+        {
+          "description": "Judges and agreement: who checked a claim, with what confidence, and an optional second judge, with the second-check agreement rate in the summary"
+        },
+        {
+          "description": "Deterministic quotation and figure matching confirms a quotation is in its source's text without a model"
+        }
       ],
       "added": [
-        { "description": "`claims.Evidence`: quoted passages from one or more sources per claim, with `SourceRef`/`URL`/`Title`, `Stance` (supports, disputes, context), `Quote`, `Locator`, `Language`, `Translation`, `Role` and `HowChecked`; `Claim.SupportingQuotes()`", "commit": "a3a352b" },
-        { "description": "Verdicts `contested`, `contradicted` and `citation-gap`, with `Contested`, `Contradicted` and `CitationGap` counts (omitted when zero) and `Verdict.NeedsPerson()`; contradicted fails a report, the other two count like needs-review", "commit": "a3a352b" },
-        { "description": "`Claim.CheckedBy`, `Claim.Confidence` (high, medium, low) and `Claim.Review`, a second judge's check with `FirstVerdict` when its verdict replaced the first; `AgreementOf` and `Summary.SecondReview`", "commit": "a3a352b" },
-        { "description": "`ClaimsReport.Inaccessible`, sources a judge could not open, and `SourceRoleSecondary` for a secondary source of unrecorded kind", "commit": "a3a352b" },
-        { "description": "`MatchQuote`, `MissingFigures`, `NormalizeText`, `QuoteFragments` and `Figures`: match a quotation against a source's text, ignoring case, punctuation, quote styles and line breaks, and find the figures a claim states that no quotation gives", "commit": "cb5cdc8" },
-        { "description": "`@plexusone/structured-evaluation@0.16.0`: Zod schemas and TS types regenerated for the new claim fields", "commit": "a3a352b" }
+        {
+          "description": "`claims.Evidence`: quoted passages from one or more sources per claim, with `SourceRef`/`URL`/`Title`, `Stance` (supports, disputes, context), `Quote`, `Locator`, `Language`, `Translation`, `Role` and `HowChecked`; `Claim.SupportingQuotes()`",
+          "commit": "a3a352b"
+        },
+        {
+          "description": "Verdicts `contested`, `contradicted` and `citation-gap`, with `Contested`, `Contradicted` and `CitationGap` counts (omitted when zero) and `Verdict.NeedsPerson()`; contradicted fails a report, the other two count like needs-review",
+          "commit": "a3a352b"
+        },
+        {
+          "description": "`Claim.CheckedBy`, `Claim.Confidence` (high, medium, low) and `Claim.Review`, a second judge's check with `FirstVerdict` when its verdict replaced the first; `AgreementOf` and `Summary.SecondReview`",
+          "commit": "a3a352b"
+        },
+        {
+          "description": "`ClaimsReport.Inaccessible`, sources a judge could not open, and `SourceRoleSecondary` for a secondary source of unrecorded kind",
+          "commit": "a3a352b"
+        },
+        {
+          "description": "`MatchQuote`, `MissingFigures`, `NormalizeText`, `QuoteFragments` and `Figures`: match a quotation against a source's text, ignoring case, punctuation, quote styles and line breaks, and find the figures a claim states that no quotation gives",
+          "commit": "cb5cdc8"
+        },
+        {
+          "description": "`@plexusone/structured-evaluation@0.16.0`: Zod schemas and TS types regenerated for the new claim fields",
+          "commit": "a3a352b"
+        }
       ],
       "changed": [
-        { "description": "Lint: a verified claim with no `Validation` passes `verified-requires-validation` when its `Evidence` has a quoted supporting passage from a named source", "commit": "a3a352b" }
+        {
+          "description": "Lint: a verified claim with no `Validation` passes `verified-requires-validation` when its `Evidence` has a quoted supporting passage from a named source",
+          "commit": "a3a352b"
+        }
       ],
       "fixed": [
-        { "description": "The HTML renderer showed only the original four verdict groups, so claims with the new verdicts were left out; they now have their own groups and count chips, and each claim lists its quoted evidence", "commit": "1ec4acd" },
-        { "description": "`GenerateSummaryText` includes the new verdicts when present", "commit": "fd2df7f" }
+        {
+          "description": "The HTML renderer showed only the original four verdict groups, so claims with the new verdicts were left out; they now have their own groups and count chips, and each claim lists its quoted evidence",
+          "commit": "1ec4acd"
+        },
+        {
+          "description": "`GenerateSummaryText` includes the new verdicts when present",
+          "commit": "fd2df7f"
+        }
       ],
       "dependencies": [
-        { "description": "Bump github.com/spf13/pflag from v1.0.10 to v1.1.0", "commit": "e8bd2ef" }
+        {
+          "description": "Bump github.com/spf13/pflag from v1.0.10 to v1.1.0",
+          "commit": "e8bd2ef"
+        }
       ],
       "documentation": [
-        { "description": "Claims guide: multi-source evidence, the new verdicts, judges and agreement", "commit": "50152af" },
-        { "description": "Claims guide: quotation and figure matching", "commit": "1664ae6" },
-        { "description": "README multi-source claims section and v0.16.0 release notes" }
+        {
+          "description": "Claims guide: multi-source evidence, the new verdicts, judges and agreement",
+          "commit": "50152af"
+        },
+        {
+          "description": "Claims guide: quotation and figure matching",
+          "commit": "1664ae6"
+        },
+        {
+          "description": "README multi-source claims section and v0.16.0 release notes"
+        }
       ],
       "tests": [
-        { "description": "Multi-source evidence, new verdicts in counts and decisions, agreement, lint with quoted evidence, and unchanged JSON for reports without the new fields", "commit": "0a294f5" },
-        { "description": "Quotation matching (exact, normalized, ellipses, order, missing spaces) and figure extraction", "commit": "75b6b78" },
-        { "description": "HTML rendering of the new verdicts and quoted evidence", "commit": "1ec4acd" }
+        {
+          "description": "Multi-source evidence, new verdicts in counts and decisions, agreement, lint with quoted evidence, and unchanged JSON for reports without the new fields",
+          "commit": "0a294f5"
+        },
+        {
+          "description": "Quotation matching (exact, normalized, ellipses, order, missing spaces) and figure extraction",
+          "commit": "75b6b78"
+        },
+        {
+          "description": "HTML rendering of the new verdicts and quoted evidence",
+          "commit": "1ec4acd"
+        }
       ]
     },
     {
       "version": "v0.15.0",
       "date": "2026-10-29",
       "highlights": [
-        { "description": "JudgeMetadata covers all three kinds of judge: Code-as-a-Judge, LLM-as-a-Judge, and Human-as-a-Judge, where it used to describe only LLMs. A new Method field, reusing the EvaluationMethod vocabulary already used on Category and Criterion, says which one produced an evaluation" },
-        { "description": "Backward compatible: an empty Method means semantic (JudgeMetadata's only meaning before v0.15.0), so existing judge JSON parses and validates unchanged" }
+        {
+          "description": "JudgeMetadata covers all three kinds of judge: Code-as-a-Judge, LLM-as-a-Judge, and Human-as-a-Judge, where it used to describe only LLMs. A new Method field, reusing the EvaluationMethod vocabulary already used on Category and Criterion, says which one produced an evaluation"
+        },
+        {
+          "description": "Backward compatible: an empty Method means semantic (JudgeMetadata's only meaning before v0.15.0), so existing judge JSON parses and validates unchanged"
+        }
       ],
       "added": [
-        { "description": "`JudgeMetadata.Method` (`EvaluationMethod`), plus `CheckID`/`CheckVersion` for deterministic judges and `ReviewerID`/`ReviewerName` for human judges, alongside the existing LLM fields", "commit": "b6c281b" },
-        { "description": "`NewDeterministicJudgeMetadata(checkID)` and `NewHumanJudgeMetadata(reviewerID)` constructors next to `NewJudgeMetadata(model)`, which now sets `Method` to `semantic`; `WithCheckVersion` and `WithReviewerName` builder methods", "commit": "b6c281b" },
-        { "description": "`JudgeMetadata.Validate() []string`: checks that a judge carries the field its `Method` requires (`Model`, `CheckID`, or `ReviewerID`) and rejects unknown methods", "commit": "b6c281b" },
-        { "description": "`ValidEvaluationMethodValues()`; `EvaluationMethod` added to `schema.EnumDefinitions` and `schema/enums.json`. The JSON Schema `evaluation` (Category/Criterion) and `method` (JudgeMetadata) fields are now constrained to `deterministic`/`semantic`/`human` where `evaluation` used to be an unconstrained string", "commit": "b6c281b" },
-        { "description": "`@plexusone/structured-evaluation@0.15.0`: Zod schemas and TS types regenerated for the judge method fields and the `evaluation` enum", "commit": "a8fcdf8" }
+        {
+          "description": "`JudgeMetadata.Method` (`EvaluationMethod`), plus `CheckID`/`CheckVersion` for deterministic judges and `ReviewerID`/`ReviewerName` for human judges, alongside the existing LLM fields",
+          "commit": "b6c281b"
+        },
+        {
+          "description": "`NewDeterministicJudgeMetadata(checkID)` and `NewHumanJudgeMetadata(reviewerID)` constructors next to `NewJudgeMetadata(model)`, which now sets `Method` to `semantic`; `WithCheckVersion` and `WithReviewerName` builder methods",
+          "commit": "b6c281b"
+        },
+        {
+          "description": "`JudgeMetadata.Validate() []string`: checks that a judge carries the field its `Method` requires (`Model`, `CheckID`, or `ReviewerID`) and rejects unknown methods",
+          "commit": "b6c281b"
+        },
+        {
+          "description": "`ValidEvaluationMethodValues()`; `EvaluationMethod` added to `schema.EnumDefinitions` and `schema/enums.json`. The JSON Schema `evaluation` (Category/Criterion) and `method` (JudgeMetadata) fields are now constrained to `deterministic`/`semantic`/`human` where `evaluation` used to be an unconstrained string",
+          "commit": "b6c281b"
+        },
+        {
+          "description": "`@plexusone/structured-evaluation@0.15.0`: Zod schemas and TS types regenerated for the judge method fields and the `evaluation` enum",
+          "commit": "a8fcdf8"
+        }
       ],
       "changed": [
-        { "description": "`JudgeMetadata.Model` is now `omitempty`, because deterministic and human judges have no model", "commit": "b6c281b" }
+        {
+          "description": "`JudgeMetadata.Model` is now `omitempty`, because deterministic and human judges have no model",
+          "commit": "b6c281b"
+        }
       ],
       "fixed": [
-        { "description": "`cmd/genschema` writes schema files through `os.Root`, confining them to the output directory (resolves gosec G703 findings)", "commit": "8f02cab" }
+        {
+          "description": "`cmd/genschema` writes schema files through `os.Root`, confining them to the output directory (resolves gosec G703 findings)",
+          "commit": "8f02cab"
+        }
       ],
       "dependencies": [
-        { "description": "Bump github.com/pb33f/ordered-map/v2 from v2.3.1 to v2.3.2, which replaces go.yaml.in/yaml/v4 with github.com/pb33f/go-yaml", "commit": "5beded2" }
+        {
+          "description": "Bump github.com/pb33f/ordered-map/v2 from v2.3.1 to v2.3.2, which replaces go.yaml.in/yaml/v4 with github.com/pb33f/go-yaml",
+          "commit": "5beded2"
+        }
       ],
       "documentation": [
-        { "description": "README and pairwise docs show the LLM, deterministic, and human judge constructors; the pairwise human-preference example no longer uses a nonexistent `Provider` field", "commit": "0de36f7" }
+        {
+          "description": "README and pairwise docs show the LLM, deterministic, and human judge constructors; the pairwise human-preference example no longer uses a nonexistent `Provider` field",
+          "commit": "0de36f7"
+        }
       ],
       "tests": [
-        { "description": "Judge constructors, per-method `Validate` errors, v0.14.0-shaped judge JSON, and deterministic judge round-trip with `model` omitted", "commit": "f5195f2" }
+        {
+          "description": "Judge constructors, per-method `Validate` errors, v0.14.0-shaped judge JSON, and deterministic judge round-trip with `model` omitted",
+          "commit": "f5195f2"
+        }
       ]
     },
     {
       "version": "v0.14.0",
       "date": "2026-08-15",
       "highlights": [
-        { "description": "Layered rubric classification: CriterionClass and EvaluationMethod taxonomies plus Class/Blocking/Evaluation fields on categories and criteria let a rubric separate advisory principle-based judgment from gating implementation checks instead of collapsing everything into one composite score" },
-        { "description": "RubricSet.JudgeInstructions carries cross-category evidence-discipline rules for the LLM judge prompt, complementing any per-category EvaluationPrompt" },
-        { "description": "RubricSet.Validate() enforces INV-3: a leadership_principle class must never be blocking, because advisory judgment cannot gate implementation" }
+        {
+          "description": "Layered rubric classification: CriterionClass and EvaluationMethod taxonomies plus Class/Blocking/Evaluation fields on categories and criteria let a rubric separate advisory principle-based judgment from gating implementation checks instead of collapsing everything into one composite score"
+        },
+        {
+          "description": "RubricSet.JudgeInstructions carries cross-category evidence-discipline rules for the LLM judge prompt, complementing any per-category EvaluationPrompt"
+        },
+        {
+          "description": "RubricSet.Validate() enforces INV-3: a leadership_principle class must never be blocking, because advisory judgment cannot gate implementation"
+        }
       ],
       "added": [
-        { "description": "`CriterionClass` type (`leadership_principle`, `specification_quality`, `implementation_readiness`, `deterministic_integrity`) and `EvaluationMethod` type (`deterministic`, `semantic`, `human`); `Class`, `Blocking`, and `Evaluation` fields on both `Category` and `Criterion` — all `omitempty`, so a v0.13.0-shaped rubric parses and validates unchanged", "commit": "41e77fe" },
-        { "description": "`RubricSet.JudgeInstructions []string` — cross-category evidence-discipline rules (e.g. cite section/requirement IDs, do not reward length) applied across all categories", "commit": "41e77fe" },
-        { "description": "`RubricSet.Validate()` INV-3 check: a category or criterion with `Class == ClassLeadershipPrinciple` must not set `Blocking`; regenerated `rubricset.schema.json` for the new fields", "commit": "41e77fe" },
-        { "description": "`@plexusone/structured-evaluation@0.14.0`: Zod schemas and TS types regenerated for the rubric layering fields; also catches up the v0.13.0 claims fields (`sourceRole`, `minCorroboratingSources`, `corroborationCategories`, `maxClaimAge`) that were not regenerated at the time", "commit": "572294c" }
+        {
+          "description": "`CriterionClass` type (`leadership_principle`, `specification_quality`, `implementation_readiness`, `deterministic_integrity`) and `EvaluationMethod` type (`deterministic`, `semantic`, `human`); `Class`, `Blocking`, and `Evaluation` fields on both `Category` and `Criterion` — all `omitempty`, so a v0.13.0-shaped rubric parses and validates unchanged",
+          "commit": "41e77fe"
+        },
+        {
+          "description": "`RubricSet.JudgeInstructions []string` — cross-category evidence-discipline rules (e.g. cite section/requirement IDs, do not reward length) applied across all categories",
+          "commit": "41e77fe"
+        },
+        {
+          "description": "`RubricSet.Validate()` INV-3 check: a category or criterion with `Class == ClassLeadershipPrinciple` must not set `Blocking`; regenerated `rubricset.schema.json` for the new fields",
+          "commit": "41e77fe"
+        },
+        {
+          "description": "`@plexusone/structured-evaluation@0.14.0`: Zod schemas and TS types regenerated for the rubric layering fields; also catches up the v0.13.0 claims fields (`sourceRole`, `minCorroboratingSources`, `corroborationCategories`, `maxClaimAge`) that were not regenerated at the time",
+          "commit": "572294c"
+        }
       ]
     },
     {
       "version": "v0.13.0",
       "date": "2026-08-10",
       "highlights": [
-        { "description": "claims.Lint: evidence-integrity linting for claims reports — a verified claim must have a resolving URL and quote, sufficient independent corroboration, and a statistic that isn't stale, closing the gap that let a synthesized \"$3B ARR\" figure get marked verified" },
-        { "description": "ExternalValidation.Role (SourceRole) distinguishes primary/secondary-relay/secondary-analysis/self-reported sources; secondary-analysis and self-reported now require a corroborating relatedClaimId" },
-        { "description": "ClaimsCriteria gains MinCorroboratingSources and MaxClaimAge knobs, enforced by both claims.Lint and EvaluateClaims; both are opt-in and disabled by default" },
-        { "description": "BREAKING: ExternalValidation.AccessedAt and InternalValidation.ValidatedAt are now *time.Time so omitempty actually omits an unset value, instead of serializing the zero-value \"0001-01-01T00:00:00Z\" timestamp" }
+        {
+          "description": "claims.Lint: evidence-integrity linting for claims reports — a verified claim must have a resolving URL and quote, sufficient independent corroboration, and a statistic that isn't stale, closing the gap that let a synthesized \"$3B ARR\" figure get marked verified"
+        },
+        {
+          "description": "ExternalValidation.Role (SourceRole) distinguishes primary/secondary-relay/secondary-analysis/self-reported sources; secondary-analysis and self-reported now require a corroborating relatedClaimId"
+        },
+        {
+          "description": "ClaimsCriteria gains MinCorroboratingSources and MaxClaimAge knobs, enforced by both claims.Lint and EvaluateClaims; both are opt-in and disabled by default"
+        },
+        {
+          "description": "BREAKING: ExternalValidation.AccessedAt and InternalValidation.ValidatedAt are now *time.Time so omitempty actually omits an unset value, instead of serializing the zero-value \"0001-01-01T00:00:00Z\" timestamp"
+        }
       ],
       "added": [
-        { "description": "`claims.Lint(report) []LintFinding` and `sevaluation lint <claims.json>` — flags a verified claim missing a URL/quote (error), a value not found in the quote (warning), a verified derived/internal claim missing sources/evidence (error), and a subjective claim marked verified (warning)", "commit": "d53be38" },
-        { "description": "`sevaluation render <claims.json> --format=html\\|json` and `sevaluation check <claims.json>` — claims-report support in the render/check commands", "commit": "06b9fba" },
-        { "description": "`render/html` package: self-contained HTML renderer for `ClaimsReport`, grouped by verdict", "commit": "7709583" },
-        { "description": "`SourceRole` type (`primary`, `secondary-relay`, `secondary-analysis`, `self-reported`) and `ExternalValidation.Role`; `SourceRole.RequiresCorroboration()`; `claims.Lint` rule `verified-role-needs-corroboration`", "commit": "5ff6086" },
-        { "description": "`ClaimsCriteria.MinCorroboratingSources` and `CorroborationCategories`; `IsSufficientlyCorroborated(claim, criteria)`; `claims.Lint` rule `verified-insufficient-corroboration`; `EvaluateClaims` treats insufficiently-corroborated verified claims like needs-review for the report decision", "commit": "18a5a0b" },
-        { "description": "`ClaimsCriteria.MaxClaimAge`; `IsFresh(claim, criteria, now)`; `claims.Lint` rule `verified-stale-as-of-date`; `EvaluateClaims` treats stale verified claims like needs-review for the report decision", "commit": "c01aa66" },
-        { "description": "`ExternalValidation.WithAccessedAt(t)` and `InternalValidation.WithValidatedAt(t)` chainable setters, mirroring `StatisticalDetail.WithAsOfDate`", "commit": "4ee701b" }
+        {
+          "description": "`claims.Lint(report) []LintFinding` and `sevaluation lint <claims.json>` — flags a verified claim missing a URL/quote (error), a value not found in the quote (warning), a verified derived/internal claim missing sources/evidence (error), and a subjective claim marked verified (warning)",
+          "commit": "d53be38"
+        },
+        {
+          "description": "`sevaluation render <claims.json> --format=html\\|json` and `sevaluation check <claims.json>` — claims-report support in the render/check commands",
+          "commit": "06b9fba"
+        },
+        {
+          "description": "`render/html` package: self-contained HTML renderer for `ClaimsReport`, grouped by verdict",
+          "commit": "7709583"
+        },
+        {
+          "description": "`SourceRole` type (`primary`, `secondary-relay`, `secondary-analysis`, `self-reported`) and `ExternalValidation.Role`; `SourceRole.RequiresCorroboration()`; `claims.Lint` rule `verified-role-needs-corroboration`",
+          "commit": "5ff6086"
+        },
+        {
+          "description": "`ClaimsCriteria.MinCorroboratingSources` and `CorroborationCategories`; `IsSufficientlyCorroborated(claim, criteria)`; `claims.Lint` rule `verified-insufficient-corroboration`; `EvaluateClaims` treats insufficiently-corroborated verified claims like needs-review for the report decision",
+          "commit": "18a5a0b"
+        },
+        {
+          "description": "`ClaimsCriteria.MaxClaimAge`; `IsFresh(claim, criteria, now)`; `claims.Lint` rule `verified-stale-as-of-date`; `EvaluateClaims` treats stale verified claims like needs-review for the report decision",
+          "commit": "c01aa66"
+        },
+        {
+          "description": "`ExternalValidation.WithAccessedAt(t)` and `InternalValidation.WithValidatedAt(t)` chainable setters, mirroring `StatisticalDetail.WithAsOfDate`",
+          "commit": "4ee701b"
+        }
       ],
       "fixed": [
-        { "description": "`ExternalValidation.AccessedAt` and `InternalValidation.ValidatedAt` are now `*time.Time` (was `time.Time`) so `omitempty` works; removes the render/html workaround that treated the zero-value timestamp as unset. No JSON schema change — the wire shape was already `string`/`format: date-time`, only the Go-side representation changed", "commit": "4ee701b" }
+        {
+          "description": "`ExternalValidation.AccessedAt` and `InternalValidation.ValidatedAt` are now `*time.Time` (was `time.Time`) so `omitempty` works; removes the render/html workaround that treated the zero-value timestamp as unset. No JSON schema change — the wire shape was already `string`/`format: date-time`, only the Go-side representation changed",
+          "commit": "4ee701b"
+        }
       ]
     },
     {
       "version": "v0.12.0",
       "date": "2026-08-09",
       "highlights": [
-        { "description": "ExternalAggregator source type: claims sourced from stats-roundup sites with no original reporting default to auto-reject, even when their excerpt verifies verbatim" },
-        { "description": "StatisticalDetail: statistical claims carry a structured value/unit/precision/as-of-date, independent of the rendered claim text" },
-        { "description": "@plexusone/structured-evaluation: Zod schemas and TypeScript types regenerated for the new claim.statistical field" }
+        {
+          "description": "ExternalAggregator source type: claims sourced from stats-roundup sites with no original reporting default to auto-reject, even when their excerpt verifies verbatim"
+        },
+        {
+          "description": "StatisticalDetail: statistical claims carry a structured value/unit/precision/as-of-date, independent of the rendered claim text"
+        },
+        {
+          "description": "@plexusone/structured-evaluation: Zod schemas and TypeScript types regenerated for the new claim.statistical field"
+        }
       ],
       "added": [
-        { "description": "`ExternalAggregator` `ExternalSourceType`, defaulting to `ReliabilityLow` — distinct from `ExternalCommunity` (`ReliabilityMedium`): an aggregator has no original reporting to fall back on, unlike a named blog post or forum thread", "commit": "614cd5b" },
-        { "description": "`IsKnownAggregatorURL(url string) bool` and a starting `knownAggregatorDomains` list for classifying sources by domain rather than by self-reported label", "commit": "614cd5b" },
-        { "description": "`StatisticalDetail` type (`Value`, `Unit`, `Precision`, `AsOfDate`) and `Claim.Statistical` field, populated via `Claim.SetStatistical`", "commit": "a5d0f37" },
-        { "description": "`Precision` enum: `PrecisionExact`, `PrecisionApproximate`, `PrecisionEstimated`, `PrecisionRange`", "commit": "a5d0f37" },
-        { "description": "`NewStatisticalDetail(value, unit, precision)` constructor and `StatisticalDetail.WithAsOfDate(t)` chainable setter", "commit": "a5d0f37" },
-        { "description": "`@plexusone/structured-evaluation` npm package: regenerated Zod schemas and TS types including `ClaimsReport`'s new `statistical` object", "commit": "e1c3038" }
+        {
+          "description": "`ExternalAggregator` `ExternalSourceType`, defaulting to `ReliabilityLow` — distinct from `ExternalCommunity` (`ReliabilityMedium`): an aggregator has no original reporting to fall back on, unlike a named blog post or forum thread",
+          "commit": "614cd5b"
+        },
+        {
+          "description": "`IsKnownAggregatorURL(url string) bool` and a starting `knownAggregatorDomains` list for classifying sources by domain rather than by self-reported label",
+          "commit": "614cd5b"
+        },
+        {
+          "description": "`StatisticalDetail` type (`Value`, `Unit`, `Precision`, `AsOfDate`) and `Claim.Statistical` field, populated via `Claim.SetStatistical`",
+          "commit": "a5d0f37"
+        },
+        {
+          "description": "`Precision` enum: `PrecisionExact`, `PrecisionApproximate`, `PrecisionEstimated`, `PrecisionRange`",
+          "commit": "a5d0f37"
+        },
+        {
+          "description": "`NewStatisticalDetail(value, unit, precision)` constructor and `StatisticalDetail.WithAsOfDate(t)` chainable setter",
+          "commit": "a5d0f37"
+        },
+        {
+          "description": "`@plexusone/structured-evaluation` npm package: regenerated Zod schemas and TS types including `ClaimsReport`'s new `statistical` object",
+          "commit": "e1c3038"
+        }
       ],
       "documentation": [
-        { "description": "Document `ExternalAggregator` in the source-types table and `StatisticalDetail` in a new \"Statistical Claims\" section in docs/features/claims.md; mirror both in README's compact claims example", "commit": "01e5925" }
+        {
+          "description": "Document `ExternalAggregator` in the source-types table and `StatisticalDetail` in a new \"Statistical Claims\" section in docs/features/claims.md; mirror both in README's compact claims example",
+          "commit": "01e5925"
+        }
       ]
     },
     {
       "version": "v0.11.0",
       "date": "2026-07-20",
       "highlights": [
-        { "description": "Category severity rollup: CategoryResult.Severity computed automatically from findings, never independently set by the judge" },
-        { "description": "@plexusone/structured-evaluation: Zod schemas and TypeScript types generated from the same Go structs' JSON Schema" }
+        {
+          "description": "Category severity rollup: CategoryResult.Severity computed automatically from findings, never independently set by the judge"
+        },
+        {
+          "description": "@plexusone/structured-evaluation: Zod schemas and TypeScript types generated from the same Go structs' JSON Schema"
+        }
       ],
       "added": [
-        { "description": "`CategoryResult.Severity` field — the highest-severity finding in the category, or empty if there are none", "commit": "9f008ef" },
-        { "description": "`WorstSeverity(findings []Finding) Severity` helper for rolling findings up into a single severity", "commit": "9f008ef" },
-        { "description": "`AddFinding` recomputes `CategoryResult.Severity` on every call; `AddCategoryResult`/`Evaluate` compute it as a safety net for categories built via struct literal or appended directly to `Rubric.Categories`", "commit": "9f008ef" },
-        { "description": "`@plexusone/structured-evaluation` npm package: generated Zod schemas and TS types for `Rubric`, `RubricSet`, `ClaimsReport`, `SummaryReport`, downstream of the Go structs' JSON Schema", "commit": "9f8da9f" }
+        {
+          "description": "`CategoryResult.Severity` field — the highest-severity finding in the category, or empty if there are none",
+          "commit": "9f008ef"
+        },
+        {
+          "description": "`WorstSeverity(findings []Finding) Severity` helper for rolling findings up into a single severity",
+          "commit": "9f008ef"
+        },
+        {
+          "description": "`AddFinding` recomputes `CategoryResult.Severity` on every call; `AddCategoryResult`/`Evaluate` compute it as a safety net for categories built via struct literal or appended directly to `Rubric.Categories`",
+          "commit": "9f008ef"
+        },
+        {
+          "description": "`@plexusone/structured-evaluation` npm package: generated Zod schemas and TS types for `Rubric`, `RubricSet`, `ClaimsReport`, `SummaryReport`, downstream of the Go structs' JSON Schema",
+          "commit": "9f8da9f"
+        }
       ],
       "tests": [
-        { "description": "`WorstSeverity` and `CategoryResult.Severity` computation: empty, single, ties, order-independence, `AddCategoryResult`/`Evaluate` safety net, explicit-severity-preserved", "commit": "4a87481" }
+        {
+          "description": "`WorstSeverity` and `CategoryResult.Severity` computation: empty, single, ties, order-independence, `AddCategoryResult`/`Evaluate` safety net, explicit-severity-preserved",
+          "commit": "4a87481"
+        }
       ],
       "documentation": [
-        { "description": "Document `CategoryResult.Severity` rollup in docs/concepts/findings.md and README.md", "commit": "560d045" },
-        { "description": "Document the `@plexusone/structured-evaluation` npm package in docs/index.md, docs/getting-started/installation.md, and README.md", "commit": "560d045" }
+        {
+          "description": "Document `CategoryResult.Severity` rollup in docs/concepts/findings.md and README.md",
+          "commit": "560d045"
+        },
+        {
+          "description": "Document the `@plexusone/structured-evaluation` npm package in docs/index.md, docs/getting-started/installation.md, and README.md",
+          "commit": "560d045"
+        }
       ]
     },
     {
       "version": "v0.10.0",
       "date": "2026-07-20",
       "highlights": [
-        { "description": "Rich weighted-criteria rubric form: categories decompose into weighted sub-criteria with pass/partial/fail bands and indicators" },
-        { "description": "Numeric score thresholds (0-100) for weighted-score rubrics" },
-        { "description": "YAML authoring: rubric definitions parse directly into RubricSet" },
-        { "description": "Generated and embedded RubricSet definition schema (rubricset.schema.json)" }
+        {
+          "description": "Rich weighted-criteria rubric form: categories decompose into weighted sub-criteria with pass/partial/fail bands and indicators"
+        },
+        {
+          "description": "Numeric score thresholds (0-100) for weighted-score rubrics"
+        },
+        {
+          "description": "YAML authoring: rubric definitions parse directly into RubricSet"
+        },
+        {
+          "description": "Generated and embedded RubricSet definition schema (rubricset.schema.json)"
+        }
       ],
       "added": [
-        { "description": "`Criterion` type (`ID`, `Name`, `Weight`, `Pass`/`Partial`/`Fail`) and `CriterionLevel` (`Description`, `Indicators`)", "commit": "47b4673" },
-        { "description": "`Category.Criteria` field for weighted sub-criteria and `Category.IsComposite()` helper", "commit": "47b4673" },
-        { "description": "`ScoreThresholds` type and `RubricPassCriteria.ScoreThresholds` for numeric pass/partial cutoffs", "commit": "47b4673" },
-        { "description": "Generated and embedded `rubricset.schema.json` RubricSet definition schema", "commit": "47b4673" },
-        { "description": "`yaml` struct tags on rubric definition types so rubrics parse directly from YAML", "commit": "e1c58ae" }
+        {
+          "description": "`Criterion` type (`ID`, `Name`, `Weight`, `Pass`/`Partial`/`Fail`) and `CriterionLevel` (`Description`, `Indicators`)",
+          "commit": "47b4673"
+        },
+        {
+          "description": "`Category.Criteria` field for weighted sub-criteria and `Category.IsComposite()` helper",
+          "commit": "47b4673"
+        },
+        {
+          "description": "`ScoreThresholds` type and `RubricPassCriteria.ScoreThresholds` for numeric pass/partial cutoffs",
+          "commit": "47b4673"
+        },
+        {
+          "description": "Generated and embedded `rubricset.schema.json` RubricSet definition schema",
+          "commit": "47b4673"
+        },
+        {
+          "description": "`yaml` struct tags on rubric definition types so rubrics parse directly from YAML",
+          "commit": "e1c58ae"
+        }
       ]
     },
     {
       "version": "v0.9.0",
       "date": "2026-07-12",
       "highlights": [
-        { "description": "IntegerScore type for 1-5 scale scoring optimized for LLM judges" },
-        { "description": "ReasonCode system for standardized finding codes and automated repair" },
-        { "description": "CoverageReport for generic coverage tracking via Extensions" },
-        { "description": "v2 schema fields: Confidence, blocking codes, and domain extensions" }
+        {
+          "description": "IntegerScore type for 1-5 scale scoring optimized for LLM judges"
+        },
+        {
+          "description": "ReasonCode system for standardized finding codes and automated repair"
+        },
+        {
+          "description": "CoverageReport for generic coverage tracking via Extensions"
+        },
+        {
+          "description": "v2 schema fields: Confidence, blocking codes, and domain extensions"
+        }
       ],
       "added": [
-        { "description": "`IntegerScore` type with 1-5 scale constants (Unacceptable through Excellent)", "commit": "57fe0e6" },
-        { "description": "`String()`, `ToCategorical()`, `IsValid()`, `ParseIntegerScore()` helpers for IntegerScore", "commit": "57fe0e6" },
-        { "description": "`ReasonCode` type with category prefixes (REQ, SEC, ARCH, DOC, etc.)", "commit": "29606df" },
-        { "description": "`ReasonCodeRegistry` with metadata and repair prompts for each code", "commit": "29606df" },
-        { "description": "Pre-defined codes: REQ-AMBIGUOUS, SEC-MISSING_AUTH, METRIC-NO_BASELINE, etc.", "commit": "29606df" },
-        { "description": "`CoverageSection` and `CoverageReport` types for generic coverage tracking", "commit": "456bd01" },
-        { "description": "`SetSection()`, `GetSection()`, `ComputeOverall()`, `ComputeOverallWeighted()` methods", "commit": "456bd01" },
-        { "description": "`SetCoverage()` and `GetCoverage()` convenience methods on Rubric", "commit": "456bd01" },
-        { "description": "`IntScore` and `Confidence` fields on CategoryResult", "commit": "fae0a2b" },
-        { "description": "`SetIntScore()`, `SetConfidence()`, `HasLowConfidence()` methods on CategoryResult", "commit": "fae0a2b" },
-        { "description": "`ReasonCodes` field and `AddReasonCode()` method on CategoryResult", "commit": "fae0a2b" },
-        { "description": "`NewCategoryResultWithIntScore()` factory function", "commit": "fae0a2b" },
-        { "description": "`Code` and `Location` fields on Finding", "commit": "1dbe78a" },
-        { "description": "`NewFinding()` and `NewFindingWithCode()` constructors", "commit": "1dbe78a" },
-        { "description": "`SetCode()`, `SetLocation()`, `GetRepairPrompt()` methods on Finding", "commit": "1dbe78a" },
-        { "description": "`CountFindingsByCode()` and `GetBlockingCodes()` utilities", "commit": "1dbe78a" },
-        { "description": "`Extensions` field on Rubric for domain-specific metadata", "commit": "c455da4" },
-        { "description": "`SetExtension()`, `GetExtension()`, `HasExtension()` methods on Rubric", "commit": "c455da4" },
-        { "description": "`IntScore`, `Confidence`, `Pass`, `Blocking` fields on Rubric", "commit": "c455da4" },
-        { "description": "`SchemaVersion` field and `IsV2()` method for version tracking", "commit": "c455da4" },
-        { "description": "`ComputeOverallIntScore()`, `ComputeOverallConfidence()`, `NeedsHumanReview()` methods", "commit": "c455da4" },
-        { "description": "`MinIntScore` field in PassCriteria for minimum score thresholds", "commit": "c455da4" },
-        { "description": "Validation for IntScore (1-5 range), Confidence (0.0-1.0), and ReasonCodes", "commit": "7c288b5" },
-        { "description": "`ValidIntegerScoreValues()` and `ValidReasonCodes()` helper functions", "commit": "7c288b5" }
+        {
+          "description": "`IntegerScore` type with 1-5 scale constants (Unacceptable through Excellent)",
+          "commit": "57fe0e6"
+        },
+        {
+          "description": "`String()`, `ToCategorical()`, `IsValid()`, `ParseIntegerScore()` helpers for IntegerScore",
+          "commit": "57fe0e6"
+        },
+        {
+          "description": "`ReasonCode` type with category prefixes (REQ, SEC, ARCH, DOC, etc.)",
+          "commit": "29606df"
+        },
+        {
+          "description": "`ReasonCodeRegistry` with metadata and repair prompts for each code",
+          "commit": "29606df"
+        },
+        {
+          "description": "Pre-defined codes: REQ-AMBIGUOUS, SEC-MISSING_AUTH, METRIC-NO_BASELINE, etc.",
+          "commit": "29606df"
+        },
+        {
+          "description": "`CoverageSection` and `CoverageReport` types for generic coverage tracking",
+          "commit": "456bd01"
+        },
+        {
+          "description": "`SetSection()`, `GetSection()`, `ComputeOverall()`, `ComputeOverallWeighted()` methods",
+          "commit": "456bd01"
+        },
+        {
+          "description": "`SetCoverage()` and `GetCoverage()` convenience methods on Rubric",
+          "commit": "456bd01"
+        },
+        {
+          "description": "`IntScore` and `Confidence` fields on CategoryResult",
+          "commit": "fae0a2b"
+        },
+        {
+          "description": "`SetIntScore()`, `SetConfidence()`, `HasLowConfidence()` methods on CategoryResult",
+          "commit": "fae0a2b"
+        },
+        {
+          "description": "`ReasonCodes` field and `AddReasonCode()` method on CategoryResult",
+          "commit": "fae0a2b"
+        },
+        {
+          "description": "`NewCategoryResultWithIntScore()` factory function",
+          "commit": "fae0a2b"
+        },
+        {
+          "description": "`Code` and `Location` fields on Finding",
+          "commit": "1dbe78a"
+        },
+        {
+          "description": "`NewFinding()` and `NewFindingWithCode()` constructors",
+          "commit": "1dbe78a"
+        },
+        {
+          "description": "`SetCode()`, `SetLocation()`, `GetRepairPrompt()` methods on Finding",
+          "commit": "1dbe78a"
+        },
+        {
+          "description": "`CountFindingsByCode()` and `GetBlockingCodes()` utilities",
+          "commit": "1dbe78a"
+        },
+        {
+          "description": "`Extensions` field on Rubric for domain-specific metadata",
+          "commit": "c455da4"
+        },
+        {
+          "description": "`SetExtension()`, `GetExtension()`, `HasExtension()` methods on Rubric",
+          "commit": "c455da4"
+        },
+        {
+          "description": "`IntScore`, `Confidence`, `Pass`, `Blocking` fields on Rubric",
+          "commit": "c455da4"
+        },
+        {
+          "description": "`SchemaVersion` field and `IsV2()` method for version tracking",
+          "commit": "c455da4"
+        },
+        {
+          "description": "`ComputeOverallIntScore()`, `ComputeOverallConfidence()`, `NeedsHumanReview()` methods",
+          "commit": "c455da4"
+        },
+        {
+          "description": "`MinIntScore` field in PassCriteria for minimum score thresholds",
+          "commit": "c455da4"
+        },
+        {
+          "description": "Validation for IntScore (1-5 range), Confidence (0.0-1.0), and ReasonCodes",
+          "commit": "7c288b5"
+        },
+        {
+          "description": "`ValidIntegerScoreValues()` and `ValidReasonCodes()` helper functions",
+          "commit": "7c288b5"
+        }
       ],
       "changed": [
-        { "description": "`Evaluate()` now computes v2 fields (IntScore, Confidence, Blocking) and checks MinIntScore", "commit": "c455da4" },
-        { "description": "`rubric.schema.json` updated with v2 schema definitions", "commit": "9ed823a" }
+        {
+          "description": "`Evaluate()` now computes v2 fields (IntScore, Confidence, Blocking) and checks MinIntScore",
+          "commit": "c455da4"
+        },
+        {
+          "description": "`rubric.schema.json` updated with v2 schema definitions",
+          "commit": "9ed823a"
+        }
       ],
       "dependencies": [
-        { "description": "Bump go.yaml.in/yaml/v4 from rc.4 to rc.6", "commit": "741e2b3" }
+        {
+          "description": "Bump go.yaml.in/yaml/v4 from rc.4 to rc.6",
+          "commit": "741e2b3"
+        }
       ],
       "documentation": [
-        { "description": "Remove Go Report Card badge from README", "commit": "0c4c125" }
+        {
+          "description": "Remove Go Report Card badge from README",
+          "commit": "0c4c125"
+        }
       ]
     },
     {
       "version": "v0.8.0",
       "date": "2026-06-20",
       "highlights": [
-        { "description": "Box format renderer now supports evaluation (rubric) reports" },
-        { "description": "Numeric score display (1-5 scale) in terminal and markdown renderers" }
+        {
+          "description": "Box format renderer now supports evaluation (rubric) reports"
+        },
+        {
+          "description": "Numeric score display (1-5 scale) in terminal and markdown renderers"
+        }
       ],
       "added": [
-        { "description": "`box.NewEvaluationRenderer()` for rendering rubric reports in ASCII box format" },
-        { "description": "Numeric score display (e.g., `4/5 🟡`) in terminal and markdown renderers" },
-        { "description": "`formatScore()` helper in markdown renderer for dual-scale display" },
-        { "description": "`numericScoreColor()` and `numericScoreIcon()` helpers in terminal renderer" }
+        {
+          "description": "`box.NewEvaluationRenderer()` for rendering rubric reports in ASCII box format"
+        },
+        {
+          "description": "Numeric score display (e.g., `4/5 🟡`) in terminal and markdown renderers"
+        },
+        {
+          "description": "`formatScore()` helper in markdown renderer for dual-scale display"
+        },
+        {
+          "description": "`numericScoreColor()` and `numericScoreIcon()` helpers in terminal renderer"
+        }
       ],
       "changed": [
-        { "description": "CLI `render` command now supports `box` format for evaluation reports" }
+        {
+          "description": "CLI `render` command now supports `box` format for evaluation reports"
+        }
       ],
       "documentation": [
-        { "description": "Updated CLI commands documentation with box format for both report types", "commit": "d9b21a3" },
-        { "description": "Updated rendering documentation with evaluation report box examples", "commit": "d9b21a3" },
-        { "description": "Updated README package description for render/box", "commit": "d9b21a3" }
+        {
+          "description": "Updated CLI commands documentation with box format for both report types",
+          "commit": "d9b21a3"
+        },
+        {
+          "description": "Updated rendering documentation with evaluation report box examples",
+          "commit": "d9b21a3"
+        },
+        {
+          "description": "Updated README package description for render/box",
+          "commit": "d9b21a3"
+        }
       ]
     },
     {
       "version": "v0.7.0",
       "date": "2026-06-07",
       "highlights": [
-        { "description": "Report validation with comprehensive enum checking" },
-        { "description": "JSON Schema enhanced with enum constraints for all fields" },
-        { "description": "New `sevaluation lint` command for report correctness validation" }
+        {
+          "description": "Report validation with comprehensive enum checking"
+        },
+        {
+          "description": "JSON Schema enhanced with enum constraints for all fields"
+        },
+        {
+          "description": "New `sevaluation lint` command for report correctness validation"
+        }
       ],
       "added": [
-        { "description": "`ValidationResult` and `ValidationIssue` types for structured error reporting", "commit": "bf47249" },
-        { "description": "`ValidateReport()` function to check rubric report correctness", "commit": "bf47249" },
-        { "description": "Enum validation for `ScoreValue` (pass/partial/fail)", "commit": "bf47249" },
-        { "description": "Enum validation for `Severity` (critical/high/medium/low/info)", "commit": "bf47249" },
-        { "description": "Enum validation for `DecisionStatus` (pass/conditional/fail/human_review)", "commit": "bf47249" },
-        { "description": "Count verification for category and finding counts", "commit": "bf47249" },
-        { "description": "Semantic consistency checks (decision vs findings alignment)", "commit": "bf47249" },
-        { "description": "`ValidScoreValues()`, `ValidSeverityValues()`, `ValidDecisionStatusValues()` helper functions", "commit": "bf47249" },
-        { "description": "`ValidEvaluationTypeValues()` and `ValidScaleTypeValues()` helper functions", "commit": "bf47249" },
-        { "description": "`EnumDefinitions` export for cross-language tooling", "commit": "ab3f103" },
-        { "description": "`GenerateEnumsJSON()` function to generate enums.json", "commit": "ab3f103" },
-        { "description": "`schema/enums.json` with validation metadata (blocking severities, passing statuses)", "commit": "ab3f103" },
-        { "description": "`sevaluation lint` command for validating evaluation reports", "commit": "875464e" },
-        { "description": "`--strict` flag for lint command (treat warnings as errors)", "commit": "875464e" },
-        { "description": "`--format=text|json` option for lint output format", "commit": "875464e" }
+        {
+          "description": "`ValidationResult` and `ValidationIssue` types for structured error reporting",
+          "commit": "bf47249"
+        },
+        {
+          "description": "`ValidateReport()` function to check rubric report correctness",
+          "commit": "bf47249"
+        },
+        {
+          "description": "Enum validation for `ScoreValue` (pass/partial/fail)",
+          "commit": "bf47249"
+        },
+        {
+          "description": "Enum validation for `Severity` (critical/high/medium/low/info)",
+          "commit": "bf47249"
+        },
+        {
+          "description": "Enum validation for `DecisionStatus` (pass/conditional/fail/human_review)",
+          "commit": "bf47249"
+        },
+        {
+          "description": "Count verification for category and finding counts",
+          "commit": "bf47249"
+        },
+        {
+          "description": "Semantic consistency checks (decision vs findings alignment)",
+          "commit": "bf47249"
+        },
+        {
+          "description": "`ValidScoreValues()`, `ValidSeverityValues()`, `ValidDecisionStatusValues()` helper functions",
+          "commit": "bf47249"
+        },
+        {
+          "description": "`ValidEvaluationTypeValues()` and `ValidScaleTypeValues()` helper functions",
+          "commit": "bf47249"
+        },
+        {
+          "description": "`EnumDefinitions` export for cross-language tooling",
+          "commit": "ab3f103"
+        },
+        {
+          "description": "`GenerateEnumsJSON()` function to generate enums.json",
+          "commit": "ab3f103"
+        },
+        {
+          "description": "`schema/enums.json` with validation metadata (blocking severities, passing statuses)",
+          "commit": "ab3f103"
+        },
+        {
+          "description": "`sevaluation lint` command for validating evaluation reports",
+          "commit": "875464e"
+        },
+        {
+          "description": "`--strict` flag for lint command (treat warnings as errors)",
+          "commit": "875464e"
+        },
+        {
+          "description": "`--format=text|json` option for lint output format",
+          "commit": "875464e"
+        }
       ],
       "changed": [
-        { "description": "`rubric.schema.json` updated with enum constraints for score, severity, and status fields", "commit": "ab3f103" },
-        { "description": "`schema` command now also generates `enums.json`", "commit": "875464e" }
+        {
+          "description": "`rubric.schema.json` updated with enum constraints for score, severity, and status fields",
+          "commit": "ab3f103"
+        },
+        {
+          "description": "`schema` command now also generates `enums.json`",
+          "commit": "875464e"
+        }
       ]
     },
     {
       "version": "v0.6.0",
       "date": "2026-06-01",
       "highlights": [
-        { "description": "**Breaking**: `evaluation` package renamed to `rubric` for clearer terminology" },
-        { "description": "New `claims` package for factual claim extraction and source validation" },
-        { "description": "Embedded reports support in SummaryReport for full-fidelity archival" },
-        { "description": "JSON Schema for ClaimsReport with automated generation" }
+        {
+          "description": "**Breaking**: `evaluation` package renamed to `rubric` for clearer terminology"
+        },
+        {
+          "description": "New `claims` package for factual claim extraction and source validation"
+        },
+        {
+          "description": "Embedded reports support in SummaryReport for full-fidelity archival"
+        },
+        {
+          "description": "JSON Schema for ClaimsReport with automated generation"
+        }
       ],
       "added": [
-        { "description": "`claims` package with claim extraction and source validation types", "commit": "2a6d91a" },
-        { "description": "`Claim` type with ID, text, location, category, validation, and verdict", "commit": "2a6d91a" },
-        { "description": "`SourceType` enum: external, internal, derived, subjective", "commit": "2a6d91a" },
-        { "description": "`ExternalValidation` with URL, sourceType, reliability tier, and quoted text", "commit": "2a6d91a" },
-        { "description": "`InternalValidation` with method, evidence path, reproducibility, and environment", "commit": "2a6d91a" },
-        { "description": "`DerivedValidation` for claims calculated from other validated claims", "commit": "2a6d91a" },
-        { "description": "`SubjectiveValidation` with acknowledgment and recommendation fields", "commit": "2a6d91a" },
-        { "description": "`ReliabilityTier` enum: authoritative, high, medium, low", "commit": "2a6d91a" },
-        { "description": "`Verdict` enum: verified, unverified, needs-review, rejected", "commit": "2a6d91a" },
-        { "description": "`ClaimsReport` with metadata, claims array, summary, criteria, and decision", "commit": "2a6d91a" },
-        { "description": "`ClaimsCriteria` for configurable pass requirements", "commit": "2a6d91a" },
-        { "description": "`EvaluateClaims()` for computing decisions from criteria", "commit": "2a6d91a" },
-        { "description": "`EmbeddedReports` field in `SummaryReport` for full-fidelity archival", "commit": "babd91b" },
-        { "description": "`EmbedRubricReport()` and `EmbedClaimsReport()` methods on SummaryReport", "commit": "babd91b" },
-        { "description": "`GetEmbeddedRubricReport()` and `GetEmbeddedClaimsReport()` retrieval methods", "commit": "babd91b" },
-        { "description": "`HasEmbeddedReports()` helper for checking embedded content", "commit": "babd91b" },
-        { "description": "`GenerateClaimsSchema()` in schema package for JSON Schema generation", "commit": "2a6d91a" },
-        { "description": "Embedded `claims.schema.json` via go:embed", "commit": "2a6d91a" },
-        { "description": "`cmd/genschema` tool for regenerating all JSON schemas", "commit": "42f13f6" }
+        {
+          "description": "`claims` package with claim extraction and source validation types",
+          "commit": "2a6d91a"
+        },
+        {
+          "description": "`Claim` type with ID, text, location, category, validation, and verdict",
+          "commit": "2a6d91a"
+        },
+        {
+          "description": "`SourceType` enum: external, internal, derived, subjective",
+          "commit": "2a6d91a"
+        },
+        {
+          "description": "`ExternalValidation` with URL, sourceType, reliability tier, and quoted text",
+          "commit": "2a6d91a"
+        },
+        {
+          "description": "`InternalValidation` with method, evidence path, reproducibility, and environment",
+          "commit": "2a6d91a"
+        },
+        {
+          "description": "`DerivedValidation` for claims calculated from other validated claims",
+          "commit": "2a6d91a"
+        },
+        {
+          "description": "`SubjectiveValidation` with acknowledgment and recommendation fields",
+          "commit": "2a6d91a"
+        },
+        {
+          "description": "`ReliabilityTier` enum: authoritative, high, medium, low",
+          "commit": "2a6d91a"
+        },
+        {
+          "description": "`Verdict` enum: verified, unverified, needs-review, rejected",
+          "commit": "2a6d91a"
+        },
+        {
+          "description": "`ClaimsReport` with metadata, claims array, summary, criteria, and decision",
+          "commit": "2a6d91a"
+        },
+        {
+          "description": "`ClaimsCriteria` for configurable pass requirements",
+          "commit": "2a6d91a"
+        },
+        {
+          "description": "`EvaluateClaims()` for computing decisions from criteria",
+          "commit": "2a6d91a"
+        },
+        {
+          "description": "`EmbeddedReports` field in `SummaryReport` for full-fidelity archival",
+          "commit": "babd91b"
+        },
+        {
+          "description": "`EmbedRubricReport()` and `EmbedClaimsReport()` methods on SummaryReport",
+          "commit": "babd91b"
+        },
+        {
+          "description": "`GetEmbeddedRubricReport()` and `GetEmbeddedClaimsReport()` retrieval methods",
+          "commit": "babd91b"
+        },
+        {
+          "description": "`HasEmbeddedReports()` helper for checking embedded content",
+          "commit": "babd91b"
+        },
+        {
+          "description": "`GenerateClaimsSchema()` in schema package for JSON Schema generation",
+          "commit": "2a6d91a"
+        },
+        {
+          "description": "Embedded `claims.schema.json` via go:embed",
+          "commit": "2a6d91a"
+        },
+        {
+          "description": "`cmd/genschema` tool for regenerating all JSON schemas",
+          "commit": "42f13f6"
+        }
       ],
       "changed": [
-        { "description": "**Breaking**: `evaluation` package renamed to `rubric`", "commit": "0a7f07e" },
-        { "description": "**Breaking**: `EvaluationReport` type renamed to `Rubric`", "commit": "0a7f07e" },
-        { "description": "**Breaking**: `NewEvaluationReport()` renamed to `NewRubric()`", "commit": "0a7f07e" },
-        { "description": "**Breaking**: `evaluation.schema.json` renamed to `rubric.schema.json`", "commit": "0a7f07e" },
-        { "description": "`SummaryReport` now supports optional embedded reports via `EmbeddedReports` field", "commit": "babd91b" },
-        { "description": "Schema embed.go updated to include claims.schema.json", "commit": "2a6d91a" }
+        {
+          "description": "**Breaking**: `evaluation` package renamed to `rubric`",
+          "commit": "0a7f07e"
+        },
+        {
+          "description": "**Breaking**: `EvaluationReport` type renamed to `Rubric`",
+          "commit": "0a7f07e"
+        },
+        {
+          "description": "**Breaking**: `NewEvaluationReport()` renamed to `NewRubric()`",
+          "commit": "0a7f07e"
+        },
+        {
+          "description": "**Breaking**: `evaluation.schema.json` renamed to `rubric.schema.json`",
+          "commit": "0a7f07e"
+        },
+        {
+          "description": "`SummaryReport` now supports optional embedded reports via `EmbeddedReports` field",
+          "commit": "babd91b"
+        },
+        {
+          "description": "Schema embed.go updated to include claims.schema.json",
+          "commit": "2a6d91a"
+        }
       ],
       "documentation": [
-        { "description": "Added Claims Validation documentation page", "commit": "fbe53f7" },
-        { "description": "Updated Report Types page to include ClaimsReport", "commit": "fbe53f7" },
-        { "description": "Added v0.6.0 release notes", "commit": "b4d41ec" },
-        { "description": "Added architecture diagram to README.md and docs/index.md", "commit": "b92f459" },
-        { "description": "Updated MkDocs site for evaluation to rubric rename", "commit": "f71d8b7" }
+        {
+          "description": "Added Claims Validation documentation page",
+          "commit": "fbe53f7"
+        },
+        {
+          "description": "Updated Report Types page to include ClaimsReport",
+          "commit": "fbe53f7"
+        },
+        {
+          "description": "Added v0.6.0 release notes",
+          "commit": "b4d41ec"
+        },
+        {
+          "description": "Added architecture diagram to README.md and docs/index.md",
+          "commit": "b92f459"
+        },
+        {
+          "description": "Updated MkDocs site for evaluation to rubric rename",
+          "commit": "f71d8b7"
+        }
       ],
       "tests": [
-        { "description": "Unit tests for claims package", "commit": "2a6d91a" },
-        { "description": "Embed tests for SummaryReport with embedded reports", "commit": "d784399" }
+        {
+          "description": "Unit tests for claims package",
+          "commit": "2a6d91a"
+        },
+        {
+          "description": "Embed tests for SummaryReport with embedded reports",
+          "commit": "d784399"
+        }
       ],
       "fixed": [
-        { "description": "Address gosec G703 path traversal lint error in genschema", "commit": "bf1c16f" }
+        {
+          "description": "Address gosec G703 path traversal lint error in genschema",
+          "commit": "bf1c16f"
+        }
       ]
     },
     {
       "version": "v0.5.0",
       "date": "2026-05-23",
       "highlights": [
-        { "description": "Likert scale (1-5) support for human comparison studies" },
-        { "description": "Inter-rater reliability (IRR) metrics for LLM calibration" }
+        {
+          "description": "Likert scale (1-5) support for human comparison studies"
+        },
+        {
+          "description": "Inter-rater reliability (IRR) metrics for LLM calibration"
+        }
       ],
       "added": [
-        { "description": "`ScaleTypeLikert` scale type with configurable anchors and thresholds", "commit": "96e608b" },
-        { "description": "`LikertConfig` with min/max values and pass/partial thresholds", "commit": "96e608b" },
-        { "description": "`LikertAnchor` for describing score levels (value, label, description)", "commit": "96e608b" },
-        { "description": "`StandardLikert5Anchors()` helper for standard 1-5 scale", "commit": "96e608b" },
-        { "description": "`WithLikert5()` and `WithLikert()` methods for creating Likert categories", "commit": "96e608b" },
-        { "description": "`LikertToCategorical()` for converting numeric scores to pass/partial/fail", "commit": "96e608b" },
-        { "description": "Optional `NumericScore` field on `CategoryResult` for dual-scale support", "commit": "273776a" },
-        { "description": "`NewCategoryResultWithNumeric()` for creating results with both categorical and numeric scores", "commit": "273776a" },
-        { "description": "`NewCategoryResultFromLikert()` for creating results from Likert scores", "commit": "273776a" },
-        { "description": "`IRRMetrics` type with exact agreement, adjacent agreement, MAD, and Pearson correlation", "commit": "98f11eb" },
-        { "description": "`ComputeIRR()` for computing IRR from rating pairs", "commit": "98f11eb" },
-        { "description": "`ComputeIRRFromResults()` for comparing two sets of CategoryResults", "commit": "98f11eb" },
-        { "description": "`CategoricalAgreement` type with confusion matrix for categorical comparisons", "commit": "98f11eb" },
-        { "description": "`ComputeCategoricalAgreement()` for categorical IRR analysis", "commit": "98f11eb" }
+        {
+          "description": "`ScaleTypeLikert` scale type with configurable anchors and thresholds",
+          "commit": "96e608b"
+        },
+        {
+          "description": "`LikertConfig` with min/max values and pass/partial thresholds",
+          "commit": "96e608b"
+        },
+        {
+          "description": "`LikertAnchor` for describing score levels (value, label, description)",
+          "commit": "96e608b"
+        },
+        {
+          "description": "`StandardLikert5Anchors()` helper for standard 1-5 scale",
+          "commit": "96e608b"
+        },
+        {
+          "description": "`WithLikert5()` and `WithLikert()` methods for creating Likert categories",
+          "commit": "96e608b"
+        },
+        {
+          "description": "`LikertToCategorical()` for converting numeric scores to pass/partial/fail",
+          "commit": "96e608b"
+        },
+        {
+          "description": "Optional `NumericScore` field on `CategoryResult` for dual-scale support",
+          "commit": "273776a"
+        },
+        {
+          "description": "`NewCategoryResultWithNumeric()` for creating results with both categorical and numeric scores",
+          "commit": "273776a"
+        },
+        {
+          "description": "`NewCategoryResultFromLikert()` for creating results from Likert scores",
+          "commit": "273776a"
+        },
+        {
+          "description": "`IRRMetrics` type with exact agreement, adjacent agreement, MAD, and Pearson correlation",
+          "commit": "98f11eb"
+        },
+        {
+          "description": "`ComputeIRR()` for computing IRR from rating pairs",
+          "commit": "98f11eb"
+        },
+        {
+          "description": "`ComputeIRRFromResults()` for comparing two sets of CategoryResults",
+          "commit": "98f11eb"
+        },
+        {
+          "description": "`CategoricalAgreement` type with confusion matrix for categorical comparisons",
+          "commit": "98f11eb"
+        },
+        {
+          "description": "`ComputeCategoricalAgreement()` for categorical IRR analysis",
+          "commit": "98f11eb"
+        }
       ],
       "documentation": [
-        { "description": "Added Likert Scales documentation page", "commit": "665f0c1" },
-        { "description": "Added Inter-Rater Reliability documentation page", "commit": "665f0c1" }
+        {
+          "description": "Added Likert Scales documentation page",
+          "commit": "665f0c1"
+        },
+        {
+          "description": "Added Inter-Rater Reliability documentation page",
+          "commit": "665f0c1"
+        }
       ],
       "tests": [
-        { "description": "Comprehensive tests for Likert scales and IRR metrics", "commit": "7e25548" }
+        {
+          "description": "Comprehensive tests for Likert scales and IRR metrics",
+          "commit": "7e25548"
+        }
       ]
     },
     {
       "version": "v0.4.0",
       "date": "2026-05-23",
       "highlights": [
-        { "description": "Switch from numeric scores to categorical pass/partial/fail values" },
-        { "description": "New terminal and markdown renderers for evaluation reports" }
+        {
+          "description": "Switch from numeric scores to categorical pass/partial/fail values"
+        },
+        {
+          "description": "New terminal and markdown renderers for evaluation reports"
+        }
       ],
       "changed": [
-        { "description": "**Breaking**: `CategoryScore` renamed to `CategoryResult` with `Score` field (pass/partial/fail)", "commit": "2c84023" },
-        { "description": "**Breaking**: `ScoreStatus` renamed to `ScoreValue` with values pass/partial/fail", "commit": "2c84023" },
-        { "description": "**Breaking**: Removed `WeightedScore` from `EvaluationReport`", "commit": "2c84023" },
-        { "description": "**Breaking**: `CategoryResult.Score` is now categorical instead of numeric", "commit": "2c84023" },
-        { "description": "Added `CategoryCounts` to `Decision` (pass/partial/fail counts)", "commit": "2c84023" },
-        { "description": "Updated detailed renderer to display category counts instead of numeric scores", "commit": "4d0d9e6" }
+        {
+          "description": "**Breaking**: `CategoryScore` renamed to `CategoryResult` with `Score` field (pass/partial/fail)",
+          "commit": "2c84023"
+        },
+        {
+          "description": "**Breaking**: `ScoreStatus` renamed to `ScoreValue` with values pass/partial/fail",
+          "commit": "2c84023"
+        },
+        {
+          "description": "**Breaking**: Removed `WeightedScore` from `EvaluationReport`",
+          "commit": "2c84023"
+        },
+        {
+          "description": "**Breaking**: `CategoryResult.Score` is now categorical instead of numeric",
+          "commit": "2c84023"
+        },
+        {
+          "description": "Added `CategoryCounts` to `Decision` (pass/partial/fail counts)",
+          "commit": "2c84023"
+        },
+        {
+          "description": "Updated detailed renderer to display category counts instead of numeric scores",
+          "commit": "4d0d9e6"
+        }
       ],
       "added": [
-        { "description": "`render/terminal` package with ANSI-colored output and UTF8 icons", "commit": "cb692fe" },
-        { "description": "`render/markdown` package for Markdown report generation", "commit": "cb692fe" },
-        { "description": "CLI `terminal` and `markdown` render format options", "commit": "8ec8893" }
+        {
+          "description": "`render/terminal` package with ANSI-colored output and UTF8 icons",
+          "commit": "cb692fe"
+        },
+        {
+          "description": "`render/markdown` package for Markdown report generation",
+          "commit": "cb692fe"
+        },
+        {
+          "description": "CLI `terminal` and `markdown` render format options",
+          "commit": "8ec8893"
+        }
       ],
       "documentation": [
-        { "description": "Added UTF8 icons to README.md Overview section", "commit": "67068ee" }
+        {
+          "description": "Added UTF8 icons to README.md Overview section",
+          "commit": "67068ee"
+        }
       ]
     },
     {
       "version": "v0.3.1",
       "date": "2026-05-19",
       "build": [
-        { "description": "Updated CI workflows to use shared workflows", "commit": "9d9cd21" },
-        { "description": "Renamed workflow files to standard filenames", "commit": "ad685e0" }
+        {
+          "description": "Updated CI workflows to use shared workflows",
+          "commit": "9d9cd21"
+        },
+        {
+          "description": "Renamed workflow files to standard filenames",
+          "commit": "ad685e0"
+        }
       ],
       "dependencies": [
-        { "description": "Bump github.com/invopop/jsonschema from 0.13.0 to 0.14.0", "commit": "8b1c8d8" },
-        { "description": "Updated go.mod dependencies", "commit": "230616e" }
+        {
+          "description": "Bump github.com/invopop/jsonschema from 0.13.0 to 0.14.0",
+          "commit": "8b1c8d8"
+        },
+        {
+          "description": "Updated go.mod dependencies",
+          "commit": "230616e"
+        }
       ]
     },
     {
       "version": "v0.3.0",
       "date": "2026-03-01",
       "highlights": [
-        { "description": "Organization rename from agentplexus to plexusone" }
+        {
+          "description": "Organization rename from agentplexus to plexusone"
+        }
       ],
       "changed": [
-        { "description": "**Breaking**: Module path changed from `github.com/agentplexus/structured-evaluation` to `github.com/plexusone/structured-evaluation`" },
-        { "description": "Updated JSON Schema `$id` URLs to use new module path" }
+        {
+          "description": "**Breaking**: Module path changed from `github.com/agentplexus/structured-evaluation` to `github.com/plexusone/structured-evaluation`"
+        },
+        {
+          "description": "Updated JSON Schema `$id` URLs to use new module path"
+        }
       ],
       "documentation": [
-        { "description": "Updated all documentation and examples to use new module path" }
+        {
+          "description": "Updated all documentation and examples to use new module path"
+        }
       ]
     },
     {
       "version": "v0.2.0",
       "date": "2026-01-26",
       "highlights": [
-        { "description": "Rubric definitions with score anchors for consistent LLM-as-Judge evaluations" },
-        { "description": "Judge metadata tracking (model, prompt, temperature, tokens)" },
-        { "description": "Pairwise comparison mode as alternative to absolute scoring" },
-        { "description": "Multi-judge aggregation with agreement metrics" }
+        {
+          "description": "Rubric definitions with score anchors for consistent LLM-as-Judge evaluations"
+        },
+        {
+          "description": "Judge metadata tracking (model, prompt, temperature, tokens)"
+        },
+        {
+          "description": "Pairwise comparison mode as alternative to absolute scoring"
+        },
+        {
+          "description": "Multi-judge aggregation with agreement metrics"
+        }
       ],
       "added": [
-        { "description": "Rubric and ScoreAnchor types for defining explicit scoring criteria", "commit": "ba83b8d" },
-        { "description": "Range-based score anchors (e.g., 8-10 = Excellent)", "commit": "ba83b8d" },
-        { "description": "DefaultPRDRubricSet with problem_definition, solution_clarity, success_metrics", "commit": "ba83b8d" },
-        { "description": "JudgeMetadata type for tracking LLM model, provider, and prompt", "commit": "4874b1d" },
-        { "description": "TokenUsage tracking for evaluation cost monitoring", "commit": "4874b1d" },
-        { "description": "Observability trace/span links in JudgeMetadata", "commit": "4874b1d" },
-        { "description": "PairwiseComparison type for comparing two outputs", "commit": "4ec495d" },
-        { "description": "Position bias detection via swapped comparisons", "commit": "4ec495d" },
-        { "description": "ComputePairwiseResult for aggregating comparison results", "commit": "4ec495d" },
-        { "description": "ReferenceData and ReferenceDataset types for gold/expected data", "commit": "5c937e9" },
-        { "description": "Human annotation support with scores and labels", "commit": "5c937e9" },
-        { "description": "MultiJudgeResult for aggregating evaluations from multiple judges", "commit": "06060ac" },
-        { "description": "Aggregation methods: mean, median, weighted, majority, conservative", "commit": "06060ac" },
-        { "description": "Inter-judge agreement metrics and disagreement detection", "commit": "06060ac" },
-        { "description": "Finding consolidation with severity-based deduplication", "commit": "06060ac" },
-        { "description": "Judge, RubricID, and Reference fields in EvaluationReport", "commit": "3cb047c" }
+        {
+          "description": "Rubric and ScoreAnchor types for defining explicit scoring criteria",
+          "commit": "ba83b8d"
+        },
+        {
+          "description": "Range-based score anchors (e.g., 8-10 = Excellent)",
+          "commit": "ba83b8d"
+        },
+        {
+          "description": "DefaultPRDRubricSet with problem_definition, solution_clarity, success_metrics",
+          "commit": "ba83b8d"
+        },
+        {
+          "description": "JudgeMetadata type for tracking LLM model, provider, and prompt",
+          "commit": "4874b1d"
+        },
+        {
+          "description": "TokenUsage tracking for evaluation cost monitoring",
+          "commit": "4874b1d"
+        },
+        {
+          "description": "Observability trace/span links in JudgeMetadata",
+          "commit": "4874b1d"
+        },
+        {
+          "description": "PairwiseComparison type for comparing two outputs",
+          "commit": "4ec495d"
+        },
+        {
+          "description": "Position bias detection via swapped comparisons",
+          "commit": "4ec495d"
+        },
+        {
+          "description": "ComputePairwiseResult for aggregating comparison results",
+          "commit": "4ec495d"
+        },
+        {
+          "description": "ReferenceData and ReferenceDataset types for gold/expected data",
+          "commit": "5c937e9"
+        },
+        {
+          "description": "Human annotation support with scores and labels",
+          "commit": "5c937e9"
+        },
+        {
+          "description": "MultiJudgeResult for aggregating evaluations from multiple judges",
+          "commit": "06060ac"
+        },
+        {
+          "description": "Aggregation methods: mean, median, weighted, majority, conservative",
+          "commit": "06060ac"
+        },
+        {
+          "description": "Inter-judge agreement metrics and disagreement detection",
+          "commit": "06060ac"
+        },
+        {
+          "description": "Finding consolidation with severity-based deduplication",
+          "commit": "06060ac"
+        },
+        {
+          "description": "Judge, RubricID, and Reference fields in EvaluationReport",
+          "commit": "3cb047c"
+        }
       ],
       "changed": [
-        { "description": "Updated JSON Schema to include v0.2.0 types", "commit": "62ca52b" }
+        {
+          "description": "Updated JSON Schema to include v0.2.0 types",
+          "commit": "62ca52b"
+        }
       ],
       "tests": [
-        { "description": "Unit tests for Rubric, PairwiseComparison, and MultiJudgeResult", "commit": "682e87b" }
+        {
+          "description": "Unit tests for Rubric, PairwiseComparison, and MultiJudgeResult",
+          "commit": "682e87b"
+        }
       ]
     },
     {
       "version": "v0.1.0",
       "date": "2026-01-26",
       "highlights": [
-        { "description": "Reusable evaluation framework for LLM-as-Judge and multi-agent workflows" },
-        { "description": "InfoSec severity levels (Critical, High, Medium, Low) with configurable pass criteria" },
-        { "description": "DAG-based report aggregation for multi-agent coordination" }
+        {
+          "description": "Reusable evaluation framework for LLM-as-Judge and multi-agent workflows"
+        },
+        {
+          "description": "InfoSec severity levels (Critical, High, Medium, Low) with configurable pass criteria"
+        },
+        {
+          "description": "DAG-based report aggregation for multi-agent coordination"
+        }
       ],
       "added": [
-        { "description": "`evaluation` package with EvaluationReport, CategoryScore, Finding, Severity types", "commit": "7a283de" },
-        { "description": "Category scoring with weighted scores (0-10) and pass/warn/fail status", "commit": "0981fed" },
-        { "description": "PassCriteria and Decision types with configurable approval thresholds", "commit": "f32acc9" },
-        { "description": "EvaluationReport with metadata, categories, findings, and next steps", "commit": "f11ae66" },
-        { "description": "`summary` package with SummaryReport, TeamSection, TaskResult for GO/NO-GO checks", "commit": "897e09b" },
-        { "description": "`combine` package with DAG-based topological sort using Kahn's algorithm", "commit": "5b384b7" },
-        { "description": "AggregateResults and AggregateWithDAG for multi-agent coordination", "commit": "5b384b7" },
-        { "description": "Box-format terminal renderer for summary reports", "commit": "1ea0b48" },
-        { "description": "Detailed terminal renderer for evaluation reports with severity grouping", "commit": "1ea0b48" },
-        { "description": "JSON Schema generation using invopop/jsonschema", "commit": "2f77e28" },
-        { "description": "Embedded schemas via `//go:embed` for runtime access", "commit": "2f77e28" },
-        { "description": "`sevaluation` CLI with render, check, validate, and schema commands", "commit": "bfdb7bf" }
+        {
+          "description": "`evaluation` package with EvaluationReport, CategoryScore, Finding, Severity types",
+          "commit": "7a283de"
+        },
+        {
+          "description": "Category scoring with weighted scores (0-10) and pass/warn/fail status",
+          "commit": "0981fed"
+        },
+        {
+          "description": "PassCriteria and Decision types with configurable approval thresholds",
+          "commit": "f32acc9"
+        },
+        {
+          "description": "EvaluationReport with metadata, categories, findings, and next steps",
+          "commit": "f11ae66"
+        },
+        {
+          "description": "`summary` package with SummaryReport, TeamSection, TaskResult for GO/NO-GO checks",
+          "commit": "897e09b"
+        },
+        {
+          "description": "`combine` package with DAG-based topological sort using Kahn's algorithm",
+          "commit": "5b384b7"
+        },
+        {
+          "description": "AggregateResults and AggregateWithDAG for multi-agent coordination",
+          "commit": "5b384b7"
+        },
+        {
+          "description": "Box-format terminal renderer for summary reports",
+          "commit": "1ea0b48"
+        },
+        {
+          "description": "Detailed terminal renderer for evaluation reports with severity grouping",
+          "commit": "1ea0b48"
+        },
+        {
+          "description": "JSON Schema generation using invopop/jsonschema",
+          "commit": "2f77e28"
+        },
+        {
+          "description": "Embedded schemas via `//go:embed` for runtime access",
+          "commit": "2f77e28"
+        },
+        {
+          "description": "`sevaluation` CLI with render, check, validate, and schema commands",
+          "commit": "bfdb7bf"
+        }
       ],
       "tests": [
-        { "description": "Unit tests for evaluation criteria, DAG sorting, and summary reports", "commit": "95435a5" }
+        {
+          "description": "Unit tests for evaluation criteria, DAG sorting, and summary reports",
+          "commit": "95435a5"
+        }
       ],
       "documentation": [
-        { "description": "Example evaluation and summary reports in examples/", "commit": "b014b5f" }
+        {
+          "description": "Example evaluation and summary reports in examples/",
+          "commit": "b014b5f"
+        }
       ],
       "build": [
-        { "description": "GitHub Actions workflows for CI, linting, and CodeQL analysis", "commit": "7ea98ec" },
-        { "description": "Dependabot configuration for automated dependency updates", "commit": "7ea98ec" },
-        { "description": "golangci-lint configuration", "commit": "57e6570" }
+        {
+          "description": "GitHub Actions workflows for CI, linting, and CodeQL analysis",
+          "commit": "7ea98ec"
+        },
+        {
+          "description": "Dependabot configuration for automated dependency updates",
+          "commit": "7ea98ec"
+        },
+        {
+          "description": "golangci-lint configuration",
+          "commit": "57e6570"
+        }
       ]
     }
   ]
