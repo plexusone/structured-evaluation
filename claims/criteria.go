@@ -44,6 +44,20 @@ type ClaimsCriteria struct {
 	// with no Statistical detail, or one whose AsOfDate is unset, is never
 	// flagged: age is unknown, not stale. See IsFresh.
 	MaxClaimAge time.Duration `json:"maxClaimAge,omitempty"`
+
+	// RequireQuotedSupport requires every verified claim to have a supports
+	// passage with a quote and a source. Off by default.
+	RequireQuotedSupport bool `json:"requireQuotedSupport,omitempty"`
+
+	// MinSupportConfidence is the lowest judge confidence a verified claim
+	// may have. A verified claim with a lower or unset confidence falls
+	// short. Empty disables the requirement.
+	MinSupportConfidence Confidence `json:"minSupportConfidence,omitempty"`
+
+	// ExceptionalMinSources is how many distinct sources must give a quoted
+	// supports passage for a verified claim marked Exceptional. 0 or 1
+	// disables the requirement.
+	ExceptionalMinSources int `json:"exceptionalMinSources,omitempty"`
 }
 
 // DefaultClaimsCriteria returns standard criteria.
@@ -54,6 +68,23 @@ func DefaultClaimsCriteria() ClaimsCriteria {
 		AllowNeedsReview:              true,
 		MinReliabilityTier:            ReliabilityMedium,
 		RequireReproducible:           false,
+	}
+}
+
+// WikipediaClaimsCriteria returns criteria at an encyclopedic standard of
+// verifiability, modelled on Wikipedia's: every verified claim rests on a
+// quoted passage from a highly reliable source, judged with at least medium
+// confidence, and a claim marked exceptional needs two independent sources.
+// Claims needing review fail the report.
+func WikipediaClaimsCriteria() ClaimsCriteria {
+	return ClaimsCriteria{
+		RequireAllVerified:            true,
+		AllowSubjectiveWithDisclaimer: false,
+		AllowNeedsReview:              false,
+		MinReliabilityTier:            ReliabilityHigh,
+		RequireQuotedSupport:          true,
+		MinSupportConfidence:          ConfidenceMedium,
+		ExceptionalMinSources:         2,
 	}
 }
 
@@ -105,12 +136,13 @@ type ClaimsCounts struct {
 	NeedsReview int `json:"needsReview"`
 	Rejected    int `json:"rejected"`
 
-	// Contested, Contradicted and CitationGap count the verdicts of
-	// multi-source checking. They are omitted when zero, so reports that
+	// Contested, Contradicted, CitationGap and Refuted count the verdicts
+	// of multi-source checking. They are omitted when zero, so reports that
 	// do not use these verdicts are unchanged.
 	Contested    int `json:"contested,omitempty"`
 	Contradicted int `json:"contradicted,omitempty"`
 	CitationGap  int `json:"citationGap,omitempty"`
+	Refuted      int `json:"refuted,omitempty"`
 }
 
 // CountClaims counts claims by verdict.
@@ -133,6 +165,8 @@ func CountClaims(claims []Claim) ClaimsCounts {
 			counts.Contradicted++
 		case VerdictCitationGap:
 			counts.CitationGap++
+		case VerdictRefuted:
+			counts.Refuted++
 		}
 	}
 	return counts
@@ -142,7 +176,7 @@ func CountClaims(claims []Claim) ClaimsCounts {
 func EvaluateClaims(claims []Claim, criteria ClaimsCriteria) ClaimsDecision {
 	now := time.Now().UTC()
 	counts := CountClaims(claims)
-	insufficientCorroboration := countInsufficientlyCorroborated(claims, criteria)
+	insufficientCorroboration := countInsufficientlyCorroborated(claims, criteria) + countUnmetSupport(claims, criteria)
 	stale := countStaleClaims(claims, criteria, now)
 
 	decision := ClaimsDecision{
@@ -150,11 +184,12 @@ func EvaluateClaims(claims []Claim, criteria ClaimsCriteria) ClaimsDecision {
 	}
 
 	// Check for rejected claims. A contradicted claim, one a source
-	// says otherwise, fails the report the same way.
-	if counts.Rejected > 0 || counts.Contradicted > 0 {
+	// says otherwise, and a refuted claim, one shown false, fail the report
+	// the same way.
+	if counts.Rejected > 0 || counts.Contradicted > 0 || counts.Refuted > 0 {
 		decision.Status = ClaimsDecisionFail
 		decision.Passed = false
-		decision.Rationale = formatRejectedRationale(counts.Rejected + counts.Contradicted)
+		decision.Rationale = formatRejectedRationale(counts.Rejected + counts.Contradicted + counts.Refuted)
 		return decision
 	}
 
@@ -342,6 +377,69 @@ func countStaleClaims(claims []Claim, criteria ClaimsCriteria, now time.Time) in
 	n := 0
 	for _, c := range claims {
 		if c.Verdict == VerdictVerified && !IsFresh(c, criteria, now) {
+			n++
+		}
+	}
+	return n
+}
+
+// SupportShortfalls returns the support criteria a verified claim falls
+// short of: requireQuotedSupport, minSupportConfidence or
+// exceptionalMinSources. It returns nil for a claim that is not verified or
+// meets them all, and for criteria that set none of them.
+func SupportShortfalls(c Claim, criteria ClaimsCriteria) []string {
+	if c.Verdict != VerdictVerified {
+		return nil
+	}
+	var out []string
+	quoted := c.SupportingQuotes()
+	if criteria.RequireQuotedSupport && len(quoted) == 0 {
+		out = append(out, "requireQuotedSupport")
+	}
+	if criteria.MinSupportConfidence != "" && confidenceRank(c.Confidence) < confidenceRank(criteria.MinSupportConfidence) {
+		out = append(out, "minSupportConfidence")
+	}
+	if c.Exceptional && criteria.ExceptionalMinSources > 1 && distinctSources(quoted) < criteria.ExceptionalMinSources {
+		out = append(out, "exceptionalMinSources")
+	}
+	return out
+}
+
+// confidenceRank orders confidences; an unset or unknown confidence ranks
+// lowest.
+func confidenceRank(c Confidence) int {
+	switch c {
+	case ConfidenceHigh:
+		return 3
+	case ConfidenceMedium:
+		return 2
+	case ConfidenceLow:
+		return 1
+	}
+	return 0
+}
+
+// distinctSources counts the distinct sources of evidence, by SourceRef, or
+// URL when a passage has no SourceRef.
+func distinctSources(evs []Evidence) int {
+	seen := map[string]bool{}
+	for _, e := range evs {
+		key := e.SourceRef
+		if key == "" {
+			key = "url:" + e.URL
+		}
+		seen[key] = true
+	}
+	return len(seen)
+}
+
+// countUnmetSupport counts verified claims that fall short of the support
+// criteria. For the report decision they count with claims lacking
+// corroboration.
+func countUnmetSupport(claims []Claim, criteria ClaimsCriteria) int {
+	n := 0
+	for _, c := range claims {
+		if len(SupportShortfalls(c, criteria)) > 0 {
 			n++
 		}
 	}

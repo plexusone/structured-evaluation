@@ -26,6 +26,13 @@ const (
 	// VerdictCitationGap indicates the claim is supported, but by a source
 	// other than the one it cites, so the citation needs fixing.
 	VerdictCitationGap Verdict = "citation-gap"
+
+	// VerdictRefuted indicates a reliable source shows the claim false. It
+	// differs from contradicted, a source the claim cites disagreeing, which
+	// the author fixes: a refuted claim is kept as a record that it is false,
+	// such as a misconception that circulates. It needs a quoted disputes
+	// passage.
+	VerdictRefuted Verdict = "refuted"
 )
 
 // IsPassing returns true if the verdict is acceptable for publication.
@@ -35,7 +42,7 @@ func (v Verdict) IsPassing() bool {
 
 // IsBlocking returns true if the verdict blocks publication.
 func (v Verdict) IsBlocking() bool {
-	return v == VerdictUnverified || v == VerdictRejected || v == VerdictContradicted
+	return v == VerdictUnverified || v == VerdictRejected || v == VerdictContradicted || v == VerdictRefuted
 }
 
 // NeedsPerson returns true if the verdict asks a person to decide: the
@@ -53,7 +60,7 @@ func (v Verdict) Icon() string {
 		return "✗"
 	case VerdictNeedsReview:
 		return "?"
-	case VerdictRejected, VerdictContradicted:
+	case VerdictRejected, VerdictContradicted, VerdictRefuted:
 		return "✗"
 	case VerdictContested, VerdictCitationGap:
 		return "?"

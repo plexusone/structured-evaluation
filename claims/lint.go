@@ -77,10 +77,36 @@ func Lint(r *ClaimsReport) []LintFinding {
 		}
 		seen[c.ID] = true
 
+		// A refuted claim records that a source shows it false, so it needs
+		// the passage that does.
+		if c.Verdict == VerdictRefuted && !hasQuotedDispute(c) {
+			out = append(out, finding(c, "refuted-requires-quoted-dispute", LintError,
+				"refuted claim has no quoted disputes passage"))
+		}
+
 		// Only verified claims must clear the evidence bar. needs-review,
 		// rejected, and unverified carry no such obligation.
 		if c.Verdict != VerdictVerified {
 			continue
+		}
+
+		// Configurable support requirements (r.Criteria): quoted support,
+		// judge confidence, and sources for exceptional claims. Each is off
+		// unless the report's criteria set it.
+		for _, s := range SupportShortfalls(*c, r.Criteria) {
+			switch s {
+			case "requireQuotedSupport":
+				out = append(out, finding(c, "verified-requires-quoted-support", LintError,
+					"verified claim has no quoted supports passage with a source"))
+			case "minSupportConfidence":
+				out = append(out, finding(c, "verified-low-confidence", LintError,
+					fmt.Sprintf("verified claim's confidence %q is below the required %q",
+						c.Confidence, r.Criteria.MinSupportConfidence)))
+			case "exceptionalMinSources":
+				out = append(out, finding(c, "verified-exceptional-needs-sources", LintError,
+					fmt.Sprintf("exceptional claim has quoted support from %d source(s), fewer than the required %d",
+						distinctSources(c.SupportingQuotes()), r.Criteria.ExceptionalMinSources)))
+			}
 		}
 
 		// General, configurable corroboration requirement (r.Criteria).
@@ -246,4 +272,15 @@ func addThousands(s string) string {
 		res = "-" + res
 	}
 	return res
+}
+
+// hasQuotedDispute reports whether the claim has a disputes passage with a
+// quote.
+func hasQuotedDispute(c *Claim) bool {
+	for _, e := range c.Evidence {
+		if e.Stance == StanceDisputes && e.HasQuote() {
+			return true
+		}
+	}
+	return false
 }

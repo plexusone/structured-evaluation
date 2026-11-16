@@ -90,6 +90,11 @@ type Claim struct {
 
 	// Review is an optional second judge's check of the verdict.
 	Review *Review `json:"review,omitempty"`
+
+	// Exceptional marks a claim that needs more support than usual: a
+	// superlative or a first, a surprising claim, or an allegation about a
+	// person. Criteria.ExceptionalMinSources sets how many sources it needs.
+	Exceptional bool `json:"exceptional,omitempty"`
 }
 
 // NewClaim creates a new claim with the given details.

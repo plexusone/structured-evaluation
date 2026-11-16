@@ -28,6 +28,9 @@
         },
         "validatedBy": {
           "type": "string"
+        },
+        "standard": {
+          "type": "string"
         }
       },
       "additionalProperties": false,
@@ -296,6 +299,9 @@
             },
             "additionalProperties": false,
             "type": "object"
+          },
+          "exceptional": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false,
@@ -329,6 +335,9 @@
               "type": "integer"
             },
             "citationGap": {
+              "type": "integer"
+            },
+            "refuted": {
               "type": "integer"
             }
           },
@@ -424,6 +433,15 @@
         },
         "maxClaimAge": {
           "type": "integer"
+        },
+        "requireQuotedSupport": {
+          "type": "boolean"
+        },
+        "minSupportConfidence": {
+          "type": "string"
+        },
+        "exceptionalMinSources": {
+          "type": "integer"
         }
       },
       "additionalProperties": false,
@@ -464,6 +482,9 @@
               "type": "integer"
             },
             "citationGap": {
+              "type": "integer"
+            },
+            "refuted": {
               "type": "integer"
             }
           },

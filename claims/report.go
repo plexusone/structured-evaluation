@@ -52,6 +52,11 @@ type ClaimsMetadata struct {
 
 	// ValidatedBy identifies who validated the claims.
 	ValidatedBy string `json:"validatedBy,omitempty"`
+
+	// Standard names the standard the claims were judged against, with its
+	// version, as <name>@<version>, so reports judged under different
+	// standards are not mixed.
+	Standard string `json:"standard,omitempty"`
 }
 
 // ClaimsSummary provides aggregated statistics.
