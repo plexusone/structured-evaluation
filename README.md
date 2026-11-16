@@ -206,6 +206,20 @@ claims.MissingFigures(claim.Text, "fondata nel 1929") // figures in the claim no
 The verdicts `contested`, `contradicted` and `citation-gap` join the original four, and the summary reports the
 second judge's agreement rate. See [Claims](docs/features/claims.md).
 
+### Encyclopedic Standard (v0.17.0)
+
+Judge claims at an encyclopedic standard of verifiability, modelled on Wikipedia's, and record claims shown false:
+
+```go
+report.Metadata.Standard = "example-claims-standard@v1.0.0"
+report.Criteria = claims.WikipediaClaimsCriteria() // quoted support, medium confidence, two sources if exceptional
+claim.Exceptional = true                           // a superlative, a first, a surprising claim
+claims.SupportShortfalls(claim, report.Criteria)   // which criteria a verified claim misses
+
+myth := claims.Claim{ID: "myth-garage", Text: "It began in a garage.", Verdict: claims.VerdictRefuted,
+    Evidence: []claims.Evidence{{SourceRef: "src-history", Stance: claims.StanceDisputes, Quote: "The first premises were a hall."}}}
+```
+
 ## Severity Levels
 
 Following InfoSec conventions:

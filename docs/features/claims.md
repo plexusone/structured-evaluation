@@ -441,6 +441,38 @@ flagged — age unknown is not the same as stale. Disabled by default
 (`MaxClaimAge <= 0`). `Lint` flags a violation as `verified-stale-as-of-date`;
 `EvaluateClaims` folds it into the report-level decision like needs-review.
 
+### Support criteria: quoted support, confidence and exceptional claims
+
+Three opt-in criteria check how a verified claim is supported, each off at its zero value:
+
+| Criterion | A verified claim needs | Lint rule |
+|---|---|---|
+| `RequireQuotedSupport` | A `supports` passage with a quote and a source | `verified-requires-quoted-support` |
+| `MinSupportConfidence` | A judge confidence at least this level; unset counts as lowest | `verified-low-confidence` |
+| `ExceptionalMinSources` | When marked `Exceptional`, quoted support from at least this many distinct sources | `verified-exceptional-needs-sources` |
+
+`Claim.Exceptional` marks a superlative or a first, a surprising claim, or an allegation about a person.
+`SupportShortfalls(claim, criteria)` returns the criteria a verified claim misses. `EvaluateClaims` folds them into the
+report-level decision like insufficient corroboration.
+
+`WikipediaClaimsCriteria()` sets all three, with two sources for exceptional claims, high source reliability, and no
+claims left needing review: an encyclopedic standard of verifiability.
+
+```go
+report.Metadata.Standard = "example-claims-standard@v1.0.0"
+report.Criteria = claims.WikipediaClaimsCriteria()
+```
+
+`ClaimsMetadata.Standard` names the standard the judges applied, as `<name>@<version>`, so tools combining reports can
+refuse to mix standards.
+
+## Refuted Claims
+
+`refuted` records that a reliable source shows a claim false. It differs from `contradicted`, where a source the claim
+cites disagrees and the author fixes the claim. A refuted claim is kept as a record that it is false, such as a
+misconception that circulates. It blocks publication like `rejected`, is counted in `Counts.Refuted`, and `Lint`
+requires a `disputes` passage with a quote (`refuted-requires-quoted-dispute`).
+
 ## Multi-Source Evidence
 
 `Validation` holds one source. When a judge checks a claim against several sources that may disagree, record each
