@@ -73,6 +73,17 @@ type claimView struct {
 	AccessedAt  string
 	IsDerived   bool
 	DerivedFrom string
+	Evidence    []evidenceView
+}
+
+// evidenceView is one quoted passage from a claim's multi-source evidence.
+type evidenceView struct {
+	Stance      string
+	Source      string
+	URL         string
+	Locator     string
+	Quote       string
+	Translation string
 }
 
 // verdictOrder controls the display order of verdict groups.
@@ -83,7 +94,10 @@ var verdictOrder = []struct {
 	class   string
 }{
 	{claims.VerdictVerified, "Verified", "✓", "verified"},
+	{claims.VerdictContested, "Contested", "?", "contested"},
+	{claims.VerdictCitationGap, "Citation gap", "?", "citation-gap"},
 	{claims.VerdictNeedsReview, "Needs review", "?", "needs-review"},
+	{claims.VerdictContradicted, "Contradicted", "✗", "contradicted"},
 	{claims.VerdictRejected, "Rejected", "✗", "rejected"},
 	{claims.VerdictUnverified, "Unverified", "✗", "unverified"},
 }
@@ -168,6 +182,17 @@ func buildClaim(c *claims.Claim, icon, class string) claimView {
 				cv.DerivedFrom += id
 			}
 		}
+	}
+	for _, e := range c.Evidence {
+		ev := evidenceView{Stance: string(e.Stance), URL: e.URL, Locator: e.Locator, Quote: e.Quote,
+			Source: e.Title}
+		if ev.Source == "" {
+			ev.Source = e.SourceRef
+		}
+		if e.Translation != nil {
+			ev.Translation = e.Translation.Text
+		}
+		cv.Evidence = append(cv.Evidence, ev)
 	}
 	return cv
 }

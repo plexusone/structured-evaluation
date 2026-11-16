@@ -103,3 +103,30 @@ func TestRenderClaims_Deterministic(t *testing.T) {
 		t.Error("render output is not deterministic")
 	}
 }
+
+func TestRenderClaimsMultiSource(t *testing.T) {
+	r := claims.NewClaimsReport("doc")
+	r.AddClaim(claims.Claim{ID: "c-contested", Text: "Founded in 1929.", Verdict: claims.VerdictContested,
+		Evidence: []claims.Evidence{
+			{SourceRef: "src-a", Title: "A history", URL: "https://example.org/a", Stance: claims.StanceSupports,
+				Quote: "fondata nel 1929", Translation: &claims.Translation{Text: "founded in 1929"}},
+			{SourceRef: "src-b", Stance: claims.StanceDisputes, Quote: "founded in 1930", Locator: "p. 4"},
+		}})
+	r.AddClaim(claims.Claim{ID: "c-contradicted", Text: "Sold 9 cars.", Verdict: claims.VerdictContradicted})
+	r.AddClaim(claims.Claim{ID: "c-gap", Text: "Born in 1898.", Verdict: claims.VerdictCitationGap})
+	r.Evaluate()
+	var buf bytes.Buffer
+	if err := New(&buf).RenderClaims(r); err != nil {
+		t.Fatal(err)
+	}
+	out := buf.String()
+	for _, want := range []string{
+		`<section class="group contested"`, `<section class="group contradicted"`, `<section class="group citation-gap"`,
+		"c-contested", "c-contradicted", "c-gap", "fondata nel 1929", "founded in 1929", "founded in 1930", "p. 4",
+		`class="chip contested"`, `class="chip contradicted"`, `class="chip citation-gap"`,
+	} {
+		if !strings.Contains(out, want) {
+			t.Errorf("output missing %q", want)
+		}
+	}
+}
