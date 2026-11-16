@@ -475,6 +475,23 @@ claim := claims.Claim{
 
 All of these are optional and omitted when unused, so reports that do not use them are unchanged.
 
+## Matching Quotes and Figures
+
+Deterministic helpers check a quote against the text of its source, so agreement between judges never has to stand
+in for whether a quote exists:
+
+```go
+m := claims.MatchQuote("During a Board ... Ugo Gobbato announced", sourceText)
+// m.Found: every part between ellipses appears, in order.
+// Matching ignores case, punctuation, quote styles, dashes and line breaks.
+
+missing := claims.MissingFigures(claim.Text, quote, translation)
+// The years, counts and amounts in the claim that no quote gives.
+// "1,142,462" matches "1.142.462".
+```
+
+`NormalizeText`, `QuoteFragments` and `Figures` are the building blocks.
+
 ## Example: Security Advisory
 
 Complete example validating a security advisory:
