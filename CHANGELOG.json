@@ -7,6 +7,44 @@
   "commitConvention": "conventional",
   "releases": [
     {
+      "version": "v0.16.0",
+      "date": "2026-11-15",
+      "highlights": [
+        { "description": "Claims checked against several sources: a claim carries every quoted passage that bears on it, each with its stance, so a report records when reliable sources disagree" },
+        { "description": "Verdicts for disagreement: `contested`, `contradicted` and `citation-gap` join the original four" },
+        { "description": "Judges and agreement: who checked a claim, with what confidence, and an optional second judge, with the second-check agreement rate in the summary" },
+        { "description": "Deterministic quotation and figure matching confirms a quotation is in its source's text without a model" }
+      ],
+      "added": [
+        { "description": "`claims.Evidence`: quoted passages from one or more sources per claim, with `SourceRef`/`URL`/`Title`, `Stance` (supports, disputes, context), `Quote`, `Locator`, `Language`, `Translation`, `Role` and `HowChecked`; `Claim.SupportingQuotes()`", "commit": "a3a352b" },
+        { "description": "Verdicts `contested`, `contradicted` and `citation-gap`, with `Contested`, `Contradicted` and `CitationGap` counts (omitted when zero) and `Verdict.NeedsPerson()`; contradicted fails a report, the other two count like needs-review", "commit": "a3a352b" },
+        { "description": "`Claim.CheckedBy`, `Claim.Confidence` (high, medium, low) and `Claim.Review`, a second judge's check with `FirstVerdict` when its verdict replaced the first; `AgreementOf` and `Summary.SecondReview`", "commit": "a3a352b" },
+        { "description": "`ClaimsReport.Inaccessible`, sources a judge could not open, and `SourceRoleSecondary` for a secondary source of unrecorded kind", "commit": "a3a352b" },
+        { "description": "`MatchQuote`, `MissingFigures`, `NormalizeText`, `QuoteFragments` and `Figures`: match a quotation against a source's text, ignoring case, punctuation, quote styles and line breaks, and find the figures a claim states that no quotation gives", "commit": "cb5cdc8" },
+        { "description": "`@plexusone/structured-evaluation@0.16.0`: Zod schemas and TS types regenerated for the new claim fields", "commit": "a3a352b" }
+      ],
+      "changed": [
+        { "description": "Lint: a verified claim with no `Validation` passes `verified-requires-validation` when its `Evidence` has a quoted supporting passage from a named source", "commit": "a3a352b" }
+      ],
+      "fixed": [
+        { "description": "The HTML renderer showed only the original four verdict groups, so claims with the new verdicts were left out; they now have their own groups and count chips, and each claim lists its quoted evidence", "commit": "1ec4acd" },
+        { "description": "`GenerateSummaryText` includes the new verdicts when present", "commit": "fd2df7f" }
+      ],
+      "dependencies": [
+        { "description": "Bump github.com/spf13/pflag from v1.0.10 to v1.1.0", "commit": "e8bd2ef" }
+      ],
+      "documentation": [
+        { "description": "Claims guide: multi-source evidence, the new verdicts, judges and agreement", "commit": "50152af" },
+        { "description": "Claims guide: quotation and figure matching", "commit": "1664ae6" },
+        { "description": "README multi-source claims section and v0.16.0 release notes" }
+      ],
+      "tests": [
+        { "description": "Multi-source evidence, new verdicts in counts and decisions, agreement, lint with quoted evidence, and unchanged JSON for reports without the new fields", "commit": "0a294f5" },
+        { "description": "Quotation matching (exact, normalized, ellipses, order, missing spaces) and figure extraction", "commit": "75b6b78" },
+        { "description": "HTML rendering of the new verdicts and quoted evidence", "commit": "1ec4acd" }
+      ]
+    },
+    {
       "version": "v0.15.0",
       "date": "2026-10-29",
       "highlights": [
