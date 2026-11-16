@@ -164,8 +164,17 @@ func (r *ClaimsReport) GetClaim(claimID string) *Claim {
 // GenerateSummaryText creates a human-readable summary.
 func (r *ClaimsReport) GenerateSummaryText() string {
 	counts := r.Summary.Counts
-	summary := fmt.Sprintf("Claims: %d total, %d verified, %d unverified, %d needs review, %d rejected. ",
+	summary := fmt.Sprintf("Claims: %d total, %d verified, %d unverified, %d needs review, %d rejected",
 		counts.Total, counts.Verified, counts.Unverified, counts.NeedsReview, counts.Rejected)
+	for _, n := range []struct {
+		count int
+		label string
+	}{{counts.Contested, "contested"}, {counts.Contradicted, "contradicted"}, {counts.CitationGap, "citation gap"}} {
+		if n.count > 0 {
+			summary += fmt.Sprintf(", %d %s", n.count, n.label)
+		}
+	}
+	summary += ". "
 
 	summary += "Decision: " + string(r.Decision.Status) + "."
 	return summary
