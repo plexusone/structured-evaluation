@@ -37,7 +37,8 @@ A reusable evaluation framework for LLM-as-Judge and multi-agent workflows.
 - 📈 **Confidence & routing** for human review of low-confidence evaluations
 - ✅ **GO/NO-GO summary reports** for deterministic checks (CI, tests, validation)
 - 🔗 **Multi-agent coordination** with DAG-based report aggregation
-- 📋 **Claims validation** for factual claim extraction and source verification
+- 📋 **Claims validation** for factual claim extraction and source verification, including claims checked against
+  several sources with quoted evidence, a second judge, and deterministic quotation matching
 - 🟦 **TypeScript / Zod bindings** generated from the same Go structs, never hand-maintained
 
 ## Architecture
@@ -179,6 +180,31 @@ report.AddClaim(*exploit)
 report.Finalize()
 // report.Decision.Passed, report.Summary.Counts
 ```
+
+### Multi-Source Claims (v0.16.0)
+
+When a judge checks a claim against several sources that may disagree, each quoted passage is an `Evidence` entry
+with its stance, and a second judge can check the verdict:
+
+```go
+claim := claims.Claim{
+    ID: "claim-founding", Text: "The company was founded in 1929.", Category: claims.ClaimTimeline,
+    Verdict: claims.VerdictContested, Confidence: claims.ConfidenceMedium, CheckedBy: "checker",
+    Evidence: []claims.Evidence{
+        {SourceRef: "src-registry", Stance: claims.StanceSupports, Quote: "fondata nel 1929", Language: "it",
+            Translation: &claims.Translation{Text: "founded in 1929", Language: "en"}},
+        {URL: "https://example.org/history", Stance: claims.StanceDisputes, Quote: "founded in 1930"},
+    },
+    Review: &claims.Review{Judge: "skeptic", Agrees: true},
+}
+
+// Deterministic checks against a source's saved text:
+claims.MatchQuote("fondata nel … 1929", sourceText).Found
+claims.MissingFigures(claim.Text, "fondata nel 1929") // figures in the claim no quote gives
+```
+
+The verdicts `contested`, `contradicted` and `citation-gap` join the original four, and the summary reports the
+second judge's agreement rate. See [Claims](docs/features/claims.md).
 
 ## Severity Levels
 
